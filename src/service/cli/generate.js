@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require(`fs`);
-const {getRandomInit, shuffle, getPictureFileName} = require(`../../utils`);
+const {getRandomInit, shuffle} = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
 
 const DEFAULT_COUNT = 1;
@@ -68,6 +68,10 @@ const Description = {
   MAX: 5,
 };
 
+const getPictureFileName = (num) => {
+  const countPicture = num < 10 ? `0${num}` : `${num}`;
+  return `item${countPicture}.jpg`;
+};
 
 const generateOffers = (count) => (
   Array(count).fill({}).map(() => ({
@@ -79,7 +83,6 @@ const generateOffers = (count) => (
     sum: getRandomInit(SumRestrict.MIN, SumRestrict.MAX),
   }))
 );
-
 
 module.exports = {
   name: `--generate`,

@@ -15,13 +15,7 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
-const getPictureFileName = (num) => {
-  const countPicture = num < 10 ? `0${num}` : `${num}`;
-  return `item${countPicture}.jpg`;
-};
-
 module.exports = {
   getRandomInit,
   shuffle,
-  getPictureFileName,
 };
