@@ -68,6 +68,16 @@ const Description = {
   MAX: 5,
 };
 
+const writeDataToFile = (fileName, content) => {
+  fs.writeFile(fileName, content, (err) => {
+    if (err) {
+      return console.error(`Can't write data to file...`);
+    }
+
+    return console.info(`Operation success. File created.`);
+  });
+};
+
 const getPictureFileName = (num) => {
   const countPicture = num < 10 ? `0${num}` : `${num}`;
   return `item${countPicture}.jpg`;
@@ -94,12 +104,6 @@ module.exports = {
       process.exit(ExitCode.error);
     }
     const content = JSON.stringify(generateOffers(countOffer));
-    fs.writeFile(FILE_NAME, content, (err) => {
-      if (err) {
-        return console.error(`Can't write data to file...`);
-      }
-
-      return console.info(`Operation success. File created.`);
-    });
+    writeDataToFile(FILE_NAME, content);
   }
 };
