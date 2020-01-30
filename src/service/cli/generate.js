@@ -49,34 +49,34 @@ const CATEGORIES = [
 ];
 
 const OfferType = {
-  offer: `offer`,
-  sale: `sale`,
+  OFFER: `offer`,
+  SALE: `sale`,
 };
 
 const SumRestrict = {
-  min: 1000,
-  max: 100000,
+  MIN: 1000,
+  MAX: 100000,
 };
 
 const PictureRestrict = {
-  min: 1,
-  max: 16,
+  MIN: 1,
+  MAX: 16,
 };
 
 const Description = {
-  min: 1,
-  max: 5,
+  MIN: 1,
+  MAX: 5,
 };
 
 
 const generateOffers = (count) => (
   Array(count).fill({}).map(() => ({
     category: [CATEGORIES[getRandomInit(0, CATEGORIES.length - 1)]],
-    description: shuffle(SENTENCES).slice(0, getRandomInit(Description.min, Description.max)).join(` `),
-    picture: getPictureFileName(getRandomInit(PictureRestrict.min, PictureRestrict.max)),
+    description: shuffle(SENTENCES).slice(0, getRandomInit(Description.MIN, Description.MAX)).join(` `),
+    picture: getPictureFileName(getRandomInit(PictureRestrict.MIN, PictureRestrict.MAX)),
     title: TITLES[getRandomInit(0, TITLES.length - 1)],
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
-    sum: getRandomInit(SumRestrict.min, SumRestrict.max),
+    sum: getRandomInit(SumRestrict.MIN, SumRestrict.MAX),
   }))
 );
 
