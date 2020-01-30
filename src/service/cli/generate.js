@@ -6,7 +6,7 @@ const {ExitCode} = require(`../../constants`);
 
 const DEFAULT_COUNT = 1;
 const MAX_OFFER = 1000;
-const FILE_NAME = `mocks.json`;
+const FILE_NAME = `mock.json`;
 
 const TITLES = [
   `Продам книги Стивена Кинга.`,
