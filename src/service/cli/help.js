@@ -1,3 +1,5 @@
+'use strict';
+
 const helpText = () => (
   console.log(`Программа запускает http-сервер и формирует файл с данными для API.
 
