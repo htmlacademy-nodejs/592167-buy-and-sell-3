@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const {getRandomInit, shuffle} = require(`../../utils`);
@@ -70,14 +70,13 @@ const Description = {
   MAX: 5,
 };
 
-const writeDataToFile = (fileName, content) => {
-  fs.writeFile(fileName, content, (err) => {
-    if (err) {
-      return console.error(chalk.red(`Can't write data to file...`));
-    }
-
+const writeDataToFile = async (fileName, content) => {
+  try {
+    await fs.writeFile(fileName, content);
     return console.info(chalk.green(`Operation success. File created.`));
-  });
+  } catch (err) {
+    return console.error(chalk.red(`Can't write data to file...`));
+  }
 };
 
 const getPictureFileName = (num) => {
@@ -98,7 +97,7 @@ const generateOffers = (count) => (
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
     if (countOffer > MAX_OFFER) {
@@ -106,6 +105,6 @@ module.exports = {
       process.exit(ExitCode.error);
     }
     const content = JSON.stringify(generateOffers(countOffer));
-    writeDataToFile(FILE_NAME, content);
+    await writeDataToFile(FILE_NAME, content);
   }
 };
