@@ -73,7 +73,7 @@ const Description = {
 const writeDataToFile = (fileName, content) => {
   fs.writeFile(fileName, content, (err) => {
     if (err) {
-      return console.error(`Can't write data to file...`);
+      return console.error(chalk.red(`Can't write data to file...`));
     }
 
     return console.info(chalk.green(`Operation success. File created.`));
@@ -102,7 +102,7 @@ module.exports = {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
     if (countOffer > MAX_OFFER) {
-      console.error(`Не больше 1000 объявлений`);
+      console.error(chalk.red(`Не больше 1000 объявлений`));
       process.exit(ExitCode.error);
     }
     const content = JSON.stringify(generateOffers(countOffer));
