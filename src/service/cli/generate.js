@@ -1,6 +1,8 @@
 'use strict';
 
 const fs = require(`fs`);
+const chalk = require(`chalk`);
+
 const {getRandomInit, shuffle} = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
 
@@ -74,7 +76,7 @@ const writeDataToFile = (fileName, content) => {
       return console.error(`Can't write data to file...`);
     }
 
-    return console.info(`Operation success. File created.`);
+    return console.info(chalk.green(`Operation success. File created.`));
   });
 };
 
