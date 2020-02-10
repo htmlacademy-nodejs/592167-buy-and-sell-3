@@ -4,7 +4,7 @@ const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const {getRandomInit, shuffle} = require(`../../utils`);
-const {ExitCode} = require(`../../constants`);
+const {ExitCode, FILE_NAME} = require(`../../constants`);
 
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 const FILE_TITLES_PATH = `./data/titles.txt`;
@@ -12,7 +12,6 @@ const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 
 const DEFAULT_COUNT = 1;
 const MAX_OFFER = 1000;
-const FILE_NAME = `mock.json`;
 
 const OfferType = {
   OFFER: `offer`,
