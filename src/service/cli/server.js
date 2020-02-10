@@ -8,7 +8,7 @@ const {HttpCode, FILE_NAME} = require(`../../constants`);
 const DEFAULT_PORT = 3000;
 
 const sendResponse = (res, statusCode, message) => {
-  const template = `
+  const responseBody = `
   <!Doctype html>
     <html lang="ru"
     <head>
@@ -22,7 +22,7 @@ const sendResponse = (res, statusCode, message) => {
     'Content-Type': `text/html; charset=UTF-8`,
   });
 
-  res.end(template);
+  res.end(responseBody);
 };
 
 const onClientConnect = async (req, res) => {
