@@ -4,6 +4,8 @@ const express = require(`express`);
 const {initializeRoutes} = require(`./routes/index`);
 
 const app = express();
+app.set(`views`, `./templates`);
+app.set(`view engine`, `pug`);
 initializeRoutes(app);
 
 const port = 8080;
