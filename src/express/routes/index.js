@@ -12,7 +12,7 @@ const initializeRoutes = (app) => {
 
 
   app.get(`/`, (req, res) => {
-    res.render(`sign-up`);
+    res.render(`ticket`);
   });
   app.get(`/register`, (req, res) => {
     res.send(req.url);
