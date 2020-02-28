@@ -12,16 +12,16 @@ const initializeRoutes = (app) => {
 
 
   app.get(`/`, (req, res) => {
-    res.render(`404`);
+    res.render(`index`);
   });
   app.get(`/register`, (req, res) => {
-    res.send(req.url);
+    res.render(`sign-up`);
   });
   app.get(`/login`, (req, res) => {
-    res.send(req.url);
+    res.render(`login`);
   });
   app.get(`/search`, (req, res) => {
-    res.send(req.url);
+    res.render(`search-result`);
   });
 };
 
