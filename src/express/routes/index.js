@@ -4,7 +4,7 @@ const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
 
 const initializeRoutes = (app) => {
-  app.set(`views`, `./src/express/templates`);
+  app.set(`views`, `${__dirname}/../templates`);
   app.set(`view engine`, `pug`);
 
   app.use(`/my`, myRoutes);
