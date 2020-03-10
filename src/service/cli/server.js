@@ -2,7 +2,9 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-const http = require(`http`);
+const express = require(`express`);
+
+const {initializeRoutes} = require(`./routes/index`);
 const {HttpCode, MOCK_FILE_NAME} = require(`../../constants`);
 
 const DEFAULT_PORT = 3000;
