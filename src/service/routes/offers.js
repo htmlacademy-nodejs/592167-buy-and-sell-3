@@ -1,24 +1,18 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const {Router} = require(`express`);
+const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
 
 router.get(`/`, async (req, res) => {
   try {
-    fs.accessSync(MOCK_FILE_NAME, fs.constants.F_OK, (err) => {
-      if (err) throw err;
-    });
-    const fileStat = fs.statSync(MOCK_FILE_NAME);
-    if (fileStat.size > 0) {
-      const fileContent = fs.readFileSync(MOCK_FILE_NAME);
-      res.json(JSON.parse(fileContent).map((el) => el.title));
-    } else {
-      res.send([]);
-    }
+    const content = await fs.readFile(MOCK_FILE_NAME);
+    res.json(JSON.parse(content).map((el) => el.title));
   } catch (err) {
+    console.error(chalk.red(err));
     res.send([]);
   }
 });
