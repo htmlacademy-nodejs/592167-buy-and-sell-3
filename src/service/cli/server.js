@@ -13,6 +13,7 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
+    app.use(express.json());
     initializeRoutes(app);
 
     app.listen(port, () => {
