@@ -71,10 +71,19 @@ const getComments = (countComments, comments) => {
   }));
 };
 
+const getCategories = (categories) => {
+  const Categories = {
+    MIN: 0,
+    MAX: categories.length - 1,
+  };
+  return Array(getRandomInit(Categories.MIN + 1, Categories.MAX))
+    .fill(`1`).map(() => categories[getRandomInit(Categories.MIN + 1, Categories.MAX)]);
+};
+
 const generateOffers = (count, titles, categories, sentences, comments) => (
   Array(count).fill({}).map(() => ({
     id: nanoid(6),
-    category: [categories[getRandomInit(0, categories.length - 1)]],
+    category: getCategories(categories),
     description: shuffle(sentences).slice(0, getRandomInit(Description.MIN, Description.MAX)).join(` `),
     picture: getPictureFileName(getRandomInit(PictureRestrict.MIN, PictureRestrict.MAX)),
     title: titles[getRandomInit(0, titles.length - 1)],
@@ -89,6 +98,7 @@ module.exports = {
   async run(args) {
     const titles = await readContent(FILE_TITLES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
+    categories.pop();
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const comments = await readContent(FILE_COMMENTS_PATH);
 
