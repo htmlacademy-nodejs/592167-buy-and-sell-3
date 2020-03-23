@@ -2,9 +2,8 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-const nanoid = require(`nanoid`);
 
-const {getRandomInit, shuffle} = require(`../../utils`);
+const {getRandomInit, shuffle, getNewId} = require(`../../utils`);
 const {ExitCode, MOCK_FILE_NAME} = require(`../../constants`);
 
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
@@ -66,7 +65,7 @@ const getPictureFileName = (num) => {
 
 const getComments = (countComments, comments) => {
   return Array(countComments).fill({}).map(() => ({
-    id: nanoid(6),
+    id: getNewId(),
     text: shuffle(comments).slice(0, getRandomInit(Comment.MIN, Comment.MAX)).join(` `),
   }));
 };
@@ -82,7 +81,7 @@ const getCategories = (categories) => {
 
 const generateOffers = (count, titles, categories, sentences, comments) => (
   Array(count).fill({}).map(() => ({
-    id: nanoid(6),
+    id: getNewId(),
     category: getCategories(categories),
     description: shuffle(sentences).slice(0, getRandomInit(Description.MIN, Description.MAX)).join(` `),
     picture: getPictureFileName(getRandomInit(PictureRestrict.MIN, PictureRestrict.MAX)),
