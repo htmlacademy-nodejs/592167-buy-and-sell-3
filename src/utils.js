@@ -22,11 +22,18 @@ const getNewId = () => {
 };
 
 const addNewAnnouncement = (announcementList, newAnnouncment) => {
-  // const announcmentId = getNewId();
   newAnnouncment.id = getNewId();
   announcementList.push(newAnnouncment);
 
   return announcementList;
+};
+
+const changeAnnouncment = (announcementList, newAnnouncement, id) => {
+  const idx = announcementList.map((el) => el.id).indexOf(id);
+  const beforeIdx = announcementList.slice(0, idx);
+  const affterIdx = announcementList.slice(idx + 1);
+
+  return [...beforeIdx, ...affterIdx];
 };
 
 module.exports = {
@@ -34,4 +41,5 @@ module.exports = {
   shuffle,
   addNewAnnouncement,
   getNewId,
+  changeAnnouncment,
 };
