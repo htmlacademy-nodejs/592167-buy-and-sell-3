@@ -12,8 +12,10 @@ router.get(`/`, async (req, res) => {
   try {
     const content = await fs.readFile(MOCK_FILE_NAME);
     const categoriesArray = JSON.parse(content);
-    let categoriesList = ``;
-    categoriesArray.map((el) => (categoriesList += el.category.join(`, `)));
+    let categories = [];
+    categoriesArray.map((el) => (categories = categories.concat(el.category)));
+    const tempSet = new Set(categories);
+    let categoriesList = [...tempSet];
     res.send(categoriesList);
   } catch (err) {
     console.error(chalk.red(err));
