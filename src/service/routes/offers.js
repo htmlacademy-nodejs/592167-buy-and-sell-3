@@ -7,11 +7,12 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
-const content = fs.readFileSync(MOCK_FILE_NAME);
+const {addNewAnnouncement} = require(`../../utils`);
+let content = JSON.parse(fs.readFileSync(MOCK_FILE_NAME));
 
 router.get(`/`, async (req, res) => {
   try {
-    res.send(JSON.parse(content));
+    res.send(content);
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);
@@ -19,10 +20,18 @@ router.get(`/`, async (req, res) => {
 });
 router.get(`/:offerId`, async (req, res) => {
   try {
-    res.send(JSON.parse(content).filter((el) => el.id === req.params.offerId.toString()));
+    res.send(content.filter((el) => el.id === req.params.offerId.toString()));
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);
+  }
+});
+router.post(`/`, (req, res) => {
+  if (Object.keys(req.body).length !== 6) {
+    res.status(400).send({error: `Переданы не все поля для нового объявления.`})
+  } else {
+    content = addNewAnnouncement(content, req.body);
+    res.send(content);
   }
 });
 

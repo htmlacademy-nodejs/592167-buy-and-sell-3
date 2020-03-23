@@ -21,7 +21,13 @@ const getNewId = () => {
   return nanoid(6);
 };
 
+const addNewAnnouncement = (announcementList, newAnnouncment) => {
+  // const announcmentId = getNewId();
+  newAnnouncment.id = getNewId();
+  announcementList.push(newAnnouncment);
 
+  return announcementList;
+};
 
 module.exports = {
   getRandomInit,
