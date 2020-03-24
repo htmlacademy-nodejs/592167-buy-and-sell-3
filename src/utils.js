@@ -71,6 +71,24 @@ const deleteComment = (announcementList, id, commentId) => {
   return newAnnouncementList;
 };
 
+const addComment = (announcementList, newCommentText, id) => {
+  const idx = announcementList.map((el) => el.id).indexOf(id);
+  const beforeIdx = announcementList.slice(0, idx);
+  const affterIdx = announcementList.slice(idx + 1);
+
+  const newAnnouncementList = [...beforeIdx, ...affterIdx];
+  const mutableAnnouncement = announcementList.find((el) => el.id === id);
+
+  const newComment = {
+    id: nanoid(6),
+    text: newCommentText.text,
+  };
+  mutableAnnouncement.comments.push(newComment);
+  newAnnouncementList.push(mutableAnnouncement);
+
+  return newAnnouncementList;
+};
+
 module.exports = {
   getRandomInit,
   shuffle,
@@ -79,4 +97,5 @@ module.exports = {
   changeAnnouncment,
   deleteAnnouncment,
   deleteComment,
+  addComment,
 };
