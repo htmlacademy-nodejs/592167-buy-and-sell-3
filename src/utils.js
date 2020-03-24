@@ -89,6 +89,10 @@ const addComment = (announcementList, newCommentText, id) => {
   return newAnnouncementList;
 };
 
+const searchAnnouncements = (list, search) => {
+  return list.filter((el) => el.title.toUpperCase().match(search.query.toUpperCase()));
+};
+
 module.exports = {
   getRandomInit,
   shuffle,
@@ -98,4 +102,5 @@ module.exports = {
   deleteAnnouncment,
   deleteComment,
   addComment,
+  searchAnnouncements,
 };
