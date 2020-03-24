@@ -49,6 +49,28 @@ const deleteAnnouncment = (announcementList, id) => {
   return [...beforeIdx, ...affterIdx];
 };
 
+const deleteComment = (announcementList, id, commentId) => {
+  const idx = announcementList.map((el) => el.id).indexOf(id);
+  const beforeIdx = announcementList.slice(0, idx);
+  const affterIdx = announcementList.slice(idx + 1);
+
+  const newAnnouncementList = [...beforeIdx, ...affterIdx];
+  const mutableAnnouncement = announcementList.find((el) => el.id === id);
+
+  const comments = mutableAnnouncement.comments;
+  const commentsIdx = comments.map((el) => el.id).indexOf(commentId);
+  const beforeCommentsIdx = comments.slice(0, commentsIdx);
+  const afterCommentsIdx = comments.slice(commentsIdx + 1);
+  const newComments = {
+    comments: [...beforeCommentsIdx, ...afterCommentsIdx],
+  };
+  const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
+
+  newAnnouncementList.push(modifiedAnnouncement);
+
+  return newAnnouncementList;
+};
+
 module.exports = {
   getRandomInit,
   shuffle,
@@ -56,4 +78,5 @@ module.exports = {
   getNewId,
   changeAnnouncment,
   deleteAnnouncment,
+  deleteComment,
 };
