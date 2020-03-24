@@ -51,5 +51,14 @@ router.delete(`/:offerId`, (req, res) => {
     res.send([]);
   }
 });
+router.get(`/:offerId/comments`, async (req, res) => {
+  try {
+    const announcment = content.find((el) => el.id === req.params.offerId.toString());
+    res.send(announcment.comments);
+  } catch (err) {
+    console.error(chalk.red(err));
+    res.send([]);
+  }
+});
 
 module.exports = router;
