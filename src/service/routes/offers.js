@@ -45,7 +45,8 @@ router.put(`/:offerId`, (req, res) => {
 router.delete(`/:offerId`, (req, res) => {
   try {
     content = deleteAnnouncment(content, req.params.offerId);
-    res.send(content);
+    content !== -1 ? res.send(content) : res.status(400).send(`Невозможно удалить объявление, так как
+    оно не обнаружено в списке объявлений.`);
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);
@@ -63,7 +64,8 @@ router.get(`/:offerId/comments`, async (req, res) => {
 router.delete(`/:offerId/comments/:commentId`, (req, res) => {
   try {
     content = deleteComment(content, req.params.offerId, req.params.commentId);
-    res.send(content);
+    content !== -1 ? res.send(content) : res.status(400).send(`Невозможно удалить комментарий, так как
+    он не обнаружен в списке.`);
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);

@@ -7,7 +7,6 @@ const getRandomInit = (min, max) => {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
 const shuffle = (someArray) => {
   for (let i = someArray.length - 1; i > 0; i--) {
     const randomPosition = Math.floor(Math.random() * i);
@@ -16,9 +15,18 @@ const shuffle = (someArray) => {
 
   return someArray;
 };
-
 const getNewId = () => {
   return nanoid(6);
+};
+const deleteItemFromArray = (array, id) => {
+  const idx = array.map((el) => el.id).indexOf(id);
+  if (idx === -1) {
+    return idx;
+  }
+  const beforeIdx = array.slice(0, idx);
+  const affterIdx = array.slice(idx + 1);
+
+  return [...beforeIdx, ...affterIdx];
 };
 
 const addNewAnnouncement = (announcementList, newAnnouncment) => {
@@ -27,56 +35,37 @@ const addNewAnnouncement = (announcementList, newAnnouncment) => {
 
   return announcementList;
 };
-
 const changeAnnouncment = (announcementList, newAnnouncement, id) => {
-  const idx = announcementList.map((el) => el.id).indexOf(id);
-  const beforeIdx = announcementList.slice(0, idx);
-  const affterIdx = announcementList.slice(idx + 1);
-
-  const newAnnouncementList = [...beforeIdx, ...affterIdx];
-  const mutableAnnouncement = announcementList.find((el) => el.id === id);
-  const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newAnnouncement);
-  newAnnouncementList.push(modifiedAnnouncement);
+  const newAnnouncementList = deleteItemFromArray(announcementList, id);
+  if (newAnnouncementList !== -1) {
+    const mutableAnnouncement = announcementList.find((el) => el.id === id);
+    const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newAnnouncement);
+    newAnnouncementList.push(modifiedAnnouncement);
+  }
 
   return newAnnouncementList;
 };
-
 const deleteAnnouncment = (announcementList, id) => {
-  const idx = announcementList.map((el) => el.id).indexOf(id);
-  const beforeIdx = announcementList.slice(0, idx);
-  const affterIdx = announcementList.slice(idx + 1);
-
-  return [...beforeIdx, ...affterIdx];
+  return deleteItemFromArray(announcementList, id);
 };
-
 const deleteComment = (announcementList, id, commentId) => {
-  const idx = announcementList.map((el) => el.id).indexOf(id);
-  const beforeIdx = announcementList.slice(0, idx);
-  const affterIdx = announcementList.slice(idx + 1);
-
-  const newAnnouncementList = [...beforeIdx, ...affterIdx];
+  const newAnnouncementList = deleteItemFromArray(announcementList, id);
   const mutableAnnouncement = announcementList.find((el) => el.id === id);
 
   const comments = mutableAnnouncement.comments;
-  const commentsIdx = comments.map((el) => el.id).indexOf(commentId);
-  const beforeCommentsIdx = comments.slice(0, commentsIdx);
-  const afterCommentsIdx = comments.slice(commentsIdx + 1);
   const newComments = {
-    comments: [...beforeCommentsIdx, ...afterCommentsIdx],
+    comments: deleteItemFromArray(comments, commentId),
   };
+  if (newComments.comments === -1) {
+    return newComments.comments;
+  }
   const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
-
   newAnnouncementList.push(modifiedAnnouncement);
 
   return newAnnouncementList;
 };
-
 const addComment = (announcementList, newCommentText, id) => {
-  const idx = announcementList.map((el) => el.id).indexOf(id);
-  const beforeIdx = announcementList.slice(0, idx);
-  const affterIdx = announcementList.slice(idx + 1);
-
-  const newAnnouncementList = [...beforeIdx, ...affterIdx];
+  const newAnnouncementList = deleteItemFromArray(announcementList, id);
   const mutableAnnouncement = announcementList.find((el) => el.id === id);
 
   const newComment = {
