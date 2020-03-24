@@ -33,6 +33,19 @@ const changeAnnouncment = (announcementList, newAnnouncement, id) => {
   const beforeIdx = announcementList.slice(0, idx);
   const affterIdx = announcementList.slice(idx + 1);
 
+  const newAnnouncementList = [...beforeIdx, ...affterIdx];
+  const mutableAnnouncement = announcementList.find((el) => el.id === id);
+  const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newAnnouncement);
+  newAnnouncementList.push(modifiedAnnouncement);
+
+  return newAnnouncementList;
+};
+
+const deleteAnnouncment = (announcementList, id) => {
+  const idx = announcementList.map((el) => el.id).indexOf(id);
+  const beforeIdx = announcementList.slice(0, idx);
+  const affterIdx = announcementList.slice(idx + 1);
+
   return [...beforeIdx, ...affterIdx];
 };
 
@@ -42,4 +55,5 @@ module.exports = {
   addNewAnnouncement,
   getNewId,
   changeAnnouncment,
+  deleteAnnouncment,
 };
