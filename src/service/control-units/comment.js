@@ -1,6 +1,7 @@
 'use strict';
 
 const nanoid = require(`nanoid`);
+const {deleteItemFromArray} = require(`../../utils`);
 
 const deleteComment = (announcementList, id, commentId) => {
   const newAnnouncementList = deleteItemFromArray(announcementList, id);

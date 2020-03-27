@@ -13,9 +13,20 @@ const shuffle = (someArray) => {
 
   return someArray;
 };
+const deleteItemFromArray = (array, id) => {
+  const idx = array.map((el) => el.id).indexOf(id);
+  if (idx === -1) {
+    return idx;
+  }
+  const beforeIdx = array.slice(0, idx);
+  const affterIdx = array.slice(idx + 1);
+
+  return [...beforeIdx, ...affterIdx];
+};
 
 
 module.exports = {
   getRandomInit,
   shuffle,
+  deleteItemFromArray,
 };
