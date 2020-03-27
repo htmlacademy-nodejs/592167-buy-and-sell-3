@@ -7,7 +7,8 @@ const chalk = require(`chalk`);
 const router = new Router();
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
-const {addNewAnnouncement, changeAnnouncment, deleteAnnouncment, deleteComment, addComment} = require(`../../utils`);
+const {deleteComment, addComment} = require(`../control-units/comment`);
+const {addNewAnnouncement, changeAnnouncment, deleteAnnouncment} = require(`../control-units/announcement`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 router.get(`/`, async (req, res) => {
