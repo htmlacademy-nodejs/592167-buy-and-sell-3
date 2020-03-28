@@ -19,7 +19,7 @@ const deleteComment = (announcementList, id, commentId) => {
 
   return newAnnouncementList;
 };
-const addComment = (announcementList, newCommentText, id) => {
+const add = (announcementList, newCommentText, id) => {
   const newAnnouncementList = deleteItemFromArray(announcementList, id);
   const mutableAnnouncement = announcementList.find((el) => el.id === id);
 
@@ -35,5 +35,5 @@ const addComment = (announcementList, newCommentText, id) => {
 
 module.exports = {
   deleteComment,
-  addComment,
+  add,
 };

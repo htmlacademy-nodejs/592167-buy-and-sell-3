@@ -7,13 +7,13 @@ const getNewId = () => {
   return nanoid(6);
 };
 
-const addNewAnnouncement = (announcementList, newAnnouncment) => {
+const add = (announcementList, newAnnouncment) => {
   newAnnouncment.id = getNewId();
   announcementList.push(newAnnouncment);
 
   return announcementList;
 };
-const changeAnnouncment = (announcementList, newAnnouncement, id) => {
+const change = (announcementList, newAnnouncement, id) => {
   const newAnnouncementList = deleteItemFromArray(announcementList, id);
   if (newAnnouncementList !== -1) {
     const mutableAnnouncement = announcementList.find((el) => el.id === id);
@@ -26,13 +26,13 @@ const changeAnnouncment = (announcementList, newAnnouncement, id) => {
 const deleteAnnouncment = (announcementList, id) => {
   return deleteItemFromArray(announcementList, id);
 };
-const searchAnnouncements = (list, search) => {
-  return list.filter((el) => el.title.toUpperCase().match(search.query.toUpperCase()));
+const search = (list, queryString) => {
+  return list.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
 };
 
 module.exports = {
-  addNewAnnouncement,
-  changeAnnouncment,
+  add,
+  change,
   deleteAnnouncment,
-  searchAnnouncements,
+  search,
 };
