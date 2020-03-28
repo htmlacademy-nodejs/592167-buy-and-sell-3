@@ -1,11 +1,7 @@
 'use strict';
 
-const nanoid = require(`nanoid`);
-const {deleteItemFromArray} = require(`../../utils`);
+const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
-const getNewId = () => {
-  return nanoid(6);
-};
 
 const add = (announcementList, newAnnouncment) => {
   newAnnouncment.id = getNewId();

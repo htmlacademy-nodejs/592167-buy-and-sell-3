@@ -1,7 +1,6 @@
 'use strict';
 
-const nanoid = require(`nanoid`);
-const {deleteItemFromArray} = require(`../../utils`);
+const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
 const deleteComment = (announcementList, id, commentId) => {
   const newAnnouncementList = deleteItemFromArray(announcementList, id);
@@ -24,7 +23,7 @@ const add = (announcementList, newCommentText, id) => {
   const mutableAnnouncement = announcementList.find((el) => el.id === id);
 
   const newComment = {
-    id: nanoid(6),
+    id: getNewId(),
     text: newCommentText.text,
   };
   mutableAnnouncement.comments.push(newComment);
