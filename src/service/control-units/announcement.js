@@ -9,6 +9,7 @@ const add = (announcementList, newAnnouncment) => {
 
   return announcementList;
 };
+
 const change = (announcementList, newAnnouncement, id) => {
   const newAnnouncementList = deleteItemFromArray(announcementList, id);
   if (newAnnouncementList !== -1) {
@@ -19,12 +20,15 @@ const change = (announcementList, newAnnouncement, id) => {
 
   return newAnnouncementList;
 };
+
 const deleteAnnouncment = (announcementList, id) => {
   return deleteItemFromArray(announcementList, id);
 };
+
 const search = (list, queryString) => {
   return list.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
 };
+
 
 module.exports = {
   add,

@@ -11,6 +11,7 @@ const commentService = require(`../control-units/comment`);
 const annoucementService = require(`../control-units/announcement`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
+
 router.get(`/`, async (req, res) => {
   try {
     res.send(content);
@@ -19,6 +20,7 @@ router.get(`/`, async (req, res) => {
     res.send([]);
   }
 });
+
 router.get(`/:offerId`, async (req, res) => {
   try {
     res.send(content.filter((el) => el.id === req.params.offerId.toString()));
@@ -27,6 +29,7 @@ router.get(`/:offerId`, async (req, res) => {
     res.send([]);
   }
 });
+
 router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
@@ -35,6 +38,7 @@ router.post(`/`, (req, res) => {
     res.send(content);
   }
 });
+
 router.put(`/:offerId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
@@ -43,6 +47,7 @@ router.put(`/:offerId`, (req, res) => {
     res.send(content);
   }
 });
+
 router.delete(`/:offerId`, (req, res) => {
   try {
     content = annoucementService.deleteAnnouncment(content, req.params.offerId);
@@ -57,6 +62,7 @@ router.delete(`/:offerId`, (req, res) => {
     res.send([]);
   }
 });
+
 router.get(`/:offerId/comments`, async (req, res) => {
   try {
     const announcment = content.find((el) => el.id === req.params.offerId.toString());
@@ -66,6 +72,7 @@ router.get(`/:offerId/comments`, async (req, res) => {
     res.send([]);
   }
 });
+
 router.delete(`/:offerId/comments/:commentId`, (req, res) => {
   try {
     content = commentService.deleteComment(content, req.params.offerId, req.params.commentId);
@@ -80,6 +87,7 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
     res.send([]);
   }
 });
+
 router.put(`/:offerId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(400).send({error: `Переданы не все поля для нового комментария.`});
@@ -88,5 +96,6 @@ router.put(`/:offerId/comments`, (req, res) => {
     res.send(content);
   }
 });
+
 
 module.exports = router;

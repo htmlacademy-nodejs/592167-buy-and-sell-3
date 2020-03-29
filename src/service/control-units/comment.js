@@ -2,6 +2,7 @@
 
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
+
 const deleteComment = (announcementList, id, commentId) => {
   const newAnnouncementList = deleteItemFromArray(announcementList, id);
   const mutableAnnouncement = announcementList.find((el) => el.id === id);
@@ -18,6 +19,7 @@ const deleteComment = (announcementList, id, commentId) => {
 
   return newAnnouncementList;
 };
+
 const add = (announcementList, newCommentText, id) => {
   const newAnnouncementList = deleteItemFromArray(announcementList, id);
   const mutableAnnouncement = announcementList.find((el) => el.id === id);
@@ -31,6 +33,7 @@ const add = (announcementList, newCommentText, id) => {
 
   return newAnnouncementList;
 };
+
 
 module.exports = {
   deleteComment,
