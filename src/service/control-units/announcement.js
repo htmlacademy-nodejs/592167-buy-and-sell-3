@@ -1,38 +1,55 @@
 'use strict';
 
+const fs = require(`fs`);
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
 
+const {MOCK_FILE_NAME} = require(`../../constants`);
+let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
-const add = (announcementList, newAnnouncment) => {
+const getContent = () => content;
+
+const add = (newAnnouncment) => {
   newAnnouncment.id = getNewId();
-  announcementList.push(newAnnouncment);
+  content.push(newAnnouncment);
 
-  return announcementList;
+  return content;
 };
 
-const change = (announcementList, newAnnouncement, id) => {
-  const newAnnouncementList = deleteItemFromArray(announcementList, id);
-  if (newAnnouncementList !== -1) {
-    const mutableAnnouncement = announcementList.find((el) => el.id === id);
+const getContentById = (id) => {
+  return content.filter((el) => el.id === id);
+};
+
+const change = (newAnnouncement, id) => {
+  const newContent = deleteItemFromArray(content, id);
+  if (newContent !== -1) {
+    const mutableAnnouncement = content.find((el) => el.id === id);
     const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newAnnouncement);
-    newAnnouncementList.push(modifiedAnnouncement);
+    newContent.push(modifiedAnnouncement);
+    content = newContent;
   }
 
-  return newAnnouncementList;
+  return content;
 };
 
-const deleteAnnouncment = (announcementList, id) => {
-  return deleteItemFromArray(announcementList, id);
+const remove = (id) => {
+  const newContent = deleteItemFromArray(content, id);
+  if (newContent !== -1) {
+    content = newContent;
+  }
+  return content;
 };
 
-const search = (list, queryString) => {
-  return list.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
+const search = (queryString) => {
+  return content.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
 };
 
 
 module.exports = {
   add,
   change,
-  deleteAnnouncment,
+  remove,
   search,
+  content,
+  getContent,
+  getContentById,
 };

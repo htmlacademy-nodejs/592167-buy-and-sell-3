@@ -1,41 +1,53 @@
 'use strict';
 
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
+let {content} = require(`./announcement`);
 
-
-const deleteComment = (announcementList, id, commentId) => {
-  const newAnnouncementList = deleteItemFromArray(announcementList, id);
-  const mutableAnnouncement = announcementList.find((el) => el.id === id);
-
-  const comments = mutableAnnouncement.comments;
-  const newComments = {
-    comments: deleteItemFromArray(comments, commentId),
-  };
-  if (newComments.comments === -1) {
-    return newComments.comments;
-  }
-  const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
-  newAnnouncementList.push(modifiedAnnouncement);
-
-  return newAnnouncementList;
+const getContent = (id) => {
+  const offer = content.find((el) => el.id === id);
+  return offer.comments;
 };
 
-const add = (announcementList, newCommentText, id) => {
-  const newAnnouncementList = deleteItemFromArray(announcementList, id);
-  const mutableAnnouncement = announcementList.find((el) => el.id === id);
+const remove = (id, commentId) => {
+  const newAnnouncementList = deleteItemFromArray(content, id);
+  if (newAnnouncementList !== -1) {
+    const mutableAnnouncement = content.find((el) => el.id === id);
 
-  const newComment = {
-    id: getNewId(),
-    text: newCommentText.text,
-  };
-  mutableAnnouncement.comments.push(newComment);
-  newAnnouncementList.push(mutableAnnouncement);
+    const comments = mutableAnnouncement.comments;
+    const newComments = {
+      comments: deleteItemFromArray(comments, commentId),
+    };
+    if (newComments.comments === -1) {
+      return newComments.comments;
+    }
+    const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
+    newAnnouncementList.push(modifiedAnnouncement);
+    content = newAnnouncementList;
+  }
 
-  return newAnnouncementList;
+  return content;
+};
+
+const add = (newCommentText, id) => {
+  const newAnnouncementList = deleteItemFromArray(content, id);
+  if (newAnnouncementList !== -1) {
+    const mutableAnnouncement = content.find((el) => el.id === id);
+
+    const newComment = {
+      id: getNewId(),
+      text: newCommentText.text,
+    };
+    mutableAnnouncement.comments.push(newComment);
+    newAnnouncementList.push(mutableAnnouncement);
+    content = newAnnouncementList;
+  }
+
+  return content;
 };
 
 
 module.exports = {
-  deleteComment,
+  remove,
   add,
+  getContent,
 };
