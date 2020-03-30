@@ -48,11 +48,7 @@ router.put(`/:offerId`, (req, res) => {
 router.delete(`/:offerId`, (req, res) => {
   try {
     const isDelete = annoucementService.remove(req.params.offerId);
-    if (isDelete === -1) {
-      res.status(410).send(`Возможно заявление уже было удалено`);
-    } else {
-      res.status(204).send(`Заявление успешно удалено.`);
-    }
+    res.status(isDelete.status).send(isDelete.text);
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);
@@ -71,11 +67,7 @@ router.get(`/:offerId/comments`, async (req, res) => {
 router.delete(`/:offerId/comments/:commentId`, (req, res) => {
   try {
     const isDelete = commentService.remove(req.params.offerId, req.params.commentId);
-    if (isDelete === -1) {
-      res.status(410).send(`Возможно комментарий уже был удален`);
-    } else {
-      res.status(204).send(`Комментарий успешно удален.`);
-    }
+    res.status(isDelete.status).send(isDelete.text);
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);

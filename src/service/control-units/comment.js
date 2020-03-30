@@ -9,23 +9,30 @@ const getContent = (id) => {
 };
 
 const remove = (id, commentId) => {
-  const newAnnouncementList = deleteItemFromArray(announcementService.getContent(), id);
+  const answer = {};
+  const localContent = announcementService.getContent();
+  const newAnnouncementList = deleteItemFromArray(localContent, id);
   if (newAnnouncementList !== -1) {
-    const mutableAnnouncement = announcementService.getContent().find((el) => el.id === id);
+    const mutableAnnouncement = localContent.find((el) => el.id === id);
 
     const comments = mutableAnnouncement.comments;
     const newComments = {
       comments: deleteItemFromArray(comments, commentId),
     };
     if (newComments.comments === -1) {
-      return newComments.comments;
+      answer.status = 410;
+      answer.text = `Возможно комментарий уже был удален`;
+      announcementService.changeContent(localContent);
+      return answer;
     }
     const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
     newAnnouncementList.push(modifiedAnnouncement);
     announcementService.changeContent(newAnnouncementList);
+    answer.status = 204;
+    answer.text = ``;
   }
 
-  return newAnnouncementList;
+  return answer;
 };
 
 const add = (newCommentText, id) => {

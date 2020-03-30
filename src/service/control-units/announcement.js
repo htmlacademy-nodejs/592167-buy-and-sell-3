@@ -32,13 +32,17 @@ const change = (newAnnouncement, id) => {
 };
 
 const remove = (id) => {
+  const answer = {};
   const newContent = deleteItemFromArray(content, id);
   if (newContent !== -1) {
     content = newContent;
+    answer.status = 204;
+    answer.text = ``;
   } else {
-    return newContent;
+    answer.status = 410;
+    answer.text = `Возможно заявление уже было удалено`;
   }
-  return content;
+  return answer;
 };
 
 const search = (queryString) => {
@@ -46,7 +50,6 @@ const search = (queryString) => {
 };
 
 const changeContent = (newContent) => {
-  console.log(newContent);
   content = newContent;
 };
 
