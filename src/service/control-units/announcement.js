@@ -12,7 +12,7 @@ const add = (newAnnouncment) => {
   newAnnouncment.id = getNewId();
   content.push(newAnnouncment);
 
-  return content;
+  return newAnnouncment.id;
 };
 
 const getContentById = (id) => {
@@ -35,6 +35,8 @@ const remove = (id) => {
   const newContent = deleteItemFromArray(content, id);
   if (newContent !== -1) {
     content = newContent;
+  } else {
+    return newContent;
   }
   return content;
 };
@@ -43,6 +45,10 @@ const search = (queryString) => {
   return content.filter((el) => el.title.toUpperCase().match(queryString.query.toUpperCase()));
 };
 
+const changeContent = (newContent) => {
+  console.log(newContent);
+  content = newContent;
+};
 
 module.exports = {
   add,
@@ -52,4 +58,5 @@ module.exports = {
   content,
   getContent,
   getContentById,
+  changeContent,
 };

@@ -1,17 +1,17 @@
 'use strict';
 
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
-let {content} = require(`./announcement`);
+let announcementService = require(`./announcement`);
 
 const getContent = (id) => {
-  const offer = content.find((el) => el.id === id);
+  const offer = announcementService.getContent().find((el) => el.id === id);
   return offer.comments;
 };
 
 const remove = (id, commentId) => {
-  const newAnnouncementList = deleteItemFromArray(content, id);
+  const newAnnouncementList = deleteItemFromArray(announcementService.getContent(), id);
   if (newAnnouncementList !== -1) {
-    const mutableAnnouncement = content.find((el) => el.id === id);
+    const mutableAnnouncement = announcementService.getContent().find((el) => el.id === id);
 
     const comments = mutableAnnouncement.comments;
     const newComments = {
@@ -22,27 +22,28 @@ const remove = (id, commentId) => {
     }
     const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
     newAnnouncementList.push(modifiedAnnouncement);
-    content = newAnnouncementList;
+    announcementService.changeContent(newAnnouncementList);
   }
 
-  return content;
+  return newAnnouncementList;
 };
 
 const add = (newCommentText, id) => {
-  const newAnnouncementList = deleteItemFromArray(content, id);
+  const localContent = announcementService.getContent();
+  const newComment = {};
+  const newAnnouncementList = deleteItemFromArray(localContent, id);
   if (newAnnouncementList !== -1) {
-    const mutableAnnouncement = content.find((el) => el.id === id);
+    const mutableAnnouncement = localContent.find((el) => el.id === id);
 
-    const newComment = {
-      id: getNewId(),
-      text: newCommentText.text,
-    };
+    newComment.id = getNewId();
+    newComment.text = newCommentText.text;
+
     mutableAnnouncement.comments.push(newComment);
     newAnnouncementList.push(mutableAnnouncement);
-    content = newAnnouncementList;
+    announcementService.changeContent(newAnnouncementList);
   }
 
-  return content;
+  return newComment.id;
 };
 
 

@@ -31,7 +31,8 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    res.send(annoucementService.add(req.body));
+    const newId = annoucementService.add(req.body);
+    res.status(201).send(`Новое заявление сохранено с id=${newId}.`);
   }
 });
 
@@ -39,13 +40,19 @@ router.put(`/:offerId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    res.send(annoucementService.change(req.body, req.params.offerId));
+    annoucementService.change(req.body, req.params.offerId);
+    res.status(201).send(`Данные успешно изменены.`);
   }
 });
 
 router.delete(`/:offerId`, (req, res) => {
   try {
-    res.send(annoucementService.remove(req.params.offerId));
+    const isDelete = annoucementService.remove(req.params.offerId);
+    if (isDelete === -1) {
+      res.status(410).send(`Возможно заявление уже было удалено`);
+    } else {
+      res.status(204).send(`Заявление успешно удалено.`);
+    }
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);
@@ -63,7 +70,12 @@ router.get(`/:offerId/comments`, async (req, res) => {
 
 router.delete(`/:offerId/comments/:commentId`, (req, res) => {
   try {
-    res.send(commentService.remove(req.params.offerId, req.params.commentId));
+    const isDelete = commentService.remove(req.params.offerId, req.params.commentId);
+    if (isDelete === -1) {
+      res.status(410).send(`Возможно комментарий уже был удален`);
+    } else {
+      res.status(204).send(`Комментарий успешно удален.`);
+    }
   } catch (err) {
     console.error(chalk.red(err));
     res.send([]);
@@ -74,7 +86,8 @@ router.put(`/:offerId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(400).send({error: `Переданы не все поля для нового комментария.`});
   } else {
-    res.send(commentService.add(req.body, req.params.offerId));
+    const commentId = commentService.add(req.body, req.params.offerId);
+    res.status(201).send(`Новый комментарий сохранен с id=${commentId}.`);
   }
 });
 
