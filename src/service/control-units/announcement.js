@@ -28,8 +28,6 @@ const change = (newAnnouncement, id) => {
     newContent.push(modifiedAnnouncement);
     content = newContent;
   }
-
-  return content;
 };
 
 const remove = (id) => {
