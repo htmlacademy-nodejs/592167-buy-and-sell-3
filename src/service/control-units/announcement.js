@@ -16,7 +16,7 @@ const add = (newAnnouncment) => {
   return newAnnouncment.id;
 };
 
-const getContentById = (id) => {
+const getById = (id) => {
   return content.filter((el) => el.id === id);
 };
 
@@ -58,6 +58,6 @@ module.exports = {
   search,
   content,
   getContent,
-  getContentById,
+  getById,
   changeContent,
 };
