@@ -32,11 +32,10 @@ const change = (newAnnouncement, id) => {
 
 const remove = (id) => {
   const newContent = deleteItemFromArray(content, id);
-  if (newContent !== -1) {
-    content = newContent;
-  } else {
+  if (newContent === -1) {
     errors.offerNotFound();
   }
+  content = newContent;
 };
 
 const search = (queryString) => {
