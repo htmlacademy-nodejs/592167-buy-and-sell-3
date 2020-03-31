@@ -2,6 +2,7 @@
 
 const fs = require(`fs`);
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
+const errors = require(`../errors/errors`);
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
@@ -36,11 +37,8 @@ const remove = (id) => {
   const newContent = deleteItemFromArray(content, id);
   if (newContent !== -1) {
     content = newContent;
-    answer.status = 204;
-    answer.text = ``;
   } else {
-    answer.status = 410;
-    answer.text = `Возможно заявление уже было удалено`;
+    errors.offerNotFound();
   }
   return answer;
 };

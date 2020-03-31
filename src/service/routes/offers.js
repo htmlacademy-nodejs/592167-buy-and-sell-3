@@ -47,11 +47,11 @@ router.put(`/:offerId`, (req, res) => {
 
 router.delete(`/:offerId`, (req, res) => {
   try {
-    const isDelete = annoucementService.remove(req.params.offerId);
-    res.status(isDelete.status).send(isDelete.text);
+    annoucementService.remove(req.params.offerId);
+    res.status(204).send(``);
   } catch (err) {
-    console.error(chalk.red(err));
-    res.send([]);
+    console.error(chalk.red(err.code, err.message));
+    res.send(`Выполнение завершилось с ошибкой: code: ${err.code}, message: ${err.message}`);
   }
 });
 
@@ -66,11 +66,11 @@ router.get(`/:offerId/comments`, async (req, res) => {
 
 router.delete(`/:offerId/comments/:commentId`, (req, res) => {
   try {
-    const isDelete = commentService.remove(req.params.offerId, req.params.commentId);
-    res.status(isDelete.status).send(isDelete.text);
+    commentService.remove(req.params.offerId, req.params.commentId);
+    res.status(204).send(``);
   } catch (err) {
-    console.error(chalk.red(err));
-    res.send([]);
+    console.error(chalk.red(err.code, err.message));
+    res.send(`Выполнение завершилось с ошибкой: code: ${err.code}, message: ${err.message}`);
   }
 });
 
