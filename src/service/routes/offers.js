@@ -51,7 +51,7 @@ router.delete(`/:offerId`, (req, res) => {
     res.status(204).send(``);
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
-    res.send(`Выполнение завершилось с ошибкой: code: ${err.code}, message: ${err.message}`);
+    res.send({code: err.code, message: err.message});
   }
 });
 
@@ -70,7 +70,7 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
     res.status(204).send(``);
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
-    res.send(`Выполнение завершилось с ошибкой: code: ${err.code}, message: ${err.message}`);
+    res.send({code: err.code, message: err.message});
   }
 });
 
