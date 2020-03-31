@@ -31,14 +31,12 @@ const change = (newAnnouncement, id) => {
 };
 
 const remove = (id) => {
-  const answer = {};
   const newContent = deleteItemFromArray(content, id);
   if (newContent !== -1) {
     content = newContent;
   } else {
     errors.offerNotFound();
   }
-  return answer;
 };
 
 const search = (queryString) => {
