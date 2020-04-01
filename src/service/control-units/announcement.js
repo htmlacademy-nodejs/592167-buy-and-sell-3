@@ -33,7 +33,7 @@ const change = (newAnnouncement, id) => {
 const remove = (id) => {
   const newContent = deleteItemFromArray(content, id);
   if (newContent === -1) {
-    errors.offerNotFound();
+    throw new errors.AnnouncementNotFoundError();
   }
   content = newContent;
 };

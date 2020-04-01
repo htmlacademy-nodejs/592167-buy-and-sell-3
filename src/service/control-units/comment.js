@@ -22,7 +22,7 @@ const remove = (id, commentId) => {
     };
     if (newComments.comments === -1) {
       announcementService.changeContent(localContent);
-      errors.commentNotFound();
+      throw new errors.CommentNotFoundError();
     }
     const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
     newAnnouncementList.push(modifiedAnnouncement);

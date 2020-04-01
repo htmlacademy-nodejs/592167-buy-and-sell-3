@@ -7,6 +7,7 @@ const router = new Router();
 
 const commentService = require(`../control-units/comment`);
 const annoucementService = require(`../control-units/announcement`);
+const errors = require(`../errors/errors`);
 
 
 router.get(`/`, async (req, res) => {
@@ -51,7 +52,11 @@ router.delete(`/:offerId`, (req, res) => {
     res.status(204).send(``);
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
-    res.send({code: err.code, message: err.message});
+    if (err instanceof errors.AnnouncementNotFoundError) {
+      res.status(410).send({code: 410, message: `announcement with id ${req.params.offerId} isn't found`});
+    } else {
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
@@ -70,7 +75,11 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
     res.status(204).send(``);
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
-    res.send({code: err.code, message: err.message});
+    if (err instanceof errors.CommentNotFoundError) {
+      res.status(410).send({code: 410, message: `comment with id ${req.params.commentId} isn't found`});
+    } else {
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 

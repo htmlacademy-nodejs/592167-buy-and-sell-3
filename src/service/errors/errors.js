@@ -1,19 +1,10 @@
 'use strict';
 
-const UserException = function (message, code) {
-  this.message = message;
-  this.code = code;
-};
+class AnnouncementNotFoundError extends Error {}
 
-const offerNotFound = () => {
-  throw new UserException(`Заявление не найдено.`, 410);
-};
-
-const commentNotFound = () => {
-  throw new UserException(`Комментарий не найден.`, 410);
-};
+class CommentNotFoundError extends Error {}
 
 module.exports = {
-  offerNotFound,
-  commentNotFound
+  AnnouncementNotFoundError,
+  CommentNotFoundError,
 };
