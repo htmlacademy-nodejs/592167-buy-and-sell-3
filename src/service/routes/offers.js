@@ -32,8 +32,8 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
-    const newId = annoucementService.add(req.body);
-    res.status(201).send(`Новое заявление сохранено с id=${newId}.`);
+    annoucementService.add(req.body);
+    res.status(201).send(``);
   }
 });
 
@@ -42,7 +42,7 @@ router.put(`/:offerId`, (req, res) => {
     res.status(400).send({error: `Переданы не все поля для нового объявления.`});
   } else {
     annoucementService.change(req.body, req.params.offerId);
-    res.status(201).send(`Данные успешно изменены.`);
+    res.status(201).send(``);
   }
 });
 
@@ -87,8 +87,8 @@ router.put(`/:offerId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(400).send({error: `Переданы не все поля для нового комментария.`});
   } else {
-    const commentId = commentService.add(req.body, req.params.offerId);
-    res.status(201).send(`Новый комментарий сохранен с id=${commentId}.`);
+    commentService.add(req.body, req.params.offerId);
+    res.status(201).send(``);
   }
 });
 
