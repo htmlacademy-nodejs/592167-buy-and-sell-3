@@ -17,7 +17,7 @@ const add = (newAnnouncment) => {
 };
 
 const getById = (id) => {
-  return content.filter((el) => el.id === id);
+  return content.find((el) => el.id === id);
 };
 
 const change = (newAnnouncement, id) => {
@@ -33,7 +33,7 @@ const change = (newAnnouncement, id) => {
 const remove = (id) => {
   const newContent = deleteItemFromArray(content, id);
   if (newContent === -1) {
-    throw new errors.AnnouncementNotFoundError();
+    throw new errors.AnnouncementNotFoundError(id);
   }
   content = newContent;
 };
