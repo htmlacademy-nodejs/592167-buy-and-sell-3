@@ -15,7 +15,7 @@ router.get(`/`, async (req, res) => {
     res.send(annoucementService.getContent());
   } catch (err) {
     console.error(chalk.red(err));
-    res.status(500).send({code: 500, message: `Internal service error`});
+    res.status(500).send({code: 500, message: err.message});
   }
 });
 
@@ -24,13 +24,13 @@ router.get(`/:offerId`, async (req, res) => {
     res.send(annoucementService.getContentById(req.params.offerId));
   } catch (err) {
     console.error(chalk.red(err));
-    res.status(500).send({code: 500, message: `Internal service error`});
+    res.status(500).send({code: 500, message: err.message});
   }
 });
 
 router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(400).send({error: `Переданы не все поля для нового объявления.`});
+    res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
     annoucementService.add(req.body);
     res.status(201).end();
@@ -39,7 +39,7 @@ router.post(`/`, (req, res) => {
 
 router.put(`/:offerId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(400).send({error: `Переданы не все поля для нового объявления.`});
+    res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
     annoucementService.change(req.body, req.params.offerId);
     res.status(201).end();
@@ -53,7 +53,7 @@ router.delete(`/:offerId`, (req, res) => {
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
     if (err instanceof errors.AnnouncementNotFoundError) {
-      res.status(410).send({code: 410, message: `announcement with id ${req.params.offerId} isn't found`});
+      res.status(410).send({code: 410, message: err.message});
     } else {
       res.status(500).send({code: 500, message: `Internal service error`});
     }
@@ -76,7 +76,7 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
     if (err instanceof errors.CommentNotFoundError) {
-      res.status(410).send({code: 410, message: `comment with id ${req.params.commentId} isn't found`});
+      res.status(410).send({code: 410, message: err.message});
     } else {
       res.status(500).send({code: 500, message: `Internal service error`});
     }
@@ -85,7 +85,7 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
 
 router.put(`/:offerId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
-    res.status(400).send({error: `Переданы не все поля для нового комментария.`});
+    res.status(400).send({code: 2, message: `Переданы не все поля для нового комментария.`});
   } else {
     commentService.add(req.body, req.params.offerId);
     res.status(201).end();
