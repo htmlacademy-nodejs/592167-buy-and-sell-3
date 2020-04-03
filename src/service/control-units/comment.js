@@ -10,7 +10,6 @@ const getContent = (id) => {
 };
 
 const remove = (id, commentId) => {
-  const answer = {};
   const localContent = announcementService.getContent();
   const newAnnouncementList = deleteItemFromArray(localContent, id);
   if (newAnnouncementList !== -1) {
@@ -28,8 +27,6 @@ const remove = (id, commentId) => {
     newAnnouncementList.push(modifiedAnnouncement);
     announcementService.changeContent(newAnnouncementList);
   }
-
-  return answer;
 };
 
 const add = (newCommentText, id) => {

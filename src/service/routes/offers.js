@@ -15,7 +15,7 @@ router.get(`/`, async (req, res) => {
     res.send(annoucementService.getContent());
   } catch (err) {
     console.error(chalk.red(err));
-    res.send([]);
+    res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
 
@@ -24,7 +24,7 @@ router.get(`/:offerId`, async (req, res) => {
     res.send(annoucementService.getContentById(req.params.offerId));
   } catch (err) {
     console.error(chalk.red(err));
-    res.send([]);
+    res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
 
@@ -65,7 +65,7 @@ router.get(`/:offerId/comments`, async (req, res) => {
     res.send(commentService.getContent(req.params.offerId));
   } catch (err) {
     console.error(chalk.red(err));
-    res.send([]);
+    res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
 
