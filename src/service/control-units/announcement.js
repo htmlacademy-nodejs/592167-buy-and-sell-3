@@ -27,6 +27,8 @@ const change = (newAnnouncement, id) => {
     const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newAnnouncement);
     newContent.push(modifiedAnnouncement);
     content = newContent;
+  } else {
+    throw new errors.AnnouncementNotFoundError(id);
   }
 };
 

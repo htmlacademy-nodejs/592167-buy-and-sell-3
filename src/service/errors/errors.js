@@ -3,7 +3,7 @@
 class AnnouncementNotFoundError extends Error {
   constructor(offerId) {
     super();
-    this.message = `Offer with id ${offerId}`;
+    this.message = `Offer with id ${offerId} isn't found`;
   }
 }
 
