@@ -15,6 +15,7 @@ module.exports = {
 
     app.use(express.json());
     initializeRoutes(app);
+    app.use((req, res) => res.status(404).send(`Нет такой страницы`));
 
     app.listen(port, () => {
       console.log(`Сервер запущен на порту: ${port}`);
