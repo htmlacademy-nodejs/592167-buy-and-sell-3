@@ -2,7 +2,7 @@
 
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
 let announcementService = require(`./announcement`);
-const errors = require(`../errors/errors`);
+const {CommentNotFoundError} = require(`../errors/errors`);
 
 const getContent = (id) => {
   const offer = announcementService.getContent().find((el) => el.id === id);
@@ -21,7 +21,7 @@ const remove = (id, commentId) => {
     };
     if (newComments.comments === -1) {
       announcementService.changeContent(localContent);
-      throw new errors.CommentNotFoundError(id, commentId);
+      throw new CommentNotFoundError(id, commentId);
     }
     const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
     newAnnouncementList.push(modifiedAnnouncement);

@@ -2,7 +2,7 @@
 
 const fs = require(`fs`);
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
-const errors = require(`../errors/errors`);
+const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
@@ -27,14 +27,14 @@ const change = (newAnnouncement, id) => {
     newContent.push(newAnnouncement);
     content = newContent;
   } else {
-    throw new errors.AnnouncementNotFoundError(id);
+    throw new AnnouncementNotFoundError(id);
   }
 };
 
 const remove = (id) => {
   const newContent = deleteItemFromArray(content, id);
   if (newContent === -1) {
-    throw new errors.AnnouncementNotFoundError(id);
+    throw new AnnouncementNotFoundError(id);
   }
   content = newContent;
 };
