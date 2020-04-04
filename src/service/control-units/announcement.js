@@ -1,59 +1,42 @@
 'use strict';
 
-const fs = require(`fs`);
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
+const announcementRepository = require(`../repositories/announcementRepository`);
 const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
-const {MOCK_FILE_NAME} = require(`../../constants`);
-let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
-
-const getContent = () => content;
-
-const add = (newAnnouncment) => {
-  newAnnouncment.id = getNewId();
-  content.push(newAnnouncment);
-
-  return newAnnouncment.id;
-};
+const getContent = () => announcementRepository.findAll();
 
 const getById = (id) => {
-  return content.find((el) => el.id === id);
-};
-
-const change = (newAnnouncement, id) => {
-  const newContent = deleteItemFromArray(content, id);
-  if (newContent !== -1) {
-    newAnnouncement.id = id;
-    newContent.push(newAnnouncement);
-    content = newContent;
+  if (announcementRepository.exists(id)) {
+    return announcementRepository.findById(id);
   } else {
     throw new AnnouncementNotFoundError(id);
   }
 };
 
-const remove = (id) => {
-  const newContent = deleteItemFromArray(content, id);
-  if (newContent === -1) {
+const add = (newAnnouncment, id) => {
+  if (id && !announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
   }
-  content = newContent;
+
+  announcementRepository.save(newAnnouncment, id);
 };
 
-const search = (queryString) => {
-  return content.filter((el) => el.title.toUpperCase().includes(queryString.query.toUpperCase()));
+
+const remove = (id) => {
+  if (!announcementRepository.exists(id)) {
+    throw new AnnouncementNotFoundError(id);
+  }
+
+  announcementRepository.remove(id);
 };
 
-const changeContent = (newContent) => {
-  content = newContent;
-};
+const search = (queryString) => announcementRepository.findByTitle(queryString);
+
 
 module.exports = {
-  add,
-  change,
-  remove,
-  search,
-  content,
   getContent,
   getById,
-  changeContent,
+  add,
+  remove,
+  search,
 };

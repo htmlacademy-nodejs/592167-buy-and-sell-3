@@ -9,7 +9,6 @@ const announcementService = require(`../control-units/announcement`);
 
 router.get(`/`, (req, res) => {
   try {
-
     res.send(announcementService.search(req.query));
   } catch (err) {
     console.log(chalk.red(err));

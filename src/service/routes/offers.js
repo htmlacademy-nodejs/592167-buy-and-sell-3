@@ -24,7 +24,11 @@ router.get(`/:offerId`, async (req, res) => {
     res.send(annoucementService.getById(req.params.offerId));
   } catch (err) {
     console.error(chalk.red(err));
-    res.status(500).send({code: 500, message: err.message});
+    if (err instanceof AnnouncementNotFoundError) {
+      res.status(410).send({code: 410, message: err.message});
+    } else {
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
@@ -32,7 +36,7 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
-    annoucementService.add(req.body);
+    annoucementService.add(req.body, undefined);
     res.status(201).end();
   }
 });
@@ -41,7 +45,7 @@ router.put(`/:offerId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
-    annoucementService.change(req.body, req.params.offerId);
+    annoucementService.add(req.body, req.params.offerId);
     res.status(201).end();
   }
 });
