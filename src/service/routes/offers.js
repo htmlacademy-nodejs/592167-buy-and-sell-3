@@ -21,7 +21,7 @@ router.get(`/`, async (req, res) => {
 
 router.get(`/:offerId`, async (req, res) => {
   try {
-    res.send(annoucementService.getContentById(req.params.offerId));
+    res.send(annoucementService.getById(req.params.offerId));
   } catch (err) {
     console.error(chalk.red(err));
     res.status(500).send({code: 500, message: err.message});

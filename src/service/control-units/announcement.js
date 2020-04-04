@@ -23,9 +23,8 @@ const getById = (id) => {
 const change = (newAnnouncement, id) => {
   const newContent = deleteItemFromArray(content, id);
   if (newContent !== -1) {
-    const mutableAnnouncement = content.find((el) => el.id === id);
-    const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newAnnouncement);
-    newContent.push(modifiedAnnouncement);
+    newAnnouncement.id = id;
+    newContent.push(newAnnouncement);
     content = newContent;
   } else {
     throw new errors.AnnouncementNotFoundError(id);
