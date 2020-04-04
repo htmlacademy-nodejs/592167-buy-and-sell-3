@@ -7,7 +7,7 @@ const router = new Router();
 
 const commentService = require(`../control-units/comment`);
 const annoucementService = require(`../control-units/announcement`);
-const errors = require(`../errors/errors`);
+const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
 
 router.get(`/`, async (req, res) => {
@@ -52,7 +52,7 @@ router.delete(`/:offerId`, (req, res) => {
     res.status(204).end();
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
-    if (err instanceof errors.AnnouncementNotFoundError) {
+    if (err instanceof AnnouncementNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
       res.status(500).send({code: 500, message: `Internal service error`});
@@ -75,7 +75,7 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
     res.status(204).end();
   } catch (err) {
     console.error(chalk.red(err.code, err.message));
-    if (err instanceof errors.CommentNotFoundError) {
+    if (err instanceof CommentNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
       res.status(500).send({code: 500, message: `Internal service error`});
