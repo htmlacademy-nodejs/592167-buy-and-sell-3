@@ -22,9 +22,10 @@ const findAll = () => content;
 
 const save = (announcement, id) => {
   if (id) {
+    const offer = content.find((el) => el.id === id);
     const newContent = deleteItemFromArray(content, id);
-    announcement.id = id;
-    newContent.push(announcement);
+    const newOffer = Object.assign({}, offer, announcement);
+    newContent.push(newOffer);
     content = newContent;
   } else {
     announcement.id = getNewId();
