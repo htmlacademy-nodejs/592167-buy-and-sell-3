@@ -6,9 +6,9 @@ const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/err
 
 const getContent = (id) => commentRepository.findByAnnouncementId(id);
 
-const remove = (id, commentId) => {
+const remove = (announcementId, commentId) => {
   if (commentRepository.exists(commentId)) {
-    throw new CommentNotFoundError(id, commentId);
+    throw new CommentNotFoundError(announcementId, commentId);
   }
 
   commentRepository.remove(commentId);
