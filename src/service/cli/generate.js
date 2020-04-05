@@ -82,7 +82,7 @@ const getCategories = (categories) => {
 const generateOffers = (count, titles, categories, sentences, comments) => (
   Array(count).fill({}).map(() => ({
     id: getNewId(),
-    category: getCategories(categories),
+    categories: getCategories(categories),
     description: shuffle(sentences).slice(0, getRandomInit(Description.MIN, Description.MAX)).join(` `),
     picture: getPictureFileName(getRandomInit(PictureRestrict.MIN, PictureRestrict.MAX)),
     title: titles[getRandomInit(0, titles.length - 1)],
