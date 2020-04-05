@@ -3,10 +3,8 @@
 const announcementRepository = require(`../repositories/announcement`);
 
 const findAll = () => {
-  // let categories = [];
-  // announcementRepository.findAll().map((el) => (categories = categories.concat(el.category)));
-  // const tempSet = new Set(categories);
-  const categories = announcementRepository.findAll().map((el) => el.category);
+  let categories = [];
+  announcementRepository.findAll().map((el) => (categories = categories.concat(el.category)));
   const tempSet = new Set(categories);
 
   return [...tempSet];
