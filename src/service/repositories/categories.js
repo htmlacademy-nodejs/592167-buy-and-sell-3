@@ -1,6 +1,6 @@
 'use strict';
 
-const announcementRepository = require(`./announcementRepository`);
+const announcementRepository = require(`src/service/repositories/announcement`);
 
 const findAll = () => {
   let categories = [];

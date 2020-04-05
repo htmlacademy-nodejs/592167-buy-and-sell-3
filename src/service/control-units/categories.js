@@ -1,6 +1,6 @@
 'use strict';
 
-const categoryRepository = require(`../repositories/categoriesRepository`);
+const categoryRepository = require(`src/service/repositories/categories`);
 
 const getCategories = () => categoryRepository.findAll();
 

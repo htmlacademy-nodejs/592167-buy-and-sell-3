@@ -1,7 +1,7 @@
 'use strict';
 
 const {getNewId, deleteItemFromArray} = require(`../../utils`);
-const announcementRepository = require(`../repositories/announcementRepository`);
+const announcementRepository = require(`src/service/repositories/announcement`);
 
 const exists = (commentId) => {
   let localContent = announcementRepository.findAll();
