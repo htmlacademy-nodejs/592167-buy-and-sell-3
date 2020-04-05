@@ -11,7 +11,7 @@ const remove = (announcementId, commentId) => {
     throw new CommentNotFoundError(announcementId, commentId);
   }
 
-  commentRepository.remove(commentId);
+  commentRepository.remove(announcementId, commentId);
 };
 
 const add = (newCommentText, id) => {
