@@ -14,20 +14,14 @@ const findByAnnouncementId = (id) => {
   return offer.comments;
 };
 
-const save = (newCommentText, id) => {
-  const localContent = announcementRepository.findAll();
-  const newComment = {};
-  const newAnnouncementList = deleteItemFromArray(localContent, id);
-  if (newAnnouncementList !== -1) {
-    const mutableAnnouncement = localContent.find((el) => el.id === id);
-
-    newComment.id = getNewId();
-    newComment.text = newCommentText.text;
-
-    mutableAnnouncement.comments.push(newComment);
-    newAnnouncementList.push(mutableAnnouncement);
-    announcementRepository._changeContent(newAnnouncementList);
-  }
+const save = (newCommentText, announcementId) => {
+  let localContent = announcementRepository.findAll();
+  const announcement = localContent.find((el) => el.id === announcementId);
+  const newComment = {
+    id: getNewId(),
+    text: newCommentText.text,
+  };
+  announcement.comments.push(newComment);
 
   return newComment.id;
 };
