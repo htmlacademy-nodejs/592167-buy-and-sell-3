@@ -66,7 +66,7 @@ router.delete(`/:offerId`, (req, res) => {
 
 router.get(`/:offerId/comments`, async (req, res) => {
   try {
-    res.send(commentService.getContent(req.params.offerId));
+    res.send(commentService.getByAnnouncementId(req.params.offerId));
   } catch (err) {
     console.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});

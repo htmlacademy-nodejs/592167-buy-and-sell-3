@@ -4,7 +4,7 @@ const commentRepository = require(`../repositories/comment`);
 const announcementRepository = require(`../repositories/announcement`);
 const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
-const getContent = (id) => commentRepository.findByAnnouncementId(id);
+const getByAnnouncementId = (id) => commentRepository.findByAnnouncementId(id);
 
 const remove = (announcementId, commentId) => {
   if (commentRepository.exists(commentId)) {
@@ -24,7 +24,7 @@ const add = (newCommentText, id) => {
 
 
 module.exports = {
-  getContent,
+  getByAnnouncementId,
   add,
   remove,
 };

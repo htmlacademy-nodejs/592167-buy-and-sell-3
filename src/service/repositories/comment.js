@@ -5,8 +5,8 @@ const announcementRepository = require(`../repositories/announcement`);
 
 const exists = (commentId) => {
   let localContent = announcementRepository.findAll();
-  const arrayOfMatches = localContent.map((el) => el.comments.map((it) => it.id).indexOf(commentId));
-  return (arrayOfMatches.filter((it) => it === -1).length === arrayOfMatches.length);
+  const comments = localContent.map((el) => el.comments.map((it) => it.id).indexOf(commentId));
+  return (comments.filter((it) => it === -1).length === comments.length);
 };
 
 const findByAnnouncementId = (id) => {
