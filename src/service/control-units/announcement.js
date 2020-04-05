@@ -1,6 +1,6 @@
 'use strict';
 
-const announcementRepository = require(`src/service/repositories/announcement`);
+const announcementRepository = require(`../repositories/announcement`);
 const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
 const getContent = () => announcementRepository.findAll();

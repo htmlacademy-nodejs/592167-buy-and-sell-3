@@ -1,7 +1,7 @@
 'use strict';
 
-const commentRepository = require(`src/service/repositories/comment`);
-const announcementRepository = require(`src/service/repositories/announcement`);
+const commentRepository = require(`../repositories/comment`);
+const announcementRepository = require(`../repositories/announcement`);
 const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
 const getContent = (id) => commentRepository.findByAnnouncementId(id);

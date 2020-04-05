@@ -7,8 +7,7 @@ const {MOCK_FILE_NAME} = require(`../../constants`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 const exists = (id) => {
-  const idx = content.map((el) => el.id).indexOf(id);
-  return idx !== -1;
+  return content.find((el) => el.id === id);
 };
 
 const findById = (id) => {

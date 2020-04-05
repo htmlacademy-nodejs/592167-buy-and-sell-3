@@ -1,10 +1,12 @@
 'use strict';
 
-const announcementRepository = require(`src/service/repositories/announcement`);
+const announcementRepository = require(`../repositories/announcement`);
 
 const findAll = () => {
-  let categories = [];
-  announcementRepository.findAll().map((el) => (categories = categories.concat(el.category)));
+  // let categories = [];
+  // announcementRepository.findAll().map((el) => (categories = categories.concat(el.category)));
+  // const tempSet = new Set(categories);
+  const categories = announcementRepository.findAll().map((el) => el.category);
   const tempSet = new Set(categories);
 
   return [...tempSet];
