@@ -1,55 +1,30 @@
 'use strict';
 
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
-let announcementService = require(`./announcement`);
-const {CommentNotFoundError} = require(`../errors/errors`);
+const commentRepository = require(`../repositories/commentRepository`);
+const announcementRepository = require(`../repositories/announcementRepository`);
+const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
-const getContent = (id) => {
-  const offer = announcementService.getContent().find((el) => el.id === id);
-  return offer.comments;
-};
+const getContent = (id) => commentRepository.findByAnnouncementId(id);
 
 const remove = (id, commentId) => {
-  const localContent = announcementService.getContent();
-  const newAnnouncementList = deleteItemFromArray(localContent, id);
-  if (newAnnouncementList !== -1) {
-    const mutableAnnouncement = localContent.find((el) => el.id === id);
-
-    const comments = mutableAnnouncement.comments;
-    const newComments = {
-      comments: deleteItemFromArray(comments, commentId),
-    };
-    if (newComments.comments === -1) {
-      announcementService.changeContent(localContent);
-      throw new CommentNotFoundError(id, commentId);
-    }
-    const modifiedAnnouncement = Object.assign({}, mutableAnnouncement, newComments);
-    newAnnouncementList.push(modifiedAnnouncement);
-    announcementService.changeContent(newAnnouncementList);
+  if (commentRepository.exists(commentId)) {
+    throw new CommentNotFoundError(id, commentId);
   }
+
+  commentRepository.remove(commentId);
 };
 
 const add = (newCommentText, id) => {
-  const localContent = announcementService.getContent();
-  const newComment = {};
-  const newAnnouncementList = deleteItemFromArray(localContent, id);
-  if (newAnnouncementList !== -1) {
-    const mutableAnnouncement = localContent.find((el) => el.id === id);
-
-    newComment.id = getNewId();
-    newComment.text = newCommentText.text;
-
-    mutableAnnouncement.comments.push(newComment);
-    newAnnouncementList.push(mutableAnnouncement);
-    announcementService.changeContent(newAnnouncementList);
+  if (!announcementRepository.exists(id)) {
+    throw new AnnouncementNotFoundError(id);
   }
 
-  return newComment.id;
+  commentRepository.save(newCommentText, id);
 };
 
 
 module.exports = {
-  remove,
-  add,
   getContent,
+  add,
+  remove,
 };

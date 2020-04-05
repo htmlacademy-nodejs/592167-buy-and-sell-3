@@ -42,6 +42,10 @@ const findByTitle = (queryString) => {
   return content.filter((el) => el.title.toUpperCase().includes(queryString.query.toUpperCase()));
 };
 
+const _changeContent = (newContent) => {
+  content = newContent;
+};
+
 module.exports = {
   exists,
   findById,
@@ -49,4 +53,5 @@ module.exports = {
   save,
   findByTitle,
   remove,
+  _changeContent,
 };
