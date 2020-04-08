@@ -4,9 +4,10 @@ const {getNewId, deleteItemFromArray} = require(`../../utils`);
 const announcementRepository = require(`../repositories/announcement`);
 
 const exists = (commentId) => {
-  let localContent = announcementRepository.findAll();
-  const comments = localContent.map((el) => el.comments.map((it) => it.id).indexOf(commentId));
-  return (comments.filter((it) => it === -1).length === comments.length);
+  const found = announcementRepository.findAll()
+    .flatMap((announcment) => announcment.comments)
+    .find((comment) => comment.id === commentId);
+  return found !== undefined;
 };
 
 const findByAnnouncementId = (id) => {
