@@ -10,10 +10,7 @@ const exists = (commentId) => {
   return found !== undefined;
 };
 
-const findByAnnouncementId = (id) => {
-  const offer = announcementRepository.findById(id);
-  return offer.comments;
-};
+const findByAnnouncementId = (id) => announcementRepository.findById(id).comments;
 
 const save = (newCommentText, announcementId) => {
   const announcement = announcementRepository.findById(announcementId);
