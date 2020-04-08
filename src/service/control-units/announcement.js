@@ -13,7 +13,7 @@ const getById = (id) => {
   }
 };
 
-const add = (newAnnouncment, id) => {
+const update = (newAnnouncment, id) => {
   if (id && !announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
   }
@@ -21,6 +21,9 @@ const add = (newAnnouncment, id) => {
   announcementRepository.save(newAnnouncment, id);
 };
 
+const create = (newAnnouncement) => {
+  announcementRepository.save(newAnnouncement, undefined);
+};
 
 const remove = (id) => {
   if (!announcementRepository.exists(id)) {
@@ -36,7 +39,8 @@ const search = (queryString) => announcementRepository.findByTitle(queryString.q
 module.exports = {
   getContent,
   getById,
-  add,
+  update,
+  create,
   remove,
   search,
 };

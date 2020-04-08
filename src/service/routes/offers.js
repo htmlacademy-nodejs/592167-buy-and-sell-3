@@ -36,7 +36,7 @@ router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
-    annoucementService.add(req.body, undefined);
+    annoucementService.create(req.body);
     res.status(201).end();
   }
 });
@@ -45,7 +45,7 @@ router.put(`/:offerId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(400).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
-    annoucementService.add(req.body, req.params.offerId);
+    annoucementService.update(req.body, req.params.offerId);
     res.status(201).end();
   }
 });
