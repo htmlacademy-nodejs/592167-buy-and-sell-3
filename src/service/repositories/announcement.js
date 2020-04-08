@@ -39,7 +39,7 @@ const remove = (id) => {
 };
 
 const findByTitle = (queryString) => {
-  return content.filter((el) => el.title.toUpperCase().includes(queryString.query.toUpperCase()));
+  return content.filter((el) => el.title.toUpperCase().includes(queryString.toUpperCase()));
 };
 
 const _changeContent = (newContent) => {

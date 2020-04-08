@@ -30,7 +30,7 @@ const remove = (id) => {
   announcementRepository.remove(id);
 };
 
-const search = (queryString) => announcementRepository.findByTitle(queryString);
+const search = (queryString) => announcementRepository.findByTitle(queryString.query);
 
 
 module.exports = {
