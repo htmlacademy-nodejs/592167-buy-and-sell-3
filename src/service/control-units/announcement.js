@@ -14,7 +14,7 @@ const getById = (id) => {
 };
 
 const update = (newAnnouncment, id) => {
-  if (id && !announcementRepository.exists(id)) {
+  if (!announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
   }
 

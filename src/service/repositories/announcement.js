@@ -6,17 +6,9 @@ const {deleteItemFromArray, getNewId} = require(`../../utils`);
 const {MOCK_FILE_NAME} = require(`../../constants`);
 let content = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
-const exists = (id) => {
-  return content.find((el) => el.id === id);
-};
+const findById = (id) => content.find((el) => el.id === id);
 
-const findById = (id) => {
-  if (exists(id)) {
-    return content.find((el) => el.id === id);
-  } else {
-    return undefined;
-  }
-};
+const exists = (id) => findById(id) !== undefined;
 
 const findAll = () => content;
 
