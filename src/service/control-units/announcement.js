@@ -6,11 +6,11 @@ const {AnnouncementNotFoundError} = require(`../errors/errors`);
 const getContent = () => announcementRepository.findAll();
 
 const getById = (id) => {
-  if (announcementRepository.exists(id)) {
-    return announcementRepository.findById(id);
-  } else {
+  if (!announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
   }
+
+  announcementRepository.findById(id);
 };
 
 const update = (newAnnouncment, id) => {
