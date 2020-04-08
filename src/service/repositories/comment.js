@@ -11,13 +11,12 @@ const exists = (commentId) => {
 };
 
 const findByAnnouncementId = (id) => {
-  const offer = announcementRepository.findAll().find((el) => el.id === id);
+  const offer = announcementRepository.findById(id);
   return offer.comments;
 };
 
 const save = (newCommentText, announcementId) => {
-  let localContent = announcementRepository.findAll();
-  const announcement = localContent.find((el) => el.id === announcementId);
+  const announcement = announcementRepository.findById(announcementId);
   const newComment = {
     id: getNewId(),
     text: newCommentText.text,
@@ -28,8 +27,7 @@ const save = (newCommentText, announcementId) => {
 };
 
 const remove = (announcementId, commentId) => {
-  let localContent = announcementRepository.findAll();
-  const announcement = localContent.find((el) => el.id === announcementId);
+  const announcement = announcementRepository.findById(announcementId);
   const comments = announcement.comments;
   announcement.comments = deleteItemFromArray(comments, commentId);
 };
