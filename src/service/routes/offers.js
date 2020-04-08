@@ -15,7 +15,7 @@ router.get(`/`, async (req, res) => {
     res.send(annoucementService.getContent());
   } catch (err) {
     console.error(chalk.red(err));
-    res.status(500).send({code: 500, message: err.message});
+    res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
 
