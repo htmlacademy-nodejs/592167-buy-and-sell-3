@@ -9,7 +9,7 @@ const announcementService = require(`../control-units/announcement`);
 
 router.get(`/`, (req, res) => {
   try {
-    res.send(announcementService.search(req.query));
+    res.send(announcementService.search(req.query.query));
   } catch (err) {
     console.log(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
