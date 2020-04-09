@@ -12,7 +12,7 @@ const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/err
 
 router.get(`/`, async (req, res) => {
   try {
-    res.send(annoucementService.getContent());
+    res.send(annoucementService.getAll());
   } catch (err) {
     console.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
