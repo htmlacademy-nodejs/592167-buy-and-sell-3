@@ -22,7 +22,7 @@ const update = (newAnnouncment, id) => {
 };
 
 const create = (newAnnouncement) => {
-  announcementRepository.save(newAnnouncement, undefined);
+  announcementRepository.save(newAnnouncement);
 };
 
 const remove = (id) => {
