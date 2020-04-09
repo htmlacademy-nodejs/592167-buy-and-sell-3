@@ -12,18 +12,18 @@ const exists = (id) => findById(id) !== undefined;
 
 const findAll = () => content;
 
-const save = (announcement, id) => {
+const save = (newAnnouncement, id) => {
   if (id) {
-    const offer = content.find((el) => el.id === id);
+    const announcement = content.find((el) => el.id === id);
     const newContent = deleteItemFromArray(content, id);
-    const newOffer = Object.assign({}, offer, announcement);
+    const newOffer = Object.assign({}, announcement, newAnnouncement);
     newContent.push(newOffer);
     content = newContent;
   } else {
-    announcement.id = getNewId();
-    content.push(announcement);
+    newAnnouncement.id = getNewId();
+    content.push(newAnnouncement);
   }
-  return announcement.id;
+  return newAnnouncement.id;
 };
 
 const remove = (id) => {
