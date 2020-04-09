@@ -10,7 +10,7 @@ const getById = (id) => {
     throw new AnnouncementNotFoundError(id);
   }
 
-  announcementRepository.findById(id);
+  return announcementRepository.findById(id);
 };
 
 const update = (newAnnouncment, id) => {
