@@ -1,8 +1,8 @@
 'use strict';
 
-const offersRoutes = require(`./offers`);
-const categoriesRoutes = require(`./categories`);
-const searchRoutes = require(`./search`);
+const offersRoutes = require(`../routes/offers`);
+const categoriesRoutes = require(`../routes/categories`);
+const searchRoutes = require(`../routes/search`);
 
 const initializeRoutes = (app) => {
   app.use(`/api/offers`, offersRoutes);

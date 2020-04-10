@@ -2,15 +2,16 @@
 
 const {Router} = require(`express`);
 const chalk = require(`chalk`);
-const categoriesService = require(`../control-units/categories`);
 
 const router = new Router();
 
-router.get(`/`, async (req, res) => {
+const announcementService = require(`../services/announcement`);
+
+router.get(`/`, (req, res) => {
   try {
-    res.send(categoriesService.getCategories());
+    res.send(announcementService.search(req.query.query));
   } catch (err) {
-    console.error(chalk.red(err));
+    console.log(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
