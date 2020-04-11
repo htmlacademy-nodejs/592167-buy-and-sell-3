@@ -3,8 +3,8 @@
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
-const {getRandomInit, shuffle, getNewId} = require(`../../utils`);
-const {ExitCode, MOCK_FILE_NAME} = require(`../../constants`);
+const {getRandomInit, shuffle, getNewId} = require(`../utils`);
+const {ExitCode, MOCK_FILE_NAME} = require(`../constants`);
 
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 const FILE_TITLES_PATH = `./data/titles.txt`;
