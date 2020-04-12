@@ -42,7 +42,6 @@ describe(`getById`, () => {
 
 describe(`create`, () => {
   test(`when adding new announcement should return new id`, () => {
-    announcementRepository.exists.mockReturnValue(true);
     announcementRepository.save.mockReturnValue(MOCK_ID);
     const newAnnouncement = {title: `some title`};
 
@@ -71,4 +70,34 @@ describe(`update`, () => {
     expect(() => underTest.update({}, MOCK_ID))
       .toThrowError(new AnnouncementNotFoundError(MOCK_ID));
   });
+});
+
+describe(`remove`, () => {
+  test(`for existing announcement should return message`, () => {
+    announcementRepository.exists.mockReturnValue(true);
+    const message = `announcement ${MOCK_ID} deleted successful`;
+    announcementRepository.remove.mockReturnValue(message);
+
+    const actual = underTest.remove(MOCK_ID);
+
+    expect(actual).toBe(message);
+    expect(announcementRepository.remove).toHaveBeenCalledWith(MOCK_ID);
+  });
+
+  test(`for non-existing anouncement should return error`, () => {
+    announcementRepository.exists.mockReturnValue(false);
+
+    expect(() => underTest.remove(MOCK_ID))
+      .toThrowError(new AnnouncementNotFoundError(MOCK_ID));
+  });
+});
+
+describe(`search`, () => {
+  const expectedAnnouncement = {id: MOCK_ID, title: `some title`};
+  announcementRepository.findByTitle.mockReturnValue(expectedAnnouncement);
+
+  const actual = underTest.search(`title`);
+
+  expect(actual).toBe(expectedAnnouncement);
+  expect(announcementRepository.findByTitle).toHaveBeenCalledWith(`title`);
 });
