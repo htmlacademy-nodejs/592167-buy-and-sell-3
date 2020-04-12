@@ -6,21 +6,21 @@ const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/err
 
 const getByAnnouncementId = (id) => commentRepository.findByAnnouncementId(id);
 
-const remove = (announcementId, commentId) => {
-  console.log(`We are here ${announcementId} and ${commentId}`);
-  if (!commentRepository.exists(commentId)) {
-    throw new CommentNotFoundError(announcementId, commentId);
-  }
-
-  commentRepository.remove(announcementId, commentId);
-};
-
 const add = (newCommentText, id) => {
   if (!announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
   }
 
-  commentRepository.save(newCommentText, id);
+  return commentRepository.save(newCommentText, id);
+};
+
+const remove = (announcementId, commentId) => {
+  if (!commentRepository.exists(commentId)) {
+    throw new CommentNotFoundError(announcementId, commentId);
+  }
+
+  commentRepository.remove(announcementId, commentId);
+  return `comment with id ${commentId} deleted successful`;
 };
 
 
