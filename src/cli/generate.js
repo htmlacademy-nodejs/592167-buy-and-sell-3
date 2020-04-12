@@ -2,6 +2,8 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {getLogger} = require(`../backend/logger`);
+const logger = getLogger();
 
 const {getRandomInit, shuffle, getNewId} = require(`../utils`);
 const {ExitCode, MOCK_FILE_NAME} = require(`../constants`);
@@ -42,9 +44,9 @@ const Comment = {
 const writeDataToFile = async (fileName, content) => {
   try {
     await fs.writeFile(fileName, content);
-    return console.info(chalk.green(`Operation success. File created.`));
+    return logger.info(chalk.green(`Operation success. File created.`));
   } catch (err) {
-    return console.error(chalk.red(`Can't write data to file...`));
+    return logger.error(chalk.red(`Can't write data to file...`));
   }
 };
 
@@ -53,7 +55,7 @@ const readContent = async (filePath) => {
     const content = await fs.readFile(filePath, `utf8`);
     return content.split(`\n`);
   } catch (err) {
-    console.error(chalk.red(err));
+    logger.error(chalk.red(err));
     return [];
   }
 };
@@ -104,7 +106,7 @@ module.exports = {
     const [count] = args;
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
     if (countOffer > MAX_OFFER) {
-      console.error(chalk.red(`Не больше 1000 объявлений`));
+      logger.error(chalk.red(`Не больше 1000 объявлений`));
       process.exit(ExitCode.error);
     }
     const content = JSON.stringify(generateOffers(countOffer, titles, categories, sentences, comments));

@@ -2,6 +2,8 @@
 
 const {Router} = require(`express`);
 const chalk = require(`chalk`);
+const {getLogger} = require(`../logger`);
+const logger = getLogger();
 
 const router = new Router();
 
@@ -13,8 +15,9 @@ const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/err
 router.get(`/`, async (req, res) => {
   try {
     res.send(annoucementService.getAll());
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.error(chalk.red(err));
+    logger.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
@@ -22,8 +25,9 @@ router.get(`/`, async (req, res) => {
 router.get(`/:offerId`, async (req, res) => {
   try {
     res.send(annoucementService.getById(req.params.offerId));
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.error(chalk.red(err));
+    logger.error(chalk.red(err));
     if (err instanceof AnnouncementNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
@@ -55,7 +59,7 @@ router.delete(`/:offerId`, (req, res) => {
     annoucementService.remove(req.params.offerId);
     res.status(204).end();
   } catch (err) {
-    console.error(chalk.red(err.code, err.message));
+    logger.error(chalk.red(err.code, err.message));
     if (err instanceof AnnouncementNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {
@@ -67,8 +71,9 @@ router.delete(`/:offerId`, (req, res) => {
 router.get(`/:offerId/comments`, async (req, res) => {
   try {
     res.send(commentService.getByAnnouncementId(req.params.offerId));
+    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
-    console.error(chalk.red(err));
+    logger.error(chalk.red(err));
     res.status(500).send({code: 500, message: `Internal service error`});
   }
 });
@@ -78,7 +83,7 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
     commentService.remove(req.params.offerId, req.params.commentId);
     res.status(204).end();
   } catch (err) {
-    console.error(chalk.red(err.code, err.message));
+    logger.error(chalk.red(err.code, err.message));
     if (err instanceof CommentNotFoundError) {
       res.status(410).send({code: 410, message: err.message});
     } else {

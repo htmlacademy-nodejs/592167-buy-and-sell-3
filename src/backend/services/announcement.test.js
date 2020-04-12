@@ -58,7 +58,6 @@ describe(`update`, () => {
     announcementRepository.save.mockReturnValue(MOCK_ID);
 
     const actual = underTest.update(newAnnouncement, MOCK_ID);
-    console.log(actual);
 
     expect(actual).toBe(MOCK_ID);
     expect(announcementRepository.findById).toHaveBeenCalledWith(MOCK_ID);
