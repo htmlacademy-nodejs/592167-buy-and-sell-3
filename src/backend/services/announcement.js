@@ -18,11 +18,11 @@ const update = (newAnnouncment, id) => {
     throw new AnnouncementNotFoundError(id);
   }
 
-  announcementRepository.save(newAnnouncment, id);
+  return announcementRepository.save(newAnnouncment, id);
 };
 
 const create = (newAnnouncement) => {
-  announcementRepository.save(newAnnouncement);
+  return announcementRepository.save(newAnnouncement);
 };
 
 const remove = (id) => {
