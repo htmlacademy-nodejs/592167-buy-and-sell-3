@@ -7,8 +7,8 @@
     "test": "npm run eslint && jest",
     "eslint": "eslint --ext .js src/",
     "start": "node src/service.js",
-    "server": "nodemon src/service.js --server 8080",
-    "debug": "LOG_LEVEL=debug nodemon src/service.js --server 8080",
+    "server": "nodemon src/service.js --server 8080 > src/backend/logs/app.log 2> src/backend/logs/error.log",
+    "debug": "LOG_LEVEL=debug nodemon src/service.js --server 8080 > src/backend/logs/app.log 2> src/backend/logs/error.log",
     "start-front-server": "nodemon src/frontend/index.js"
   },
   "repository": {
