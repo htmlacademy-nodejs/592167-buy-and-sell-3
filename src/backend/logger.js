@@ -8,7 +8,7 @@ const logger = require(`pino`)({
 
 module.exports = {
   logger,
-  getLogger(options = []) {
+  getLogger(options = {}) {
     return logger.child(options);
   }
 };
