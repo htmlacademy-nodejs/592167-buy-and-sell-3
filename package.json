@@ -8,6 +8,7 @@
     "eslint": "eslint --ext .js src/",
     "start": "node src/service.js",
     "server": "nodemon src/service.js --server 8080",
+    "debug": "LOG_LEVEL=debug nodemon src/service.js --server 8080",
     "start-front-server": "nodemon src/frontend/index.js"
   },
   "repository": {
