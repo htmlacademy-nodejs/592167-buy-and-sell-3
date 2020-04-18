@@ -78,7 +78,6 @@ describe(`remove`, () => {
     const actual = underTest.remove(MOCK_ID);
 
     expect(actual).toBe(message);
-    expect(announcementRepository.remove).toHaveBeenCalledWith(MOCK_ID);
   });
 
   test(`for non-existing announcement should throw error`, () => {
