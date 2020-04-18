@@ -13,9 +13,9 @@ describe(`getAll`, () => {
     const expectedAnnouncements = [{}, {}, {}];
     announcementRepository.findAll.mockReturnValue(expectedAnnouncements);
 
-    const countAnnouncements = underTest.getAll().length;
+    const countAnnouncements = underTest.getAll();
 
-    expect(countAnnouncements).toBe(3);
+    expect(countAnnouncements).toBe(expectedAnnouncements);
   });
 });
 
