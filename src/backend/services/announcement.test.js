@@ -9,7 +9,7 @@ const {AnnouncementNotFoundError} = require(`../errors/errors`);
 const MOCK_ID = 123456;
 
 describe(`getAll`, () => {
-  test(`for all announcements array length should be 3`, () => {
+  test(`actual announcement list should equal expected`, () => {
     const expectedAnnouncements = [{}, {}, {}];
     announcementRepository.findAll.mockReturnValue(expectedAnnouncements);
 
@@ -28,8 +28,6 @@ describe(`getById`, () => {
     const actual = underTest.getById(MOCK_ID);
 
     expect(actual).toBe(expectedAnnouncement);
-    expect(announcementRepository.exists).toHaveBeenCalledWith(MOCK_ID);
-    expect(announcementRepository.findById).toHaveBeenCalledWith(MOCK_ID);
   });
 
   test(`for non-existing announcement should throw error`, () => {
@@ -52,7 +50,7 @@ describe(`create`, () => {
 });
 
 describe(`update`, () => {
-  test(`for existing announcement should return id`, () => {
+  test(`for existing announcement should apply changes and return its id`, () => {
     announcementRepository.exists.mockReturnValue(true);
     const newAnnouncement = {title: `some title`};
     announcementRepository.save.mockReturnValue(MOCK_ID);
@@ -72,9 +70,9 @@ describe(`update`, () => {
 });
 
 describe(`remove`, () => {
-  test(`for existing announcement should return message`, () => {
+  test(`should return message if existing announcement was successfully deleted`, () => {
     announcementRepository.exists.mockReturnValue(true);
-    const message = `announcement with id ${MOCK_ID} deleted successful`;
+    const message = `announcement with id ${MOCK_ID} successfully deleted`;
     announcementRepository.remove.mockReturnValue(message);
 
     const actual = underTest.remove(MOCK_ID);
@@ -83,7 +81,7 @@ describe(`remove`, () => {
     expect(announcementRepository.remove).toHaveBeenCalledWith(MOCK_ID);
   });
 
-  test(`for non-existing anouncement should return error`, () => {
+  test(`for non-existing announcement should throw error`, () => {
     announcementRepository.exists.mockReturnValue(false);
 
     expect(() => underTest.remove(MOCK_ID))

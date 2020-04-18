@@ -11,7 +11,7 @@ const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/err
 const MOCK_ID = 123456;
 
 describe(`getByAnnouncementId`, () => {
-  test(`method should return comments`, () => {
+  test(`if announcement and comments exist should return comments`, () => {
     const expectedComments = [``, ``, ``];
     commentRepository.findByAnnouncementId.mockReturnValue(expectedComments);
 
@@ -22,7 +22,7 @@ describe(`getByAnnouncementId`, () => {
 });
 
 describe(`add`, () => {
-  test(`for exists comment should return id`, () => {
+  test(`existing announcement should create new comment and return its id`, () => {
     announcementRepository.exists.mockReturnValue(true);
     const expectedComments = [{}, {}];
     commentRepository.save.mockReturnValue(expectedComments);
@@ -32,7 +32,7 @@ describe(`add`, () => {
     expect(actual).toEqual(expectedComments);
   });
 
-  test(`for non-exists comment should return error`, () => {
+  test(`for non-existing announcement should return error`, () => {
     announcementRepository.exists.mockReturnValue(false);
 
     expect(() => underTest.add({}, MOCK_ID))
@@ -41,9 +41,9 @@ describe(`add`, () => {
 });
 
 describe(`remove`, () => {
-  test(`for exists comment should return message`, () => {
+  test(`should return message if existing comment was successfully deleted`, () => {
     commentRepository.exists.mockReturnValue(true);
-    const message = `comment with id ${MOCK_ID} deleted successful`;
+    const message = `comment with id ${MOCK_ID} successfully deleted`;
     commentRepository.remove.mockReturnValue(message);
 
     const actual = underTest.remove(MOCK_ID, MOCK_ID);
@@ -51,7 +51,7 @@ describe(`remove`, () => {
     expect(actual).toBe(message);
   });
 
-  test(`for non-exists comment should return error`, () => {
+  test(`for non-existing comment should return error`, () => {
     commentRepository.exists.mockReturnValue(false);
 
     expect(() => underTest.remove(MOCK_ID, MOCK_ID))
