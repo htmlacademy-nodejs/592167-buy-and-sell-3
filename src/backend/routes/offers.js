@@ -83,7 +83,11 @@ router.get(`/:offerId/comments`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(500).send({code: 500, message: `Internal service error`});
+    if (err instanceof AnnouncementNotFoundError) {
+      res.status(410).send({code: 410, message: err.message});
+    } else {
+      res.status(500).send({code: 500, message: `Internal service error`});
+    }
   }
 });
 
