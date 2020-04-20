@@ -13,6 +13,7 @@ const MOCK_ID = 123456;
 describe(`getByAnnouncementId`, () => {
   test(`if announcement and comments exist should return comments`, () => {
     const expectedComments = [``, ``, ``];
+    announcementRepository.exists.mockReturnValue(true);
     commentRepository.findByAnnouncementId.mockReturnValue(expectedComments);
 
     const actual = underTest.getByAnnouncementId(MOCK_ID);
