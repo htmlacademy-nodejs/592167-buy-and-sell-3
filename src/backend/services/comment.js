@@ -9,7 +9,7 @@ const getByAnnouncementId = (id) => {
     throw new AnnouncementNotFoundError(id);
   }
 
-  commentRepository.findByAnnouncementId(id);
+  return commentRepository.findByAnnouncementId(id);
 };
 
 const add = (newCommentText, id) => {
