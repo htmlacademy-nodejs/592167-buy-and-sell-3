@@ -6,7 +6,7 @@ const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
 const categoriesService = require(`../services/categories`);
-const {HttpCode} = require(`../../constants`);
+const {INTERNAL_SERVER_ERROR} = require(`../../constants`).HttpCode;
 
 const router = new Router();
 
@@ -16,7 +16,7 @@ router.get(`/`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(HttpCode.INTERNAL_SERVER_ERROR).send({code: HttpCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
   }
 });
 

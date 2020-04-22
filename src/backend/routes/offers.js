@@ -10,7 +10,12 @@ const router = new Router();
 const commentService = require(`../services/comment`);
 const annoucementService = require(`../services/announcement`);
 const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
-const {HttpCode} = require(`../../constants`);
+const {
+  INTERNAL_SERVER_ERROR,
+  GONE,
+  BAD_REQUEST,
+  CREATED,
+  NO_CONTENT} = require(`../../constants`).HttpCode;
 
 
 router.get(`/`, async (req, res) => {
@@ -19,7 +24,7 @@ router.get(`/`, async (req, res) => {
     logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(HttpCode.INTERNAL_SERVER_ERROR).send({code: HttpCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+    res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
   }
 });
 
@@ -30,35 +35,35 @@ router.get(`/:offerId`, async (req, res) => {
   } catch (err) {
     logger.error(chalk.red(err));
     if (err instanceof AnnouncementNotFoundError) {
-      res.status(HttpCode.GONE).send({code: HttpCode.GONE, message: err.message});
+      res.status(GONE).send({code: GONE, message: err.message});
     } else {
-      res.status(HttpCode.INTERNAL_SERVER_ERROR).send({code: HttpCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+      res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
     }
   }
 });
 
 router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(HttpCode.BAD_REQUEST).send({code: 1, message: `Переданы не все поля для нового объявления.`});
+    res.status(BAD_REQUEST).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
     const id = annoucementService.create(req.body);
-    res.status(HttpCode.CREATED).send({id});
+    res.status(CREATED).send({id});
   }
 });
 
 router.put(`/:offerId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(HttpCode.BAD_REQUEST).send({code: 1, message: `Переданы не все поля для нового объявления.`});
+    res.status(BAD_REQUEST).send({code: 1, message: `Переданы не все поля для нового объявления.`});
   } else {
     try {
       const id = annoucementService.update(req.body, req.params.offerId);
-      res.status(HttpCode.CREATED).send({id});
+      res.status(CREATED).send({id});
     } catch (err) {
       logger.error(chalk.red(err.code, err.message));
       if (err instanceof AnnouncementNotFoundError) {
-        res.status(HttpCode.GONE).send({code: HttpCode.GONE, message: err.message});
+        res.status(GONE).send({code: GONE, message: err.message});
       } else {
-        res.status(HttpCode.INTERNAL_SERVER_ERROR).send({code: HttpCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+        res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
       }
     }
   }
@@ -67,13 +72,13 @@ router.put(`/:offerId`, (req, res) => {
 router.delete(`/:offerId`, (req, res) => {
   try {
     annoucementService.remove(req.params.offerId);
-    res.status(HttpCode.NO_CONTENT).end();
+    res.status(NO_CONTENT).end();
   } catch (err) {
     logger.error(chalk.red(err.code, err.message));
     if (err instanceof AnnouncementNotFoundError) {
-      res.status(HttpCode.GONE).send({code: HttpCode.GONE, message: err.message});
+      res.status(GONE).send({code: GONE, message: err.message});
     } else {
-      res.status(HttpCode.INTERNAL_SERVER_ERROR).send({code: HttpCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+      res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
     }
   }
 });
@@ -85,9 +90,9 @@ router.get(`/:offerId/comments`, async (req, res) => {
   } catch (err) {
     logger.error(chalk.red(err));
     if (err instanceof AnnouncementNotFoundError) {
-      res.status(HttpCode.GONE).send({code: HttpCode.GONE, message: err.message});
+      res.status(GONE).send({code: GONE, message: err.message});
     } else {
-      res.status(HttpCode.INTERNAL_SERVER_ERROR).send({code: HttpCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+      res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
     }
   }
 });
@@ -95,23 +100,23 @@ router.get(`/:offerId/comments`, async (req, res) => {
 router.delete(`/:offerId/comments/:commentId`, (req, res) => {
   try {
     commentService.remove(req.params.offerId, req.params.commentId);
-    res.status(HttpCode.NO_CONTENT).end();
+    res.status(NO_CONTENT).end();
   } catch (err) {
     logger.error(chalk.red(err.code, err.message));
     if (err instanceof CommentNotFoundError) {
-      res.status(HttpCode.GONE).send({code: HttpCode.GONE, message: err.message});
+      res.status(GONE).send({code: GONE, message: err.message});
     } else {
-      res.status(HttpCode.INTERNAL_SERVER_ERROR).send({code: HttpCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
+      res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
     }
   }
 });
 
 router.post(`/:offerId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
-    res.status(HttpCode.BAD_REQUEST).send({code: 2, message: `Переданы не все поля для нового комментария.`});
+    res.status(BAD_REQUEST).send({code: 2, message: `Переданы не все поля для нового комментария.`});
   } else {
     commentService.add(req.body, req.params.offerId);
-    res.status(HttpCode.CREATED).end();
+    res.status(CREATED).end();
   }
 });
 
