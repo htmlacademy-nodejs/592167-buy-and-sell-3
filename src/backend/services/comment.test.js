@@ -44,12 +44,11 @@ describe(`add`, () => {
 describe(`remove`, () => {
   test(`should return message if existing comment was successfully deleted`, () => {
     commentRepository.exists.mockReturnValue(true);
-    const message = `comment with id ${MOCK_ID} successfully deleted`;
-    commentRepository.remove.mockReturnValue(message);
+    commentRepository.remove.mockReturnValue(true);
 
     const actual = underTest.remove(MOCK_ID, MOCK_ID);
 
-    expect(actual).toBe(message);
+    expect(actual).toBe(true);
   });
 
   test(`for non-existing comment should return error`, () => {

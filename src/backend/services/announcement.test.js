@@ -72,12 +72,11 @@ describe(`update`, () => {
 describe(`remove`, () => {
   test(`should return message if existing announcement was successfully deleted`, () => {
     announcementRepository.exists.mockReturnValue(true);
-    const message = `announcement with id ${MOCK_ID} successfully deleted`;
-    announcementRepository.remove.mockReturnValue(message);
+    announcementRepository.remove.mockReturnValue(true);
 
     const actual = underTest.remove(MOCK_ID);
 
-    expect(actual).toBe(message);
+    expect(actual).toBe(true);
   });
 
   test(`for non-existing announcement should throw error`, () => {

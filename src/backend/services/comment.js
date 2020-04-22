@@ -26,7 +26,7 @@ const remove = (announcementId, commentId) => {
   }
 
   commentRepository.remove(announcementId, commentId);
-  return `comment with id ${commentId} successfully deleted`;
+  return true;
 };
 
 

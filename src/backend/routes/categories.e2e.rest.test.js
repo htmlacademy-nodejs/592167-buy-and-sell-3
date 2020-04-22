@@ -8,5 +8,6 @@ describe(`categories`, () => {
     const res = await request(app).get(`/api/categories`);
 
     expect(res.statusCode).toBe(200);
+    expect(res).toHaveProperty(`body`);
   });
 });

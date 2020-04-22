@@ -31,7 +31,7 @@ const remove = (id) => {
   }
 
   announcementRepository.remove(id);
-  return `announcement with id ${id} successfully deleted`;
+  return true;
 };
 
 const search = (queryString) => announcementRepository.findByTitle(queryString);

@@ -110,12 +110,11 @@ describe(`update announcement`, () => {
 
 describe(`delete announcement`, () => {
   test(`for existing announcement after delete should return status
-  code 204 and message about successfully delete`, async () => {
+  code 204`, async () => {
     const tempAnnouncement = await request(app).post(`/api/offers`)
       .send(newAnnouncement);
     const res = await request(app).delete(`/api/offers/${tempAnnouncement.body.id}`);
 
-    // const message = `announcement with id ${tempAnnouncement.body.id} successfully deleted`;
     expect(res.statusCode).toBe(204);
   });
 
