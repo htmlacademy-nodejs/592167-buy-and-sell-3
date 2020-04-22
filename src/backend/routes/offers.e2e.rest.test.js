@@ -46,11 +46,21 @@ const newComment = {text: `some text`};
 describe(`get all announcements`, () => {
   test(`When get offers status code should be OK`, async () => {
     const res = await request(app).get(`/api/offers`);
+
     expect(res.statusCode).toBe(OK);
+    expect(res.body[0]).toHaveProperty(`id`);
+    expect(res.body[0]).toHaveProperty(`title`);
+    expect(res.body[0]).toHaveProperty(`categories`);
+    expect(res.body[0]).toHaveProperty(`description`);
+    expect(res.body[0]).toHaveProperty(`picture`);
+    expect(res.body[0]).toHaveProperty(`type`);
+    expect(res.body[0]).toHaveProperty(`sum`);
+    expect(res.body[0]).toHaveProperty(`comments`);
   });
 
   test(`when route is not correct status code should be NOT_FOUND`, async () => {
     const res = await request(app).get(`/api/no-offers`);
+
     expect(res.statusCode).toBe(NOT_FOUND);
   });
 });
@@ -58,8 +68,16 @@ describe(`get all announcements`, () => {
 describe(`get announcement`, () => {
   test(`when get announce should had properties id and title`, async () => {
     const res = await request(app).get(`/api/offers/rxc7bK`);
+
+    expect(res.statusCode).toBe(OK);
     expect(res.body).toHaveProperty(`id`);
     expect(res.body).toHaveProperty(`title`);
+    expect(res.body).toHaveProperty(`categories`);
+    expect(res.body).toHaveProperty(`description`);
+    expect(res.body).toHaveProperty(`picture`);
+    expect(res.body).toHaveProperty(`type`);
+    expect(res.body).toHaveProperty(`sum`);
+    expect(res.body).toHaveProperty(`comments`);
   });
 
   test(`for non-existing announcement status code should be GONE`, async () => {
