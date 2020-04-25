@@ -1,15 +1,20 @@
 'use strict';
 
 const request = require(`supertest`);
+const fs = require(`fs`);
+
 const app = require(`../app`);
+const {Cli} = require(`../../cli`);
 
 const {
   OK,
-  NOT_FOUND,
+  NO_CONTENT,
   GONE,
   BAD_REQUEST,
   CREATED,
-  NO_CONTENT} = require(`../../constants`).HttpCode;
+  NOT_FOUND} = require(`../../constants`).HttpCode;
+const {MOCK_FILE_NAME} = require(`../../constants`);
+
 
 const MOCK_ID = 123456;
 const newAnnouncement = {
@@ -43,6 +48,21 @@ const updateAnnouncement = {
 };
 const newComment = {text: `some text`};
 
+const createMockDatabase = async () => {
+  await Cli[`--generate`].run([1]);
+  console.log(fs.existsSync(MOCK_FILE_NAME));
+  const announcement = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
+
+  return announcement[0].id;
+};
+
+const deleteMockDatabase = () => {
+  if (fs.existsSync(`${__dirname}/../../../${MOCK_FILE_NAME}`)) {
+    fs.unlinkSync(`${__dirname}/../../../${MOCK_FILE_NAME}`);
+  }
+};
+
+
 describe(`get all announcements`, () => {
   test(`When get offers status code should be OK`, async () => {
     const res = await request(app).get(`/api/offers`);
@@ -59,6 +79,8 @@ describe(`get all announcements`, () => {
   });
 
   test(`when route is not correct status code should be NOT_FOUND`, async () => {
+    deleteMockDatabase();
+    createMockDatabase();
     const res = await request(app).get(`/api/no-offers`);
 
     expect(res.statusCode).toBe(NOT_FOUND);
@@ -66,8 +88,11 @@ describe(`get all announcements`, () => {
 });
 
 describe(`get announcement`, () => {
+  deleteMockDatabase();
+  const id = createMockDatabase();
   test(`when get announce should had properties id and title`, async () => {
-    const res = await request(app).get(`/api/offers/rxc7bK`);
+    console.log(id);
+    const res = await request(app).get(`/api/offers/${id}`);
 
     expect(res.statusCode).toBe(OK);
     expect(res.body).toHaveProperty(`id`);
