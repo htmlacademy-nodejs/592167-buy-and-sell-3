@@ -70,7 +70,7 @@ describe(`update`, () => {
 });
 
 describe(`remove`, () => {
-  test(`should return message if existing announcement was successfully deleted`, () => {
+  test(`should return 'true' if existing announcement was successfully deleted`, () => {
     announcementRepository.exists.mockReturnValue(true);
     announcementRepository.remove.mockReturnValue(true);
 
