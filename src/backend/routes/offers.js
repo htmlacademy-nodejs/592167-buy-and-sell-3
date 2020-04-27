@@ -115,8 +115,17 @@ router.post(`/:offerId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
     res.status(BAD_REQUEST).send({code: 2, message: `Переданы не все поля для нового комментария.`});
   } else {
-    commentService.add(req.body, req.params.offerId);
-    res.status(CREATED).end();
+    try {
+      commentService.add(req.body, req.params.offerId);
+      res.status(CREATED).end();
+    } catch (err) {
+      logger.error(chalk.red(err));
+      if (err instanceof AnnouncementNotFoundError) {
+        res.status(GONE).send({code: GONE, message: err.message});
+      } else {
+        res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
+      }
+    }
   }
 });
 
