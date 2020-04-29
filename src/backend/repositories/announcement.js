@@ -34,6 +34,10 @@ const findByTitle = (queryString) => {
   return announcements.filter((el) => el.title.toUpperCase().includes(queryString.toUpperCase()));
 };
 
+const set = (newAnnouncements) => {
+  announcements = newAnnouncements;
+};
+
 
 module.exports = {
   exists,
@@ -42,4 +46,5 @@ module.exports = {
   save,
   findByTitle,
   remove,
+  set,
 };
