@@ -29,7 +29,7 @@ describe(`search title`, () => {
   test(`search announcements by substring`, async () => {
     const tempAnnouncement = await request(app).post(`/api/offers`)
       .send(newAnnouncement);
-    const res = await request(app).get(`/api/search?query=title`);
+    const res = await request(app).get(encodeURI(`/api/search?query=title`));
 
     expect(res.body[0].id).toBe(tempAnnouncement.body.id);
   });
