@@ -52,17 +52,12 @@ describe(`get all announcements`, () => {
 describe(`get announcement`, () => {
   test(`when get announce should had properties id and title`, async () => {
     const id = addMockAnnouncement();
+    const expectedBody = Object.assign({}, MOCK_ANNOUNCEMENT);
+    expectedBody.id = id;
     const res = await request(app).get(`/api/offers/${id}`);
 
     expect(res.statusCode).toBe(OK);
-    expect(res.body).toHaveProperty(`id`);
-    expect(res.body).toHaveProperty(`title`);
-    expect(res.body).toHaveProperty(`categories`);
-    expect(res.body).toHaveProperty(`description`);
-    expect(res.body).toHaveProperty(`picture`);
-    expect(res.body).toHaveProperty(`type`);
-    expect(res.body).toHaveProperty(`sum`);
-    expect(res.body).toHaveProperty(`comments`);
+    expect(res.body).toEqual(expectedBody);
 
     deleteMockAnnouncement(id);
   });
