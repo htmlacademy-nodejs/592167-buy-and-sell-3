@@ -21,7 +21,6 @@ const {
 router.get(`/`, async (req, res) => {
   try {
     res.send(annoucementService.getAll());
-    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
@@ -31,7 +30,6 @@ router.get(`/`, async (req, res) => {
 router.get(`/:offerId`, async (req, res) => {
   try {
     res.send(annoucementService.getById(req.params.offerId));
-    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
     if (err instanceof AnnouncementNotFoundError) {
@@ -86,7 +84,6 @@ router.delete(`/:offerId`, (req, res) => {
 router.get(`/:offerId/comments`, async (req, res) => {
   try {
     res.send(commentService.getByAnnouncementId(req.params.offerId));
-    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
     if (err instanceof AnnouncementNotFoundError) {

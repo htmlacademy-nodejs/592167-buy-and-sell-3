@@ -12,12 +12,15 @@ const {initializeRoutes} = require(`./routes`);
 
 app.use(express.json());
 
-initializeRoutes(app);
-
 app.use((req, res, next) => {
+  res.on(`finish`, () => {
+    logger.info(`End request with status code ${res.statusCode}`);
+  });
   logger.debug(`Запрос пришел с адреса ${req.url}`);
   next();
 });
+
+initializeRoutes(app);
 
 app.use((req, res) => {
   res.status(404).send({code: 404, message: `Нет такой страницы`});

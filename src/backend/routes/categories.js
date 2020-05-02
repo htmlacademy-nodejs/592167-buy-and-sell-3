@@ -13,7 +13,6 @@ const router = new Router();
 router.get(`/`, async (req, res) => {
   try {
     res.send(categoriesService.getCategories());
-    logger.info(`End request with status code ${res.statusCode}`);
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
