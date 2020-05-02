@@ -193,12 +193,9 @@ describe(`get all comments from announcement`, () => {
 describe(`delete comments from announcement`, () => {
   test(`for existing announcement and comment delete it by id`, async () => {
     const id = addMockAnnouncement();
-    // const temp = await request(app).get(`/api/offers/${id}`);
-    // console.log(temp.body, expectedComments[1].id);
     const res = await request(app)
       .delete(`/api/offers/${id}/comments/${expectedComments[1].id}`);
 
-    // console.log(res.body);
     expect(res.statusCode).toBe(NO_CONTENT);
 
     deleteMockAnnouncement(id);
