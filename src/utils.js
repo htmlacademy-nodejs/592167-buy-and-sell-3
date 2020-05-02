@@ -1,8 +1,6 @@
 'use strict';
 
-const fs = require(`fs`).promises;
 const nanoid = require(`nanoid`);
-const {MOCK_ANNOUNCEMENT, MOCK_FILE_NAME} = require(`./constants`);
 
 
 const getRandomInit = (min, max) => {
@@ -35,15 +33,10 @@ const getNewId = () => {
   return nanoid(6);
 };
 
-const createMockDatabase = async () => {
-  await fs.writeFile(MOCK_FILE_NAME, MOCK_ANNOUNCEMENT);
-};
-
 
 module.exports = {
   getRandomInit,
   shuffle,
   deleteItemFromArray,
   getNewId,
-  createMockDatabase,
 };
