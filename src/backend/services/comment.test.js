@@ -25,12 +25,11 @@ describe(`getByAnnouncementId`, () => {
 describe(`add`, () => {
   test(`existing announcement should create new comment and return its id`, () => {
     announcementRepository.exists.mockReturnValue(true);
-    const expectedComments = [{}, {}];
-    commentRepository.save.mockReturnValue(expectedComments);
+    commentRepository.save.mockReturnValue(MOCK_ID);
 
-    const actual = underTest.add({text: `some text`}, MOCK_ID);
+    const actual = underTest.add({text: `some text`});
 
-    expect(actual).toEqual(expectedComments);
+    expect(actual).toBe(MOCK_ID);
   });
 
   test(`for non-existing announcement should return error`, () => {
