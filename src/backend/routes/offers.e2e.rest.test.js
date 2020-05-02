@@ -71,14 +71,14 @@ describe(`get announcement`, () => {
 describe(`post announcement`, () => {
   test(`when adding new announcement should return new id`, async () => {
     const res = await request(app).post(`/api/offers`).send(newAnnouncement);
+    const expectedAnnouncement = Object.assign({}, newAnnouncement);
+    expectedAnnouncement.id = res.body.id;
 
-    const announcementId = res.body.id;
+    const announcement = await request(app).get(`/api/offers/${expectedAnnouncement.id}`);
 
-    const announcement = await request(app).get(`/api/offers/${announcementId}`);
+    expect(announcement.body).toEqual(expectedAnnouncement);
 
-    expect(announcement.body.title).toBe(newAnnouncement.title);
-
-    deleteMockAnnouncement(announcementId);
+    deleteMockAnnouncement(expectedAnnouncement.id);
   });
 
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
