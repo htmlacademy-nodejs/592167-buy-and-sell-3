@@ -41,7 +41,7 @@ describe(`add`, () => {
 });
 
 describe(`remove`, () => {
-  test(`should return message if existing comment was successfully deleted`, () => {
+  test(`should return 'true' if existing comment was successfully deleted`, () => {
     commentRepository.exists.mockReturnValue(true);
     commentRepository.remove.mockReturnValue(true);
 
