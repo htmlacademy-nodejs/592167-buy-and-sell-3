@@ -14,7 +14,6 @@ const {
   CREATED,
   NOT_FOUND
 } = require(`../../constants`).HttpCode;
-// const {MOCK_ANNOUNCEMENT} = require(`../../constants`);
 
 const MOCK_ANNOUNCEMENT = {
   categories: [
@@ -57,7 +56,17 @@ delete newAnnouncement.comments;
 const expectedComments = MOCK_ANNOUNCEMENT.comments;
 const newComment = {text: `some text`};
 
-const addMockAnnouncement = () => announcementRepository.save(MOCK_ANNOUNCEMENT);
+let tempId;
+
+beforeEach(() => {
+  tempId = addMockAnnouncement();
+});
+
+afterEach(() => {
+  deleteMockAnnouncement(tempId);
+});
+
+const addMockAnnouncement = () => announcementRepository.save(Object.assign({}, MOCK_ANNOUNCEMENT));
 const deleteMockAnnouncement = (id) => announcementRepository.remove(id);
 
 
@@ -85,15 +94,12 @@ describe(`get all announcements`, () => {
 
 describe(`get announcement`, () => {
   test(`when get announce should had properties id and title`, async () => {
-    const id = addMockAnnouncement();
     const expectedBody = Object.assign({}, MOCK_ANNOUNCEMENT);
-    expectedBody.id = id;
-    const res = await request(app).get(`/api/offers/${id}`);
+    expectedBody.id = tempId;
+    const res = await request(app).get(`/api/offers/${tempId}`);
 
     expect(res.statusCode).toBe(OK);
     expect(res.body).toEqual(expectedBody);
-
-    deleteMockAnnouncement(id);
   });
 
   test(`for non-existing announcement status code should be GONE`, async () => {
@@ -125,25 +131,19 @@ describe(`post announcement`, () => {
 
 describe(`update announcement`, () => {
   test(`when updating announcement title should be 'new title'`, async () => {
-    const id = addMockAnnouncement();
-    await request(app).put(`/api/offers/${id}`)
+    await request(app).put(`/api/offers/${tempId}`)
       .send(newAnnouncement);
-    const res = await request(app).get(`/api/offers/${id}`);
+    const res = await request(app).get(`/api/offers/${tempId}`);
 
     expect(res.body.title).toBe(newAnnouncement.title);
-
-    deleteMockAnnouncement(id);
   });
 
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
     const tempAnnouncement = {title: `some title`};
-    const id = addMockAnnouncement();
-    const res = await request(app).put(`/api/offers/${id}`)
+    const res = await request(app).put(`/api/offers/${tempId}`)
       .send(tempAnnouncement);
 
     expect(res.statusCode).toBe(BAD_REQUEST);
-
-    deleteMockAnnouncement(id);
   });
 
   test(`when updating non-existing announcement status code should be GONE`, async () => {
@@ -164,23 +164,17 @@ describe(`delete announcement`, () => {
   });
 
   test(`when deleting non-existing announcement status code should be GONE`, async () => {
-    const id = addMockAnnouncement();
-    const res = await request(app).delete(`/api/offers/${MOCK_ID}${id}`);
+    const res = await request(app).delete(`/api/offers/${MOCK_ID}`);
 
     expect(res.statusCode).toBe(GONE);
-
-    deleteMockAnnouncement(id);
   });
 });
 
 describe(`get all comments from announcement`, () => {
   test(`for existing announcement should return all comments`, async () => {
-    const id = addMockAnnouncement();
-    const res = await request(app).get(`/api/offers/${id}/comments`);
+    const res = await request(app).get(`/api/offers/${tempId}/comments`);
 
     expect(res.body).toEqual(expectedComments);
-
-    deleteMockAnnouncement(id);
   });
 
   test(`for non-existing announcement status code should be GONE`, async () => {
@@ -192,46 +186,34 @@ describe(`get all comments from announcement`, () => {
 
 describe(`delete comments from announcement`, () => {
   test(`for existing announcement and comment delete it by id`, async () => {
-    const id = addMockAnnouncement();
     const res = await request(app)
-      .delete(`/api/offers/${id}/comments/${expectedComments[1].id}`);
+      .delete(`/api/offers/${tempId}/comments/${expectedComments[1].id}`);
 
     expect(res.statusCode).toBe(NO_CONTENT);
-
-    deleteMockAnnouncement(id);
   });
 
   test(`for existing announcement and non-existing comment status code should be GONE`, async () => {
-    const id = addMockAnnouncement();
     const res = await request(app)
-      .delete(`/api/offers/${id}/comments/${MOCK_ID}`);
+      .delete(`/api/offers/${tempId}/comments/${MOCK_ID}`);
 
     expect(res.statusCode).toBe(GONE);
-
-    deleteMockAnnouncement(id);
   });
 });
 
 describe(`add comment`, () => {
   test(`when add comment for existing announcement should return new comment id`, async () => {
-    const id = addMockAnnouncement();
     const res = await request(app)
-      .post(`/api/offers/${id}/comments`)
+      .post(`/api/offers/${tempId}/comments`)
       .send(newComment);
 
     expect(res.statusCode).toBe(CREATED);
-
-    deleteMockAnnouncement(id);
   });
 
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
-    const id = addMockAnnouncement();
     const res = await request(app)
-      .post(`/api/offers/${id}/comments`)
+      .post(`/api/offers/${tempId}/comments`)
       .send({text: `some text`, orText: `another text`});
 
     expect(res.statusCode).toBe(BAD_REQUEST);
-
-    deleteMockAnnouncement(id);
   });
 });
