@@ -201,7 +201,7 @@ describe(`delete comments from announcement`, () => {
     deleteMockAnnouncement(id);
   });
 
-  test(`for non-existing comment status code should be GONE`, async () => {
+  test(`for existing announcement and non-existing comment status code should be GONE`, async () => {
     const id = addMockAnnouncement();
     const res = await request(app)
       .delete(`/api/offers/${id}/comments/${MOCK_ID}`);
