@@ -1,10 +1,9 @@
 'use strict';
 
 const request = require(`supertest`);
-const announcementRepository = require(`../repositories/announcement`);
-
 
 const app = require(`../app`);
+const announcementRepository = require(`../repositories/announcement`);
 
 const {
   OK,
