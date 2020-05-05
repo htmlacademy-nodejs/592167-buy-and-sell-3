@@ -124,8 +124,9 @@ describe(`post announcement`, () => {
     const tempAnnouncement = {title: `some title`};
     const res = await request(app).post(`/api/offers`).send(tempAnnouncement);
 
-    console.log(res.body);
+    const expectedResponse = {code: 1, message: `Send not all params for new announcement.`};
     expect(res.statusCode).toBe(BAD_REQUEST);
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
