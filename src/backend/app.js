@@ -16,15 +16,15 @@ app.use((req, res, next) => {
   res.on(`finish`, () => {
     logger.info(`End request with status code ${res.statusCode}`);
   });
-  logger.debug(`Запрос пришел с адреса ${req.url}`);
+  logger.debug(`Request came from address ${req.url}`);
   next();
 });
 
 initializeRoutes(app);
 
 app.use((req, res) => {
-  res.status(404).send({code: 404, message: `Нет такой страницы`});
-  logger.error(`Запрос завершился с ошибкой ${res.statusCode}`);
+  res.status(404).send({code: 404, message: `Page not found`});
+  logger.error(`End request with error ${res.statusCode}, resource not found`);
 });
 
 
