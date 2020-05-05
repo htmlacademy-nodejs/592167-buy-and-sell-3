@@ -93,11 +93,11 @@ describe(`get all announcements`, () => {
 
 describe(`get announcement`, () => {
   test(`when get announce should had properties id and title`, async () => {
+    const res = await request(app).get(`/api/offers/${tempId}`);
+    expect(res.statusCode).toBe(OK);
+
     const expectedBody = Object.assign({}, MOCK_ANNOUNCEMENT);
     expectedBody.id = tempId;
-    const res = await request(app).get(`/api/offers/${tempId}`);
-
-    expect(res.statusCode).toBe(OK);
     expect(res.body).toEqual(expectedBody);
   });
 
@@ -124,6 +124,7 @@ describe(`post announcement`, () => {
     const tempAnnouncement = {title: `some title`};
     const res = await request(app).post(`/api/offers`).send(tempAnnouncement);
 
+    console.log(res.body);
     expect(res.statusCode).toBe(BAD_REQUEST);
   });
 });

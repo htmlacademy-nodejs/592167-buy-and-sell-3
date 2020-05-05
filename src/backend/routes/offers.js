@@ -42,7 +42,7 @@ router.get(`/:offerId`, async (req, res) => {
 
 router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(BAD_REQUEST).send({code: 1, message: `Переданы не все поля для нового объявления.`});
+    res.status(BAD_REQUEST).send({code: 1, message: `Send not all params for new announcement.`});
   } else {
     const id = annoucementService.create(req.body);
     res.status(CREATED).send({id});
@@ -51,7 +51,7 @@ router.post(`/`, (req, res) => {
 
 router.put(`/:offerId`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
-    res.status(BAD_REQUEST).send({code: 1, message: `Переданы не все поля для нового объявления.`});
+    res.status(BAD_REQUEST).send({code: 1, message: `Send not all params for new announcement.`});
   } else {
     try {
       const id = annoucementService.update(req.body, req.params.offerId);
@@ -110,7 +110,7 @@ router.delete(`/:offerId/comments/:commentId`, (req, res) => {
 
 router.post(`/:offerId/comments`, (req, res) => {
   if (Object.keys(req.body).length !== 1) {
-    res.status(BAD_REQUEST).send({code: 2, message: `Переданы не все поля для нового комментария.`});
+    res.status(BAD_REQUEST).send({code: 2, message: `Send not all params for new comment.`});
   } else {
     try {
       commentService.add(req.body, req.params.offerId);
