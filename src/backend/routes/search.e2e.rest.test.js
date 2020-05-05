@@ -42,7 +42,7 @@ const addMockAnnouncement = () => announcementRepository.save(MOCK_ANNOUNCEMENT)
 const deleteMockAnnouncement = (id) => announcementRepository.remove(id);
 
 describe(`search title`, () => {
-  test(`search announcements by substring`, async () => {
+  test(`if title contains substring search should return announcements list`, async () => {
     const id = addMockAnnouncement();
     const expectedAnnouncement = Object.assign({}, MOCK_ANNOUNCEMENT);
     expectedAnnouncement.id = id;
@@ -52,5 +52,11 @@ describe(`search title`, () => {
     expect(res.body[0]).toEqual(expectedAnnouncement);
 
     deleteMockAnnouncement(id);
+  });
+
+  test(`if title not contains substring search should return empty list`, async () => {
+    const res = await request(app).get(`/api/search?query=111111`);
+
+    expect(res.body.length === 0).toBeTruthy();
   });
 });
