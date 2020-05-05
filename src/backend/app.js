@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 initializeRoutes(app);
 
 app.use((req, res) => {
-  res.status(404).send({code: 404, message: `Page not found`});
+  res.status(404).send({code: 404, message: `Resource not found`});
   logger.error(`End request with error ${res.statusCode}, resource not found`);
 });
 
