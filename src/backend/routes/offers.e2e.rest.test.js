@@ -120,12 +120,12 @@ describe(`post announcement`, () => {
     deleteMockAnnouncement(expectedAnnouncement.id);
   });
 
-  test(`when sending not all params status code should be BAD_REQUEST`, async () => {
+  test.only(`when sending not all params status code should be BAD_REQUEST`, async () => {
     const tempAnnouncement = {title: `some title`};
     const res = await request(app).post(`/api/offers`).send(tempAnnouncement);
+    expect(res.statusCode).toBe(BAD_REQUEST);
 
     const expectedResponse = {code: 1, message: `Send not all params for new announcement.`};
-    expect(res.statusCode).toBe(BAD_REQUEST);
     expect(res.body).toEqual(expectedResponse);
   });
 });
