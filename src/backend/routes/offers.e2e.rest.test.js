@@ -120,7 +120,7 @@ describe(`post announcement`, () => {
     deleteMockAnnouncement(expectedAnnouncement.id);
   });
 
-  test.only(`when sending not all params status code should be BAD_REQUEST`, async () => {
+  test(`when sending not all params status code should be BAD_REQUEST`, async () => {
     const tempAnnouncement = {title: `some title`};
     const res = await request(app).post(`/api/offers`).send(tempAnnouncement);
     expect(res.statusCode).toBe(BAD_REQUEST);
@@ -131,12 +131,15 @@ describe(`post announcement`, () => {
 });
 
 describe(`update announcement`, () => {
-  test(`when updating announcement title should be 'new title'`, async () => {
+  test(`when updating announcement should be new announcement`, async () => {
     await request(app).put(`/api/offers/${tempId}`)
       .send(newAnnouncement);
     const res = await request(app).get(`/api/offers/${tempId}`);
 
-    expect(res.body.title).toBe(newAnnouncement.title);
+    const expectedAnnouncement = Object.assign(MOCK_ANNOUNCEMENT);
+    expectedAnnouncement.id = tempId;
+
+    expect(res.body).toEqual(expectedAnnouncement);
   });
 
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
