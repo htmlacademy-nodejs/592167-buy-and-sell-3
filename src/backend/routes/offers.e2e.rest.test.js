@@ -123,6 +123,7 @@ describe(`post announcement`, () => {
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
     const tempAnnouncement = {title: `some title`};
     const res = await request(app).post(`/api/offers`).send(tempAnnouncement);
+
     expect(res.statusCode).toBe(BAD_REQUEST);
 
     const expectedResponse = {code: 1, message: `Send not all params for new announcement.`};
@@ -148,13 +149,18 @@ describe(`update announcement`, () => {
       .send(tempAnnouncement);
 
     expect(res.statusCode).toBe(BAD_REQUEST);
+
+    const expectedResponse = {code: 1, message: `Send not all params for new announcement.`};
+    expect(res.body).toEqual(expectedResponse);
   });
 
   test(`when updating non-existing announcement status code should be GONE`, async () => {
     const res = await request(app).put(`/api/offers/${MOCK_ID}`)
       .send(newAnnouncement);
-
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Offer with id ${MOCK_ID} isn't found`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
@@ -169,8 +175,10 @@ describe(`delete announcement`, () => {
 
   test(`when deleting non-existing announcement status code should be GONE`, async () => {
     const res = await request(app).delete(`/api/offers/${MOCK_ID}`);
-
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Offer with id ${MOCK_ID} isn't found`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
@@ -183,8 +191,10 @@ describe(`get all comments from announcement`, () => {
 
   test(`for non-existing announcement status code should be GONE`, async () => {
     const res = await request(app).get(`/api/offers/${MOCK_ID}/comments`);
-
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Offer with id ${MOCK_ID} isn't found`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
@@ -199,8 +209,10 @@ describe(`delete comments from announcement`, () => {
   test(`for existing announcement and non-existing comment status code should be GONE`, async () => {
     const res = await request(app)
       .delete(`/api/offers/${tempId}/comments/${MOCK_ID}`);
-
     expect(res.statusCode).toBe(GONE);
+
+    const expectedResponse = {code: GONE, message: `Comment with id ${MOCK_ID} isn't found for offer with id ${tempId}`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });
 
@@ -211,13 +223,16 @@ describe(`add comment`, () => {
       .send(newComment);
 
     expect(res.statusCode).toBe(CREATED);
+    expect(res.body).toHaveProperty(`id`);
   });
 
   test(`when sending not all params status code should be BAD_REQUEST`, async () => {
     const res = await request(app)
       .post(`/api/offers/${tempId}/comments`)
       .send({text: `some text`, orText: `another text`});
-
     expect(res.statusCode).toBe(BAD_REQUEST);
+
+    const expectedResponse = {code: 2, message: `Send not all params for new comment.`};
+    expect(res.body).toEqual(expectedResponse);
   });
 });

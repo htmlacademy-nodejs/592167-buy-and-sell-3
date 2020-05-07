@@ -113,8 +113,8 @@ router.post(`/:offerId/comments`, (req, res) => {
     res.status(BAD_REQUEST).send({code: 2, message: `Send not all params for new comment.`});
   } else {
     try {
-      commentService.add(req.body, req.params.offerId);
-      res.status(CREATED).end();
+      const id = commentService.add(req.body, req.params.offerId);
+      res.status(CREATED).send({id});
     } catch (err) {
       logger.error(chalk.red(err));
       if (err instanceof AnnouncementNotFoundError) {
