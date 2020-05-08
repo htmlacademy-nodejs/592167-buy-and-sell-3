@@ -44,10 +44,10 @@ const deleteMockAnnouncement = (id) => announcementRepository.remove(id);
 describe(`search title`, () => {
   test(`if title contains substring search should return announcements list`, async () => {
     const id = addMockAnnouncement();
-    const announcement = Object.assign({}, MOCK_ANNOUNCEMENT);
-    announcement.id = id;
 
     const expectedAnnouncements = [];
+    const announcement = Object.assign({}, MOCK_ANNOUNCEMENT);
+    announcement.id = id;
     expectedAnnouncements.push(announcement);
 
     const res = await request(app).get(encodeURI(`/api/search?query=Самый остроумный`));
