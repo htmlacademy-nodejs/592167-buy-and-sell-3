@@ -24,12 +24,11 @@ describe(`categories`, () => {
     expect(res.body.length === 0).toBeTruthy();
   });
 
-  test(`is categories with 'Программирование'`, async () => {
+  test(`categories should be 'MOCK_ANNOUNCEMENT.categories'`, async () => {
     const id = addMockAnnouncement();
-    const expectedCategory = `Программирование`;
     const res = await request(app).get(`/api/categories`);
 
-    expect(res.body).toContain(expectedCategory);
+    expect(res.body).toEqual(MOCK_ANNOUNCEMENT.categories);
 
     deleteMockAnnouncement(id);
   });
