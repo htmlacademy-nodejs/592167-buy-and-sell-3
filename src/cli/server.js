@@ -1,6 +1,8 @@
 'use strict';
 
 const app = require(`../backend/app`);
+const {getLogger} = require(`../backend/logger`);
+const logger = getLogger();
 const DEFAULT_PORT = 3000;
 
 module.exports = {
@@ -10,7 +12,9 @@ module.exports = {
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
     app.listen(port, () => {
-      console.log(`Сервер запущен на порту: ${port}`);
+      logger.info(`Сервер запущен на порту: ${port}`);
+    }).on(`error`, (err) => {
+      logger.error(`Сервер не смог запуститься. Ошибка ${err}`);
     });
   }
 };

@@ -14,7 +14,7 @@ const findAll = () => announcements;
 
 const save = (newAnnouncement, id) => {
   if (id) {
-    const announcement = announcements.find((el) => el.id === id);
+    const announcement = findById(id);
     const newContent = deleteItemFromArray(announcements, id);
     const newOffer = Object.assign({}, announcement, newAnnouncement);
     newContent.push(newOffer);

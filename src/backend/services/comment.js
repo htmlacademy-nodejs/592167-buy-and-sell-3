@@ -4,15 +4,12 @@ const commentRepository = require(`../repositories/comment`);
 const announcementRepository = require(`../repositories/announcement`);
 const {AnnouncementNotFoundError, CommentNotFoundError} = require(`../errors/errors`);
 
-const getByAnnouncementId = (id) => commentRepository.findByAnnouncementId(id);
-
-const remove = (announcementId, commentId) => {
-  console.log(`We are here ${announcementId} and ${commentId}`);
-  if (!commentRepository.exists(commentId)) {
-    throw new CommentNotFoundError(announcementId, commentId);
+const getByAnnouncementId = (id) => {
+  if (!announcementRepository.exists(id)) {
+    throw new AnnouncementNotFoundError(id);
   }
 
-  commentRepository.remove(announcementId, commentId);
+  return commentRepository.findByAnnouncementId(id);
 };
 
 const add = (newCommentText, id) => {
@@ -20,7 +17,16 @@ const add = (newCommentText, id) => {
     throw new AnnouncementNotFoundError(id);
   }
 
-  commentRepository.save(newCommentText, id);
+  return commentRepository.save(newCommentText, id);
+};
+
+const remove = (announcementId, commentId) => {
+  if (!commentRepository.exists(commentId)) {
+    throw new CommentNotFoundError(announcementId, commentId);
+  }
+
+  commentRepository.remove(announcementId, commentId);
+  return true;
 };
 
 
