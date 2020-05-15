@@ -1,5 +1,8 @@
 'use strict';
 
+const request = require(`request-promise-native`);
+const {MOCK_URL} = require(`../../constants`);
+
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
 
@@ -9,6 +12,8 @@ const initializeRoutes = (app) => {
 
 
   app.get(`/`, (req, res) => {
+    request(`${MOCK_URL}/api/offers`, {json: true})
+      .then((content) => console.log(content));
     res.render(`index`);
   });
   app.get(`/register`, (req, res) => {
