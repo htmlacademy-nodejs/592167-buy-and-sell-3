@@ -18,10 +18,9 @@ router.get(`/comments`, (req, res) => {
     .then((announcements) => {
       const commentsOnAnnouncements = announcements.length > MAX_ANNOUNCEMENTS_COMMENTS ? announcements.slice(0, MAX_ANNOUNCEMENTS_COMMENTS) : announcements;
       const comments = commentsOnAnnouncements.map((it) => it.comments);
-      console.log(comments);
     });
-  console.log(`We are here`);
-  res.send(req.originalUrl);
+  res.render(`comments`);
+  // res.send(req.originalUrl);
 });
 
 module.exports = router;
