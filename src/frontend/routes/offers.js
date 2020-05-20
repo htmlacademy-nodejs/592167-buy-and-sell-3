@@ -15,8 +15,7 @@ router.get(`/category/:id`, (req, res) => {
 router.get(`/add`, (req, res) => res.send(req.originalUrl));
 router.get(`/edit/:id`, (req, res) => {
   request(`${MOCK_URL}/api/offers/${req.params.id}`, {json: true})
-    .then((content) => console.log(content));
-  res.send(req.originalUrl);
+    .then((announcement) => res.render(`ticket-edit`, {announcement}));
 });
 router.get(`/:id`, (req, res) => res.send(req.originalUrl));
 
