@@ -9,6 +9,7 @@ app.set(`views`, `${__dirname}/templates`);
 app.set(`view engine`, `pug`);
 
 app.use(express.static(`${__dirname}/static`));
+app.use(`/my/comments`, express.static(`${__dirname}/static`));
 
 initializeRoutes(app);
 
