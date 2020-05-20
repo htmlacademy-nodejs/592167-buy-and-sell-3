@@ -10,8 +10,8 @@ const MAX_ANNOUNCEMENTS_COMMENTS = 3;
 
 router.get(`/`, (req, res) => {
   request(`${MOCK_URL}/api/offers`, {json: true})
-    .then((content) => console.log(content));
-  res.send(req.originalUrl);
+    .then((announcements) => res.render(`my-tickets`, {announcements}))
+    .catch((err) => res.render(`500`, {err}));
 });
 router.get(`/comments`, (req, res) => {
   request(`${MOCK_URL}/api/offers`, {json: true})
