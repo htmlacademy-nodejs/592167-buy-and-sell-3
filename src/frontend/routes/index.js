@@ -13,8 +13,8 @@ const initializeRoutes = (app) => {
 
   app.get(`/`, (req, res) => {
     request(`${MOCK_URL}/api/offers`, {json: true})
-      .then((content) => console.log(content));
-    res.render(`index`);
+      .then((announcements) => res.render(`index`, {announcements}))
+      .catch((err) => res.render(`500`, {err}));
   });
   app.get(`/register`, (req, res) => {
     res.render(`sign-up`);
