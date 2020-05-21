@@ -12,6 +12,8 @@ app.use(express.static(`${__dirname}/static`));
 app.use(`/my`, express.static(`${__dirname}/static`));
 app.use(`/offers`, express.static(`${__dirname}/static`));
 
+app.use(express.urlencoded({extended: false}));
+
 initializeRoutes(app);
 
 const port = 8080;
