@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require(`fs`).promises;
 const {Router} = require(`express`);
 const router = new Router();
 
@@ -14,7 +15,15 @@ router.get(`/category/:id`, (req, res) => {
 });
 router.get(`/add`, (req, res) => res.render(`new-ticket`));
 router.post(`/add`, (req, res) => {
-  console.log(req.body, res.body);
+  const {type, size, path, name} = req.files.avatar;
+  const allowTypes = [`image/jpeg`, `image/png`];
+
+  if (size === 0 || !allowTypes.includes(type)) {
+    fs.unlink(path);
+    return res.redirect(`/offers/add`);
+  }
+
+  console.log(req.fields, name);
 });
 router.get(`/edit/:id`, (req, res) => {
   request(`${MOCK_URL}/api/offers/${req.params.id}`, {json: true})
