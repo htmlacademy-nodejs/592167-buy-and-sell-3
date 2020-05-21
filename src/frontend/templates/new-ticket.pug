@@ -17,12 +17,12 @@ block main
             .ticket-form__content
               .ticket-form__row
                 .form__field
-                  input#ticket-name.js-field(type='text', name='ticket-name', required='')
+                  input#ticket-name.js-field(type='text', name='ticket-name', required='', value=`${newAnnouncement.ticketName}`)
                   label(for='ticket-name') Название
                   span Обязательное поле
               .ticket-form__row
                 .form__field
-                  textarea#comment-field.js-field(name='comment', cols='30', rows='10', maxlength='400', minlength='50')
+                  textarea#comment-field.js-field(name='comment', cols='30', rows='10', maxlength='400', minlength='50') #{newAnnouncement.comment}
                   label(for='comment-field') Описание
                   span Обязательное поле
               .ticket-form__row
@@ -33,14 +33,22 @@ block main
                   option(value='4') Электроника
               .ticket-form__row
                 .form__field.form__field--price
-                  input#price-field.js-field.js-price(type='number', name='price', min='1', required='')
+                  input#price-field.js-field.js-price(type='number', name='price', min='1', required='' value=`${newAnnouncement.price}`)
                   label(for='price-field') Цена
                   span Обязательное поле
                 .form__switch.switch
                   .switch__item
-                    input#buy-field.visually-hidden(type='radio', name='action', value='buy')
-                    label.switch__button(for='buy-field') Куплю
+                    if newAnnouncement.action === `sell`
+                      input#buy-field.visually-hidden(type='radio', name='action', value='buy' checked)
+                      label.switch__button(for='buy-field') Куплю
+                    else
+                      input#buy-field.visually-hidden(type='radio', name='action', value='buy')
+                      label.switch__button(for='buy-field') Куплю
                   .switch__item
-                    input#sell-field.visually-hidden(type='radio', name='action', value='sell')
-                    label.switch__button(for='sell-field') Продам
+                    if newAnnouncement.action === `buy`
+                      input#sell-field.visually-hidden(type='radio', name='action', value='sell' checked)
+                      label.switch__button(for='sell-field') Продам
+                    else
+                      input#sell-field.visually-hidden(type='radio', name='action', value='sell')
+                      label.switch__button(for='sell-field') Продам
             button.form__button.btn.btn--medium.js-button(type='submit', disabled='') Опубликовать

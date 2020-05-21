@@ -7,13 +7,21 @@ const router = new Router();
 const request = require(`request-promise-native`);
 const {MOCK_URL} = require(`../../constants`);
 
+const newAnnouncement = {
+  ticketName: 'Мое название',
+  comment: 'Хотим обратить ваше внимание, что здесь представлен скелет',
+  category: '1',
+  price: '25',
+  action: 'buy'
+};
+
 router.get(`/category`, (req, res) => {
   res.render(`category`);
 });
 router.get(`/category/:id`, (req, res) => {
   res.render(`category`);
 });
-router.get(`/add`, (req, res) => res.render(`new-ticket`));
+router.get(`/add`, (req, res) => res.render(`new-ticket`, {newAnnouncement}));
 router.post(`/add`, (req, res) => {
   const {type, size, path, name} = req.files.avatar;
   const allowTypes = [`image/jpeg`, `image/png`];
