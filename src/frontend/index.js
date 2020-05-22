@@ -13,7 +13,6 @@ app.use(express.static(`${__dirname}/static`));
 app.use(`/my`, express.static(`${__dirname}/static`));
 app.use(`/offers`, express.static(`${__dirname}/static`));
 
-// app.use(express.urlencoded({extended: false}));
 app.use(formidableMiddleware({
   encoding: `utf-8`,
   uploadDir: `${__dirname}/tmp`,

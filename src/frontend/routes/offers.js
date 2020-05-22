@@ -7,36 +7,59 @@ const router = new Router();
 const request = require(`request-promise-native`);
 const {MOCK_URL} = require(`../../constants`);
 
-const newAnnouncement = {
-  ticketName: 'Мое название',
-  comment: 'Хотим обратить ваше внимание, что здесь представлен скелет',
-  category: '1',
-  price: '25',
-  action: 'buy'
+const emptyAnnouncement = {
+  categories: ``,
+  description: ``,
+  title: ``,
+  type: ``,
+  sum: ``,
 };
+let templateAnnouncement;
+
 
 router.get(`/category`, (req, res) => {
   res.render(`category`);
 });
+
 router.get(`/category/:id`, (req, res) => {
   res.render(`category`);
 });
-router.get(`/add`, (req, res) => res.render(`new-ticket`, {newAnnouncement}));
+
+router.get(`/add`, (req, res) => {
+  templateAnnouncement = Object.assign({}, emptyAnnouncement);
+  res.render(`new-ticket`, {templateAnnouncement});
+});
+
 router.post(`/add`, (req, res) => {
   const {type, size, path, name} = req.files.avatar;
   const allowTypes = [`image/jpeg`, `image/png`];
 
+  const newAnnouncement = {
+    categories: req.fields.category,
+    description: req.fields.comment,
+    picture: name,
+    title: req.fields[`ticket-name`],
+    type: req.fields.action,
+    sum: parseInt(req.fields.price, 10),
+  };
+
+  templateAnnouncement = Object.assign({}, newAnnouncement);
+
   if (size === 0 || !allowTypes.includes(type)) {
     fs.unlink(path);
-    return res.redirect(`/offers/add`);
+    return res.render(`new-ticket`, {templateAnnouncement});
   }
 
-  console.log(req.fields, name);
+  request.post(`${MOCK_URL}/api/offers`, {json: newAnnouncement});// .then((content) => console.log(content));
+
+  return res.redirect(`/my`);
 });
+
 router.get(`/edit/:id`, (req, res) => {
   request(`${MOCK_URL}/api/offers/${req.params.id}`, {json: true})
     .then((announcement) => res.render(`ticket-edit`, {announcement}));
 });
+
 router.get(`/:id`, (req, res) => res.send(req.originalUrl));
 
 
