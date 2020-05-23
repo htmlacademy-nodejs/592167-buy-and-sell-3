@@ -8,11 +8,13 @@ const {MOCK_URL} = require(`../../constants`);
 
 const MAX_ANNOUNCEMENTS_COMMENTS = 3;
 
+
 router.get(`/`, (req, res) => {
   request(`${MOCK_URL}/api/offers`, {json: true})
     .then((announcements) => res.render(`my-tickets`, {announcements}))
     .catch((err) => res.render(`500`, {err}));
 });
+
 router.get(`/comments`, (req, res) => {
   request(`${MOCK_URL}/api/offers`, {json: true})
     .then((announcements) => {
@@ -27,5 +29,6 @@ router.get(`/comments`, (req, res) => {
     })
     .catch((err) => res.render(`500`, {err}));
 });
+
 
 module.exports = router;

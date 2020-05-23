@@ -16,16 +16,25 @@ const initializeRoutes = (app) => {
       .then((announcements) => res.render(`index`, {announcements}))
       .catch((err) => res.render(`500`, {err}));
   });
+
   app.get(`/register`, (req, res) => {
     res.render(`sign-up`);
   });
+
   app.get(`/login`, (req, res) => {
     res.render(`login`);
   });
+
   app.get(`/search`, (req, res) => {
-    res.render(`search-result`);
+    request(encodeURI(`${MOCK_URL}/api/search?query=${req.query.search}`))
+      .then((content) => {
+        const announcements = JSON.parse(content);
+        res.render(`search-result`, {announcements});
+      })
+      .catch((err) => res.render(`500`, {err}));
   });
 };
+
 
 module.exports = {
   initializeRoutes
