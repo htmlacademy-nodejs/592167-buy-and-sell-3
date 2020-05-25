@@ -20,7 +20,7 @@ const HttpCode = {
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
 const MOCK_FILE_NAME = `mock.json`;
-const MOCK_URL = `http://localhost:8081`;
+const BACKEND_URL = `http://localhost:8081`;
 
 
 module.exports = {
@@ -29,5 +29,5 @@ module.exports = {
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
   MOCK_FILE_NAME,
-  MOCK_URL,
+  BACKEND_URL,
 };

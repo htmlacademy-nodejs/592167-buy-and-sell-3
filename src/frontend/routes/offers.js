@@ -5,7 +5,7 @@ const {Router} = require(`express`);
 const router = new Router();
 
 const request = require(`request-promise-native`);
-const {MOCK_URL} = require(`../../constants`);
+const {BACKEND_URL} = require(`../../constants`);
 
 const emptyAnnouncement = {
   categories: ``,
@@ -50,13 +50,13 @@ router.post(`/add`, (req, res) => {
     return res.render(`new-ticket`, {templateAnnouncement});
   }
 
-  request.post(`${MOCK_URL}/api/offers`, {json: newAnnouncement});// .then((content) => console.log(content));
+  request.post(`${BACKEND_URL}/api/offers`, {json: newAnnouncement});// .then((content) => console.log(content));
 
   return res.redirect(`/my`);
 });
 
 router.get(`/edit/:id`, (req, res) => {
-  request(`${MOCK_URL}/api/offers/${req.params.id}`, {json: true})
+  request(`${BACKEND_URL}/api/offers/${req.params.id}`, {json: true})
     .then((announcement) => res.render(`ticket-edit`, {announcement}));
 });
 
