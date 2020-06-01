@@ -25,13 +25,13 @@ router.get(`/comments`, async (req, res) => {
     const announcements = response.data;
     const amountOfAnnouncements = Math.min(MAX_ANNOUNCEMENTS_COMMENTS, announcements.length);
     const commentsOnAnnouncements = announcements.slice(0, amountOfAnnouncements);
-    const commentsList = commentsOnAnnouncements.map((it) => ({
+    const firstNAnnouncements = commentsOnAnnouncements.map((it) => ({
       title: it.title,
       type: it.type,
       sum: it.sum,
       comments: it.comments
     }));
-    res.render(`comments`, {commentsList});
+    res.render(`comments`, {firstNAnnouncements});
   } catch (err) {
     res.render(`500`, {err});
   }

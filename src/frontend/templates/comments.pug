@@ -5,7 +5,7 @@ block main
     section.comments
       .comments__wrapper
         h1.visually-hidden Страница комментариев
-        each announcementComments in commentsList
+        each announcementComments in firstNAnnouncements
           .comments__block
             .comments__header
               a.announce-card(href='#')
