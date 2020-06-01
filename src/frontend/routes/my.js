@@ -23,7 +23,8 @@ router.get(`/comments`, async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers`);
     const announcements = response.data;
-    const commentsOnAnnouncements = announcements.length > MAX_ANNOUNCEMENTS_COMMENTS ? announcements.slice(0, MAX_ANNOUNCEMENTS_COMMENTS) : announcements;
+    const amountOfAnnouncements = Math.min(MAX_ANNOUNCEMENTS_COMMENTS, announcements.length);
+    const commentsOnAnnouncements = announcements.slice(0, amountOfAnnouncements);
     const commentsList = commentsOnAnnouncements.map((it) => ({
       title: it.title,
       type: it.type,
