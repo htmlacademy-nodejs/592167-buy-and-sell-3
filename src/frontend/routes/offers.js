@@ -1,16 +1,75 @@
 'use strict';
 
+const fs = require(`fs`).promises;
 const {Router} = require(`express`);
 const router = new Router();
+
+const axios = require(`axios`);
+const {BACKEND_URL} = require(`../../constants`);
+
+const emptyAnnouncement = {
+  categories: ``,
+  description: ``,
+  title: ``,
+  type: ``,
+  sum: ``,
+};
+let templateAnnouncement;
+
 
 router.get(`/category`, (req, res) => {
   res.render(`category`);
 });
+
 router.get(`/category/:id`, (req, res) => {
   res.render(`category`);
 });
-router.get(`/add`, (req, res) => res.send(req.originalUrl));
-router.get(`/edit/:id`, (req, res) => res.send(req.originalUrl));
+
+router.get(`/add`, (req, res) => {
+  templateAnnouncement = Object.assign({}, emptyAnnouncement);
+  res.render(`new-ticket`, {templateAnnouncement});
+});
+
+router.post(`/add`, async (req, res) => {
+  try {
+    const {type, size, path, name} = req.files.avatar;
+    const allowTypes = [`image/jpeg`, `image/png`];
+
+    const newAnnouncement = {
+      categories: req.fields.category,
+      description: req.fields.comment,
+      picture: name,
+      title: req.fields[`ticket-name`],
+      type: req.fields.action,
+      sum: parseInt(req.fields.price, 10),
+    };
+
+    templateAnnouncement = Object.assign({}, newAnnouncement);
+
+    if (size === 0 || !allowTypes.includes(type)) {
+      fs.unlink(path);
+      return res.render(`new-ticket`, {templateAnnouncement});
+    }
+
+    await axios.post(`${BACKEND_URL}/api/offers`, newAnnouncement);
+
+    return res.redirect(`/my`);
+  } catch (err) {
+    res.render(`500`, {err});
+  }
+});
+
+router.get(`/edit/:id`, async (req, res) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
+    const announcement = response.data;
+    res.render(`ticket-edit`, {announcement});
+  } catch (err) {
+    res.render(`500`, {err});
+  }
+});
+
 router.get(`/:id`, (req, res) => res.send(req.originalUrl));
+
 
 module.exports = router;
