@@ -19,31 +19,32 @@ $do$;
 -- Создает базу BUY_AND_SELL
 CREATE DATABASE BUY_AND_SELL WITH OWNER user_buy_and_sell;
 
-\c buy_and_sell;
+\c buy_and_sell user_buy_and_sell;
 
 --Создает таблицу types
 CREATE TABLE types (
     id bigserial PRIMARY KEY NOT NULL,
-    type_name VARCHAR(50) NOT NULL
+    type VARCHAR(50) NOT NULL
 );
 ALTER TABLE types OWNER TO user_buy_and_sell;
 
 --Создает таблицу categories
 CREATE TABLE categories (
     id bigserial PRIMARY KEY NOT NULL,
-    category_name VARCHAR(50) NOT NULL
+    category VARCHAR(50) NOT NULL
 );
 ALTER TABLE categories OWNER TO user_buy_and_sell;
 
 -- Создает таблицу users
 CREATE TABLE users (
     id bigserial PRIMARY KEY NOT NULL,
-    sname VARCHAR(50) NOT NULL,
-    name VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     password VARCHAR(50) NOT NULL
 );
 ALTER TABLE users OWNER TO user_buy_and_sell;
+CREATE UNIQUE INDEX email_idx ON users (email);
 
 -- Создает таблицу announcements
 CREATE TABLE announcements (
@@ -60,8 +61,7 @@ ALTER TABLE announcements OWNER TO user_buy_and_sell;
 CREATE TABLE images (
     id bigserial PRIMARY KEY NOT NULL,
     announcement_id INTEGER NOT NULL REFERENCES announcements,
-    image_type VARCHAR(50) NOT NULL,
-    data text NOT NULL
+    image text NOT NULL
 );
 ALTER TABLE images OWNER TO user_buy_and_sell;
 
@@ -70,53 +70,14 @@ ALTER TABLE images OWNER TO user_buy_and_sell;
     id bigserial PRIMARY KEY NOT NULL,
     announcement_id INTEGER NOT NULL REFERENCES announcements,
     user_id INTEGER NOT NULL REFERENCES users,
-    comment VARCHAR(255) NOT NULL
+    comment text NOT NULL
  );
 ALTER TABLE comments OWNER TO user_buy_and_sell;
 
---Создает таблицу announcement-categories
-CREATE TABLE announcement_categories (
+--Создает таблицу announcements_to_categories
+CREATE TABLE announcements_to_categories (
     announcement_id INTEGER NOT NULL REFERENCES announcements,
     category_id INTEGER NOT NULL REFERENCES categories,
     PRIMARY KEY (announcement_id, category_id)
 );
-ALTER TABLE announcement_categories OWNER TO user_buy_and_sell;
-
-
--- Заполнение базы
-
--- Вставка типов заявления
-INSERT INTO types VALUES(default, 'Покупка'), (default, 'Продажа');
-
--- Вставка категорий
-INSERT INTO categories VALUES(default, 'Мебель'), (default, 'Животные'), (default, 'Посуда'), (default, 'Моделирование'), (default, 'Искусство');
-
--- Вставка пользователей
-INSERT INTO users VALUES(default, 'Иванов', 'Иван', 'ivanov@mail.com', '123123'), (default, 'Фролов', 'Егор', 'frolov@gmail.com', '123456'), (default, 'Петров', 'Михаил', 'user@mail.de', '564321');
-
--- Вставка объявлений
-INSERT INTO announcements VALUES(
-    default,
-    '40 книг на английском, которые есть у всех',
-    'Повседневная практика показывает, что консультация с профессионалами из IT играет важную роль в формировании позиций. Значимость этих проблем настолько очевидна, что консультация с профессионалами из IT представляет собой интересный эксперимент.',
-    46060,
-    1,
-    1
-);
-INSERT INTO announcements VALUES(
-    default,
-    'Десять лучших продуктов для завтрака, о которых не стоит вспоминать',
-    'Не следует, однако, забывать о том, что дальнейшее развитие различных форм деятельности представляет собой интересный парадокс. Продаю с болью в сердце.',
-    35809,
-    2,
-    2
-);
-
--- Вставка связки объявление-категория
-INSERT INTO announcement_categories VALUES(1, 2), (2, 4), (1, 3), (1, 1);
-
--- Вставка комментариев
-INSERT INTO comments VALUES(default, 1, 3, 'some comment'), (default, 1, 1, 'another comment'), (default, 2, 1, 'comment'), (default, 2, 3, 'just comment');
-
--- Вставка изображений
-INSERT INTO images VALUES(default, 2, 'data:image/jpeg;base64', 'base64'), (default, 1, 'data:image/jpeg;base64', 'base64');
+ALTER TABLE announcements_to_categories OWNER TO user_buy_and_sell;
