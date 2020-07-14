@@ -27,6 +27,12 @@ const Categories = {
   MAX: 5,
 };
 
+const getRandomDate = () => {
+  const day = new Date();
+  const threeMonth = 90;
+  day.setDate(day.getDate() - getRandomInit(0, threeMonth));
+  return day;
+};
 
 const addCategories = (countAnnouncements) => {
   let categories = `\n\n-- Добавляет связи между объявлениями и категориями
@@ -110,11 +116,13 @@ insert into categories values (default, 'Разное'),
     if (announcementList.length > 0) {
       announcementList += `\n`;
     }
+    const createDate = getRandomDate().toLocaleString();
     const title = titles[getRandomInit(0, titles.length - 2)];
     const description = shuffle(sentences).slice(0, getRandomInit(Description.MIN, Description.MAX)).join(` `);
     const sum = getRandomInit(SumRestrict.MIN, SumRestrict.MAX);
     announcementList += `insert into announcements values (
       default,
+      '${createDate}',
       '${title}',
       '${description}',
       ${sum},
