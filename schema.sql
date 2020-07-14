@@ -49,6 +49,7 @@ CREATE UNIQUE INDEX email_idx ON users (email);
 -- Создает таблицу announcements
 CREATE TABLE announcements (
     id bigserial PRIMARY KEY NOT NULL,
+    regdate date NOT NULL,
     title varchar(100) NOT NULL,
     description varchar(1000) NOT NULL,
     sum INTEGER NOT NULL,
