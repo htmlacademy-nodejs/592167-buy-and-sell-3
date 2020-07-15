@@ -69,6 +69,7 @@ ALTER TABLE images OWNER TO user_buy_and_sell;
  --Создает таблицу comments
  CREATE TABLE comments (
     id bigserial PRIMARY KEY NOT NULL,
+    regdate date NOT NULL,
     announcement_id INTEGER NOT NULL REFERENCES announcements,
     user_id INTEGER NOT NULL REFERENCES users,
     comment text NOT NULL

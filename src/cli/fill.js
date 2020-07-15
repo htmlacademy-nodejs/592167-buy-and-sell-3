@@ -63,7 +63,8 @@ const addComments = (countAnnouncements) => {
   let comments = `\n-- Добавляет комментарии
 insert into comments values `;
   for (let i = 1; i <= countAnnouncements; i++) {
-    comments += `(default, ${i}, 2, 'comment text${i}')`;
+    const createDate = getRandomDate().toLocaleString();
+    comments += `(default, '${createDate}', ${i}, 2, 'comment text${i}')`;
     comments += `${i === countAnnouncements ? `;` : `,`}\n`;
   }
 
