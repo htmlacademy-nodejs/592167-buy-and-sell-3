@@ -23,22 +23,20 @@ order by c.id;
 -- Сначала свежие объявления;
 select a.id, a.title, a.sum, t.type, a.description, a.regdate,
        concat(u.last_name, ' ', u.first_name) as "user", u.email,
-       count(cm.announcement_id) as comments,
-       string_agg(c.category, ', ') as categories
-from announcements_to_categories ac
-left join announcements a
-    on ac.announcement_id = a.id
-left join comments cm
-          on a.id = cm.announcement_id
-left join types t
-    on a.type_id = t.id
-left join categories c
-    on ac.category_id = c.id
-left join users u
-    on a.user_id = u.id
+       (select count(*) from comments cm  where a.id=cm.announcement_id),
+       string_agg(c.category, ', ')
+from announcements_to_categories atc
+    inner join categories c
+        on atc.category_id = c.id
+    inner join announcements a
+        on atc.announcement_id = a.id
+    inner join types t
+        on a.type_id = t.id
+    inner join users u
+        on a.user_id = u.id
 group by a.id, a.title, a.sum, t.type, a.description, a.regdate,
-         u.last_name, u.first_name, u.email
-order by a.regdate desc;
+         u.first_name, u.last_name, u.email
+order by a.regdate desc
 
 -- Получить полную информацию определённого объявления
 -- (идентификатор объявления, заголовок объявления, стоимость, тип объявления,
@@ -46,21 +44,19 @@ order by a.regdate desc;
 -- количество комментариев, наименование категорий)
 select a.id, a.title, a.sum, t.type, a.description, a.regdate,
        concat(u.last_name, ' ', u.first_name) as "user", u.email,
-       count(cm.announcement_id) as comments,
-       string_agg(c.category, ', ') as categories
-from announcements_to_categories ac
-         left join announcements a
-                   on ac.announcement_id = a.id and a.id = 3
-         left join comments cm
-                   on a.id = cm.announcement_id
-         left join types t
-                   on a.type_id = t.id
-         left join categories c
-                   on ac.category_id = c.id
-         left join users u
-                   on a.user_id = u.id
+       (select count(*) from comments cm  where a.id=cm.announcement_id),
+       string_agg(c.category, ', ')
+from announcements_to_categories atc
+    inner join categories c
+        on atc.category_id = c.id
+    inner join announcements a
+        on atc.announcement_id = a.id and a.id = 4
+    inner join types t
+        on a.type_id = t.id
+    inner join users u
+        on a.user_id = u.id
 group by a.id, a.title, a.sum, t.type, a.description, a.regdate,
-         u.last_name, u.first_name, u.email;
+         u.first_name, u.last_name, u.email
 
 -- Получить список из 5 свежих комментариев
 -- (идентификатор комментария, идентификатор объявления, имя и фамилия автора, текст комментария)
