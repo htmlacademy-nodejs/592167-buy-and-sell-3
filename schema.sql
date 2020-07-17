@@ -49,6 +49,7 @@ CREATE UNIQUE INDEX email_idx ON users (email);
 -- Создает таблицу announcements
 CREATE TABLE announcements (
     id bigserial PRIMARY KEY NOT NULL,
+    regdate date NOT NULL,
     title varchar(100) NOT NULL,
     description varchar(1000) NOT NULL,
     sum INTEGER NOT NULL,
@@ -68,6 +69,7 @@ ALTER TABLE images OWNER TO user_buy_and_sell;
  --Создает таблицу comments
  CREATE TABLE comments (
     id bigserial PRIMARY KEY NOT NULL,
+    regdate date NOT NULL,
     announcement_id INTEGER NOT NULL REFERENCES announcements,
     user_id INTEGER NOT NULL REFERENCES users,
     comment text NOT NULL
