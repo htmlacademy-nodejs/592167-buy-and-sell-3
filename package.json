@@ -36,9 +36,11 @@
     "express": "4.17.1",
     "express-formidable": "1.2.0",
     "nanoid": "2.1.11",
+    "pg": "8.3.0",
     "pino": "6.2.0",
     "pug": "2.0.4",
     "request": "2.88.2",
-    "request-promise-native": "1.0.8"
+    "request-promise-native": "1.0.8",
+    "sequelize": "6.3.3"
   }
 }
