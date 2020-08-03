@@ -1,7 +1,7 @@
 'use strict';
 
 const app = require(`../backend/app`);
-const {testConnect} = require(`../backend/services/db-connect`);
+const {testConnect} = require(`../backend/db/db-connect`);
 const {getLogger} = require(`../backend/logger`);
 require(`dotenv`).config();
 
