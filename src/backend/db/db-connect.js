@@ -11,9 +11,16 @@ const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER
     {
       host: `${process.env.DB_HOST}`,
       dialect: `${process.env.DIALECT}`,
-      logging: (msg) => logger.info(msg),
     }
 );
+
+const Announcements = require(`./models/announcement`)(sequelize, Sequelize);
+const AnnouncementsToCategories = require(`./models/announcements_to_category`)(sequelize, Sequelize);
+const Categories = require(`./models/category`)(sequelize, Sequelize);
+const Comments = require(`./models/comment`)(sequelize, Sequelize);
+const Images = require(`./models/image`)(sequelize, Sequelize);
+const Types = require(`./models/type`)(sequelize, Sequelize);
+const Users = require(`./models/user`)(sequelize, Sequelize);
 
 const testConnect = async () => {
   try {
