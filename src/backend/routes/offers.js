@@ -20,7 +20,7 @@ const {
 
 router.get(`/`, async (req, res) => {
   try {
-    res.send(annoucementService.getAll());
+    res.send(await annoucementService.getAll());
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});

@@ -3,7 +3,9 @@
 const announcementRepository = require(`../repositories/announcement`);
 const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
-const getAll = () => announcementRepository.findAll();
+const getAll = async () => {
+  return await announcementRepository.findAll();
+};
 
 const getById = (id) => {
   if (!announcementRepository.exists(id)) {
