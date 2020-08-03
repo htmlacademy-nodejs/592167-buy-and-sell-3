@@ -6,6 +6,8 @@ require(`dotenv`).config();
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
+const {types, users, categories} = require(`./mocks`);
+
 const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`,
     `${process.env.USER_PASSWORD}`,
     {
@@ -14,17 +16,48 @@ const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER
     }
 );
 
-const Announcements = require(`./models/announcement`)(sequelize, Sequelize);
-const AnnouncementsToCategories = require(`./models/announcements_to_category`)(sequelize, Sequelize);
-const Categories = require(`./models/category`)(sequelize, Sequelize);
-const Comments = require(`./models/comment`)(sequelize, Sequelize);
-const Images = require(`./models/image`)(sequelize, Sequelize);
-const Types = require(`./models/type`)(sequelize, Sequelize);
-const Users = require(`./models/user`)(sequelize, Sequelize);
+const Announcement = require(`./models/announcement`)(sequelize, Sequelize);
+const AnnouncementsToCategory = require(`./models/announcements_to_category`)(sequelize, Sequelize);
+const Category = require(`./models/category`)(sequelize, Sequelize);
+const Comment = require(`./models/comment`)(sequelize, Sequelize);
+const Image = require(`./models/image`)(sequelize, Sequelize);
+const Type = require(`./models/type`)(sequelize, Sequelize);
+const User = require(`./models/user`)(sequelize, Sequelize);
+
+// Связь между таблицами announcements и types
+Type.hasMany(Announcement, {
+  as: `announcements`,
+  foreignKey: `typeId`,
+});
+
+// Связь между таблицами announcements и users
+User.hasMany(Announcement, {
+  as: `announcements`,
+  foreignKey: `userId`,
+});
+
 
 const initDb = async () => {
   await sequelize.sync({ force: true });
   console.log(`Структура БД успешно создана`);
+
+  await Type.bulkCreate(types);
+  await User.bulkCreate(users);
+  await Category.bulkCreate(categories);
+}
+
+const addData = async () => {
+  try {
+    return await Announcement.create({
+      title: `some title`,
+      description: `some description`,
+      sum: 5345,
+      userId: 3,
+      typeId: 1,
+    });
+  } catch (err) {
+    return err.message;
+  }
 }
 
 const testConnect = async () => {
@@ -40,6 +73,17 @@ const testConnect = async () => {
 };
 
 module.exports = {
+  db: {
+    Announcement,
+    AnnouncementsToCategory,
+    Category,
+    Comment,
+    Image,
+    Type,
+    User,
+  },
   testConnect,
   initDb,
+  addData,
+  sequelize,
 };
