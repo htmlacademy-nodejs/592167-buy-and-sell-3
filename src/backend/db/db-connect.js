@@ -22,6 +22,11 @@ const Images = require(`./models/image`)(sequelize, Sequelize);
 const Types = require(`./models/type`)(sequelize, Sequelize);
 const Users = require(`./models/user`)(sequelize, Sequelize);
 
+const initDb = async () => {
+  await sequelize.sync({ force: true });
+  console.log(`Структура БД успешно создана`);
+}
+
 const testConnect = async () => {
   try {
     logger.info(`Устанавливаем соединение с сервером`);
@@ -36,4 +41,5 @@ const testConnect = async () => {
 
 module.exports = {
   testConnect,
+  initDb,
 };

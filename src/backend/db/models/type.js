@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Type extends sequelize.Sequelize.Model{ }
   Type.init({
     id: {
-      type: DataTypes.INTGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
