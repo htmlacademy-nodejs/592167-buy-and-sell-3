@@ -1,12 +1,14 @@
 'use strict';
 
 const Sequelize = require(`sequelize`);
+const Operator = Sequelize.Op;
 require(`dotenv`).config();
 
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
-const {types, users, categories} = require(`./mocks`);
+const {types, users, categories, announcements, announcementsToCategories,
+  images, comments,} = require(`./mocks`);
 
 const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`,
     `${process.env.USER_PASSWORD}`,
@@ -25,8 +27,13 @@ const Type = require(`./models/type`)(sequelize, Sequelize);
 const User = require(`./models/user`)(sequelize, Sequelize);
 
 // Связь между таблицами types и announcements
-Type.hasMany(Announcement, {
-  as: `announcements`,
+// Type.hasMany(Announcement, {
+//   as: `announcements`,
+//   foreignKey: `typeId`,
+// });
+
+Announcement.belongsTo(Type, {
+  as: `types`,
   foreignKey: `typeId`,
 });
 
@@ -74,6 +81,10 @@ const initDb = async () => {
   await Type.bulkCreate(types);
   await User.bulkCreate(users);
   await Category.bulkCreate(categories);
+  await Announcement.bulkCreate(announcements);
+  await AnnouncementsToCategory.bulkCreate(announcementsToCategories);
+  await Image.bulkCreate(images);
+  await Comment.bulkCreate(comments);
 }
 
 const addData = async () => {
@@ -116,4 +127,5 @@ module.exports = {
   initDb,
   addData,
   sequelize,
+  Operator,
 };
