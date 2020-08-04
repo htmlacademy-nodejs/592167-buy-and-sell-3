@@ -22,6 +22,20 @@ const findAll = async () => await db.Announcement.findAll({
   raw: true,
 });
 
+const findMyAnnouncements = async () => await db.Announcement.findAll({
+  include: [{
+    model: db.Type,
+    as: `types`,
+  }, {
+    model: db.Image,
+    as: `images`
+  }],
+  raw: true,
+  where: {
+    userId: 1
+  }
+});
+
 const save = (newAnnouncement, id) => {
   if (id) {
     const announcement = findById(id);
@@ -49,6 +63,7 @@ module.exports = {
   exists,
   findById,
   findAll,
+  findMyAnnouncements,
   save,
   findByTitle,
   remove,
