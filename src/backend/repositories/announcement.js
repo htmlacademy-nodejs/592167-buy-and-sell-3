@@ -11,13 +11,16 @@ const findById = (id) => announcements.find((el) => el.id === id);
 
 const exists = (id) => findById(id) !== undefined;
 
-// const findAll = () => announcements;
-const findAll = async () => {
-  console.log(`we are here`);
-  const usersInfo = await db.Type.findAll({raw: true});
-  console.table(usersInfo);
-  return usersInfo;
-};
+const findAll = async () => await db.Announcement.findAll({
+  include: [{
+    model: db.Type,
+    as: `types`,
+  }, {
+    model: db.Image,
+    as: `images`
+  }],
+  raw: true,
+});
 
 const save = (newAnnouncement, id) => {
   if (id) {
