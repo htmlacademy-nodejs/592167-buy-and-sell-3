@@ -24,16 +24,46 @@ const Image = require(`./models/image`)(sequelize, Sequelize);
 const Type = require(`./models/type`)(sequelize, Sequelize);
 const User = require(`./models/user`)(sequelize, Sequelize);
 
-// Связь между таблицами announcements и types
+// Связь между таблицами types и announcements
 Type.hasMany(Announcement, {
   as: `announcements`,
   foreignKey: `typeId`,
 });
 
-// Связь между таблицами announcements и users
+// Связь между таблицами users и announcements
 User.hasMany(Announcement, {
   as: `announcements`,
   foreignKey: `userId`,
+});
+
+// Связь между таблицами users и comments
+User.hasMany(Comment, {
+  as: `comments`,
+  foreignKey: `userId`,
+});
+
+// Связь между таблицами announcements и comments
+Announcement.hasMany(Comment, {
+  as: `comments`,
+  foreignKey: `announcementId`,
+});
+
+// Связь между таблицами announcements и images
+Announcement.hasMany(Image, {
+  as: `images`,
+  foreignKey: `announcementId`,
+});
+
+// Связь между таблицами announcements и announcements_to_categories
+Announcement.hasMany(AnnouncementsToCategory, {
+  as: `announcementsToCategories`,
+  foreignKey: `announcementId`,
+});
+
+// Связь между таблицами announcements и announcements_to_categories
+Category.hasMany(AnnouncementsToCategory, {
+  as: `announcementsToCategories`,
+  foreignKey: `categoryId`,
 });
 
 
