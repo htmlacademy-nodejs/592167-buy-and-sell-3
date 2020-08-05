@@ -91,10 +91,12 @@ router.delete(`/:offerId`, (req, res) => {
   }
 });
 
-router.get(`/:offerId/comments`, async (req, res) => {
+router.get(`/my/comments`, async (req, res) => {
   try {
-    res.send(commentService.getByAnnouncementId(req.params.offerId));
+    // res.send(commentService.getByAnnouncementId(req.params.offerId));
+    res.send(await commentService.getCommentsOnMyAnnouncements(1));
   } catch (err) {
+    console.log(err);
     logger.error(chalk.red(err));
     if (err instanceof AnnouncementNotFoundError) {
       res.status(GONE).send({code: GONE, message: err.message});
