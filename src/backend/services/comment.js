@@ -12,6 +12,10 @@ const getByAnnouncementId = (id) => {
   return commentRepository.findByAnnouncementId(id);
 };
 
+const getCommentsOnMyAnnouncements = (userId) => {
+  return commentRepository.getCommentsOnMyAnnouncements(userId);
+};
+
 const add = (newCommentText, id) => {
   if (!announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
@@ -32,6 +36,7 @@ const remove = (announcementId, commentId) => {
 
 module.exports = {
   getByAnnouncementId,
+  getCommentsOnMyAnnouncements,
   add,
   remove,
 };
