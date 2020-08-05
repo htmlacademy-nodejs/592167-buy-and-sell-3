@@ -43,6 +43,12 @@ User.hasMany(Announcement, {
   foreignKey: `userId`,
 });
 
+// Связь между таблицами announcements и users
+Announcement.belongsTo(User, {
+  as: `users`,
+  foreignKey: `userId`,
+});
+
 // Связь между таблицами users и comments
 User.hasMany(Comment, {
   as: `comments`,
