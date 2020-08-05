@@ -8,7 +8,9 @@ const getAll = async () => {
 };
 
 const getMyAnnouncements = async () => {
-  return await announcementRepository.findMyAnnouncements();
+  const myAnnouncements = await announcementRepository.findMyAnnouncements();
+  console.table(myAnnouncements);
+  return myAnnouncements;
 };
 
 const getById = (id) => {

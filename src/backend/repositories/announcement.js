@@ -2,7 +2,7 @@
 
 const fs = require(`fs`);
 const {deleteItemFromArray, getNewId} = require(`../../utils`);
-const {db} = require(`../db/db-connect`);
+const {db, sequelize} = require(`../db/db-connect`);
 
 const {MOCK_FILE_NAME} = require(`../../constants`);
 let announcements = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
@@ -12,23 +12,46 @@ const findById = (id) => announcements.find((el) => el.id === id);
 const exists = (id) => findById(id) !== undefined;
 
 const findAll = async () => await db.Announcement.findAll({
+  attributes: {
+    include: [
+      [
+        sequelize.literal(`(
+                    SELECT image.image
+        FROM "Images" AS image
+        WHERE
+                image."announcementId" = "Announcement".id
+        limit 1
+                )`),
+        `images.image`
+      ]
+    ]
+  },
   include: [{
     model: db.Type,
     as: `types`,
-  }, {
-    model: db.Image,
-    as: `images`
   }],
   raw: true,
 });
 
 const findMyAnnouncements = async () => await db.Announcement.findAll({
+  attributes: {
+    include: [
+      [
+        sequelize.literal(`(
+                    SELECT image.image
+        FROM "Images" AS image
+        WHERE
+                image."announcementId" = "Announcement".id
+        limit 1
+                )`),
+        `images.image`
+      ]
+    ]
+  },
   include: [{
     model: db.Type,
+    attributes: [`type`],
     as: `types`,
-  }, {
-    model: db.Image,
-    as: `images`
   }],
   raw: true,
   where: {
