@@ -3,7 +3,13 @@
 const announcementRepository = require(`../repositories/announcement`);
 const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
-const getAll = () => announcementRepository.findAll();
+const getAll = async () => {
+  return await announcementRepository.findAll();
+};
+
+const getMyAnnouncements = async () => {
+  return await announcementRepository.findMyAnnouncements();
+};
 
 const getById = (id) => {
   if (!announcementRepository.exists(id)) {
@@ -39,6 +45,7 @@ const search = (queryString) => announcementRepository.findByTitle(queryString);
 
 module.exports = {
   getAll,
+  getMyAnnouncements,
   getById,
   update,
   create,

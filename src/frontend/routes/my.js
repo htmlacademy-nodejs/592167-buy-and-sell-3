@@ -11,7 +11,7 @@ const MAX_ANNOUNCEMENTS_COMMENTS = 3;
 
 router.get(`/`, async (req, res) => {
   try {
-    const response = await axios.get(`${BACKEND_URL}/api/offers`);
+    const response = await axios.get(`${BACKEND_URL}/api/offers/my`);
     const announcements = response.data;
     res.render(`my-tickets`, {announcements});
   } catch (err) {
