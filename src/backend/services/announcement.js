@@ -44,7 +44,7 @@ const remove = (id) => {
   return true;
 };
 
-const search = (queryString) => announcementRepository.findByTitle(queryString);
+const search = async (queryString) => await announcementRepository.findByTitle(queryString);
 
 
 module.exports = {
