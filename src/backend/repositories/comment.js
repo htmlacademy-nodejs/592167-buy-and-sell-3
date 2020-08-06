@@ -14,29 +14,23 @@ const exists = (commentId) => {
 
 const findByAnnouncementId = (id) => announcementRepository.findById(id).comments;
 
-const getCommentsOnMyAnnouncements = async (userId) => {
-  const result = await db.Announcement.findAll({
-    attributes: [`title`, `description`],
-    include: [{
-      model: db.Type,
-      attributes: [`type`],
-      as: `types`,
-    }, {
+const getCommentsOnMyAnnouncements = async (announcementsId) => {
+  return await db.Comment.findAll({
+    attributes: [`id`, `announcementId`, `comment`, `userId`],
+    include: {
       model: db.User,
       attributes: [`firstName`, `lastName`],
       as: `users`,
-    }, {
-      model: db.Comment,
-      attributes: [`comment`],
-      as: `comments`,
-    }],
-    where: {
-      userId,
     },
-    // raw: true,
+    where: {
+      announcementId: announcementsId,
+    },
+    order: [
+      [`announcementId`],
+      [`createdAt`, `DESC`],
+    ],
+    raw: true,
   });
-
-  return result;
 };
 
 const save = (newCommentText, announcementId) => {
