@@ -59,6 +59,19 @@ const findMyAnnouncements = async () => await db.Announcement.findAll({
   }
 });
 
+const getAnnouncementsForComments = async (userId) => await db.Announcement.findAll({
+  attributes: [`id`, `title`, `sum`],
+  include: {
+    model: db.Type,
+    attributes: [`type`],
+    as: `types`,
+  },
+  where: {
+    userId
+  },
+  raw: true,
+});
+
 const save = (newAnnouncement, id) => {
   if (id) {
     const announcement = findById(id);
@@ -87,6 +100,7 @@ module.exports = {
   findById,
   findAll,
   findMyAnnouncements,
+  getAnnouncementsForComments,
   save,
   findByTitle,
   remove,
