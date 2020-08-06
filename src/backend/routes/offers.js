@@ -93,8 +93,23 @@ router.delete(`/:offerId`, (req, res) => {
 
 router.get(`/my/comments`, async (req, res) => {
   try {
-    // res.send(commentService.getByAnnouncementId(req.params.offerId));
-    res.send(await commentService.getCommentsOnMyAnnouncements(1));
+    const announcements = await annoucementService.getAnnouncementsForComments(1);
+    const announcementsId = announcements.map((el) => el.id);
+    const comments = await commentService.getCommentsOnMyAnnouncements(announcementsId);
+
+    const commentsSend = [];
+    for (let announcement of announcements) {
+      const announcementComments = {
+        id: announcement.id,
+        title: announcement.title,
+        sum: announcement.sum,
+        type: announcement[`types.type`],
+      };
+      announcementComments.comments = comments.filter((it) => it.announcementId === announcement.id);
+      commentsSend.push(announcementComments);
+    }
+
+    res.send(commentsSend);
   } catch (err) {
     console.log(err);
     logger.error(chalk.red(err));
