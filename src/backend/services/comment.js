@@ -12,8 +12,8 @@ const getByAnnouncementId = (id) => {
   return commentRepository.findByAnnouncementId(id);
 };
 
-const getCommentsOnMyAnnouncements = (userId) => {
-  return commentRepository.getCommentsOnMyAnnouncements(userId);
+const getCommentsOnMyAnnouncements = (announcementsId) => {
+  return commentRepository.getCommentsOnMyAnnouncements(announcementsId);
 };
 
 const add = (newCommentText, id) => {

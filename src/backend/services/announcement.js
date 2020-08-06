@@ -8,10 +8,12 @@ const getAll = async () => {
 };
 
 const getMyAnnouncements = async () => {
-  const myAnnouncements = await announcementRepository.findMyAnnouncements();
-  console.table(myAnnouncements);
-  return myAnnouncements;
+  return await announcementRepository.findMyAnnouncements();
 };
+
+const getAnnouncementsForComments = async (userId) => {
+  return await announcementRepository.getAnnouncementsForComments(userId);
+}
 
 const getById = (id) => {
   if (!announcementRepository.exists(id)) {
@@ -48,6 +50,7 @@ const search = (queryString) => announcementRepository.findByTitle(queryString);
 module.exports = {
   getAll,
   getMyAnnouncements,
+  getAnnouncementsForComments,
   getById,
   update,
   create,
