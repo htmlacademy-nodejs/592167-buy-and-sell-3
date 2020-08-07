@@ -7,8 +7,8 @@ require(`dotenv`).config();
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
-const {types, users, categories, announcements, announcementsToCategories,
-  images, comments} = require(`./mocks`);
+// const {types, users, categories, announcements, announcementsToCategories,
+//   images, comments} = require(`./mocks`);
 
 const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`,
     `${process.env.USER_PASSWORD}`,
@@ -86,19 +86,6 @@ Category.hasMany(AnnouncementsToCategory, {
 });
 
 
-const initDb = async () => {
-  await sequelize.sync({force: true});
-  console.log(`Структура БД успешно создана`);
-
-  await Type.bulkCreate(types);
-  await User.bulkCreate(users);
-  await Category.bulkCreate(categories);
-  await Announcement.bulkCreate(announcements);
-  await AnnouncementsToCategory.bulkCreate(announcementsToCategories);
-  await Image.bulkCreate(images);
-  await Comment.bulkCreate(comments);
-};
-
 const addData = async () => {
   try {
     return await Announcement.create({
@@ -136,8 +123,8 @@ module.exports = {
     User,
   },
   connectDb,
-  initDb,
   addData,
   sequelize,
+  Sequelize,
   Operator,
 };
