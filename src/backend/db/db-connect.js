@@ -97,7 +97,6 @@ const connectDb = async () => {
     await sequelize.authenticate();
     logger.info(`Соединение с сервером установлено!`);
   } catch (err) {
-    console.error(`Не удалось установить соединение по причине: ${err}`);
     logger.error(`Не удалось установить соединение по причине: ${err}`);
     process.exit();
   }

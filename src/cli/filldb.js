@@ -2,7 +2,7 @@
 
 const fs = require(`fs`).promises;
 
-const {sequelize, db} = require(`../backend/db/db-connect`);
+const {sequelize, db, connectDb} = require(`../backend/db/db-connect`);
 const {getLogger} = require(`../backend/logger`);
 const logger = getLogger();
 
@@ -150,6 +150,7 @@ module.exports = {
 
     const [count] = args;
     const countAnnouncement = Number.parseInt(count, 10) || DEFAULT_COUNT;
+    await connectDb();
     await initDb(countAnnouncement, titles, sentences, commentsTemplate);
     sequelize.close();
   }
