@@ -113,7 +113,7 @@ const addData = async () => {
   }
 };
 
-const testConnect = async () => {
+const connectDb = async () => {
   try {
     logger.info(`Устанавливаем соединение с сервером`);
     await sequelize.authenticate();
@@ -135,7 +135,7 @@ module.exports = {
     Type,
     User,
   },
-  testConnect,
+  connectDb,
   initDb,
   addData,
   sequelize,
