@@ -30,7 +30,6 @@ router.get(`/`, async (req, res) => {
 router.get(`/my`, async (req, res) => {
   try {
     res.send(await annoucementService.getMyAnnouncements());
-    // res.send(`method is work`);
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});

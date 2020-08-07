@@ -7,9 +7,6 @@ require(`dotenv`).config();
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
-// const {types, users, categories, announcements, announcementsToCategories,
-//   images, comments} = require(`./mocks`);
-
 const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`,
     `${process.env.USER_PASSWORD}`,
     {
@@ -25,12 +22,6 @@ const Comment = require(`./models/comment`)(sequelize, Sequelize);
 const Image = require(`./models/image`)(sequelize, Sequelize);
 const Type = require(`./models/type`)(sequelize, Sequelize);
 const User = require(`./models/user`)(sequelize, Sequelize);
-
-// Связь между таблицами types и announcements
-// Type.hasMany(Announcement, {
-//   as: `announcements`,
-//   foreignKey: `typeId`,
-// });
 
 Announcement.belongsTo(Type, {
   as: `types`,

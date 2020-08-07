@@ -118,7 +118,6 @@ const findByTitle = async (queryString) => {
     },
     raw: true,
   });
-  // return announcements.filter((el) => el.title.toUpperCase().includes(queryString.toUpperCase()));
 };
 
 

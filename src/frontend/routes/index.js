@@ -33,7 +33,6 @@ const initializeRoutes = (app) => {
     try {
       const response = await axios.get(encodeURI(`${BACKEND_URL}/api/search?query=${req.query.search}`));
       const announcements = response.data;
-      // res.send(announcements);
       res.render(`search-result`, {announcements});
     } catch (err) {
       res.render(`500`, {err});
