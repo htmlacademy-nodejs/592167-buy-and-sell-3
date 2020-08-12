@@ -13,11 +13,11 @@ block main
             li.tickets-list__item
               .ticket-card.ticket-card--color01
                 .ticket-card__img
-                  img(src=`/img/${announcement.picture}`, srcset='/img/item01@2x.jpg 2x', alt='Изображение товара')
+                  img(src=`/img/${announcement['images.image']}`, srcset='/img/item01@2x.jpg 2x', alt='Изображение товара')
                 .ticket-card__info
-                  span.ticket-card__label #{announcement.type}
+                  span.ticket-card__label #{announcement['types.type']}
                   .ticket-card__categories
-                    a(href='#') #{announcement.categories[0]}
+                    a(href='#') #{announcement.categories ? announcement.categories[0] : ``}
                   .ticket-card__header
                     h3.ticket-card__title
                       a(href='#') #{announcement.title}

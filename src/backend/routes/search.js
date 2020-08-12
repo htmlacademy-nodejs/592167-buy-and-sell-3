@@ -10,9 +10,9 @@ const router = new Router();
 const announcementService = require(`../services/announcement`);
 const {INTERNAL_SERVER_ERROR} = require(`../../constants`).HttpCode;
 
-router.get(`/`, (req, res) => {
+router.get(`/`, async (req, res) => {
   try {
-    res.send(announcementService.search(req.query.query));
+    res.send(await announcementService.search(req.query.query));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
