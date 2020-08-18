@@ -17,7 +17,8 @@ const emptyAnnouncement = {
 let templateAnnouncement;
 
 
-router.get(`/category`, (req, res) => {
+router.get(`/category`, async (req, res) => {
+  const elementCountCategory = await axios.get(`${BACKEND_URL}/api/offers/category`);
   res.render(`category`);
 });
 
