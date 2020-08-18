@@ -2,7 +2,7 @@
 
 const fs = require(`fs`).promises;
 
-const {sequelize, db, connectDb} = require(`../backend/db/db-connect`);
+const {sequelize, db, connectDb, Operator} = require(`../backend/db/db-connect`);
 const {getLogger} = require(`../backend/logger`);
 const logger = getLogger();
 
@@ -23,9 +23,9 @@ const Description = {
   MAX: 5,
 };
 
-const Categories = {
+const ArticlesToCategories = {
   MIN: 1,
-  MAX: 4,
+  MAX: 5,
 };
 
 const Images = {
@@ -64,10 +64,21 @@ const getPictureFileName = (num) => {
   return `item${countPicture}.jpg`;
 };
 
+const getAnnouncementsToCategories = (countAnnouncement) => {
+  const announcementsToCategories = [];
+  const categoriesKey = [1, 2, 3, 4, 5];
+  for (let i = 1; i <= countAnnouncement; i++) {
+    const announcementsToCategory = shuffle(categoriesKey).slice(0, getRandomInit(ArticlesToCategories.MIN, ArticlesToCategories.MAX));
+    announcementsToCategories.push(announcementsToCategory);
+  }
+
+  return announcementsToCategories;
+};
+
 const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) => {
 // генерируем моки
   const announcements = [];
-  const announcementsToCategories = [];
+  const announcementsToCategories = getAnnouncementsToCategories(countAnnouncement);
   const images = [];
   const comments = [];
 
@@ -87,6 +98,7 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
     {category: `Программирование`},
     {category: `Психология`},
     {category: `Искусство`},
+    {category: `Моделирование`},
   ];
 
   for (let i = 1; i <= countAnnouncement; i++) {
@@ -103,16 +115,6 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
       announcementId: i, image: getPictureFileName(getRandomInit(Images.MIN, Images.MAX))
     }
     images.push(image);
-  }
-
-  for (let i = 1; i <= countAnnouncement; i++) {
-    const countCategories = getRandomInit(Categories.MIN, Categories.MAX);
-    for (let j = 1; j < countCategories; j++) {
-      const announcementToCategory = {
-        announcementId: i, categoryId: j
-      };
-      announcementsToCategories.push(announcementToCategory);
-    }
   }
 
   for (let i = 1; i <= countAnnouncement; i++) {
@@ -135,9 +137,21 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
   await db.User.bulkCreate(users);
   await db.Category.bulkCreate(categories);
   await db.Announcement.bulkCreate(announcements);
-  await db.AnnouncementsToCategory.bulkCreate(announcementsToCategories);
   await db.Image.bulkCreate(images);
   await db.Comment.bulkCreate(comments);
+
+  for (let i = 0; i < countAnnouncement; i++) {
+    const categories = await db.Category.findAll({
+      where: {
+        id: {
+          [Operator.in]: announcementsToCategories[i]
+        }
+      },
+    });
+
+    const announcements = await db.Announcement.findByPk(i + 1);
+    await announcements.addCategories(categories);
+  }
 };
 
 
