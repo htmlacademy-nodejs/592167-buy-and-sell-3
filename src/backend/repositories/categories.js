@@ -10,7 +10,6 @@ const findAll = async () => await db.Announcement.findAll({
     model: db.Category,
     attributes: [`category`],
   },
-  group: [`category`, `Announcement.id`, db.Category],
 });
 
 // {
