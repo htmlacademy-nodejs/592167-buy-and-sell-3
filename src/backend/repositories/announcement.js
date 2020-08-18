@@ -72,6 +72,17 @@ const getAnnouncementsForComments = async (userId) => await db.Announcement.find
   raw: true,
 });
 
+const getAnnouncementsOfCategories = async (categoryName) => await db.Announcement.findAll({
+  attributes: [`id`, `title`],
+  include: {
+    model: db.Category,
+    attributes: [`category`],
+    where: {
+      category: categoryName
+    }
+  }
+});
+
 const save = (newAnnouncement, id) => {
   if (id) {
     const announcement = findById(id);
@@ -127,6 +138,7 @@ module.exports = {
   findAll,
   findMyAnnouncements,
   getAnnouncementsForComments,
+  getAnnouncementsOfCategories,
   save,
   findByTitle,
   remove,

@@ -36,6 +36,15 @@ router.get(`/my`, async (req, res) => {
   }
 });
 
+router.get(`/:categoryName`, async (req, res) => {
+  try {
+    res.send(await annoucementService.getAnnouncementsOfCategories(req.params.categoryName));
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal server error`});
+  }
+});
+
 router.get(`/:offerId`, async (req, res) => {
   try {
     res.send(annoucementService.getById(req.params.offerId));

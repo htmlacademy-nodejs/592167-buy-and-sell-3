@@ -15,6 +15,10 @@ const getAnnouncementsForComments = async (userId) => {
   return await announcementRepository.getAnnouncementsForComments(userId);
 }
 
+const getAnnouncementsOfCategories = async (categoryName) => {
+  return await announcementRepository.getAnnouncementsOfCategories(categoryName);
+}
+
 const getById = (id) => {
   if (!announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
@@ -51,6 +55,7 @@ module.exports = {
   getAll,
   getMyAnnouncements,
   getAnnouncementsForComments,
+  getAnnouncementsOfCategories,
   getById,
   update,
   create,
