@@ -28,7 +28,6 @@ const findAll = async () => await db.Announcement.findAll({
   },
   include: [{
     model: db.Type,
-    as: `types`,
   }],
   raw: true,
 });

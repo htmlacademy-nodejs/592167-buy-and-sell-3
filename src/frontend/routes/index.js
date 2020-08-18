@@ -17,7 +17,7 @@ const initializeRoutes = (app) => {
       const announcements = response.data;
       res.render(`index`, {announcements});
     } catch (err) {
-      res.render(`500`, {err});
+      res.render(`./errors/500`, {err});
     }
   });
 

@@ -2,7 +2,7 @@
 
 const categoryRepository = require(`../repositories/categories`);
 
-const getCategories = () => categoryRepository.findAll();
+const getCategories = async () => await categoryRepository.findAll();
 
 module.exports = {
   getCategories,
