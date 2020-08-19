@@ -32,26 +32,25 @@ const Images = {
   MIN: 1,
   MAX: 16,
 };
-
 const Comments = {
   MIN: 0,
   MAX: 5,
-}
+};
 
 const Users = {
   MIN: 1,
   MAX: 3,
-}
+};
 
 const Types = {
   MIN: 1,
   MAX: 2,
-}
+};
 
 
 const readContent = async (filePath) => {
   try {
-    const content = await fs.readFile(filePath, 'utf8');
+    const content = await fs.readFile(filePath, `utf8`);
     return content.split(`\n`);
   } catch (err) {
     logger.error(err.message);
@@ -61,7 +60,7 @@ const readContent = async (filePath) => {
 
 const getPictureFileName = (num) => {
   const countPicture = num < 10 ? `0${num}` : `${num}`;
-  return `item${countPicture}.jpg`;
+  return `item${countPicture}`;
 };
 
 const getAnnouncementsToCategories = (countAnnouncement) => {
@@ -108,12 +107,12 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
       sum: getRandomInit(SumRestrict.MIN, SumRestrict.MAX),
       typeId: getRandomInit(Types.MIN, Types.MAX),
       userId: getRandomInit(Users.MIN, Users.MAX),
-    }
+    };
     announcements.push(announcement);
 
     const image = {
       announcementId: i, image: getPictureFileName(getRandomInit(Images.MIN, Images.MAX))
-    }
+    };
     images.push(image);
   }
 
@@ -124,7 +123,7 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
         announcementId: i,
         userId: getRandomInit(Users.MIN, Users.MAX),
         comment: commentsTemplate[getRandomInit(0, commentsTemplate.length - 2)],
-      }
+      };
       comments.push(comment);
     }
   }
@@ -168,4 +167,4 @@ module.exports = {
     await initDb(countAnnouncement, titles, sentences, commentsTemplate);
     sequelize.close();
   }
-}
+};
