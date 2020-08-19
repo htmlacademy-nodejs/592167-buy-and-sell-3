@@ -36,33 +36,31 @@ router.get(`/my`, async (req, res) => {
   }
 });
 
-router.get(`/:categoryName`, async (req, res) => {
-  try {
-    res.send(await annoucementService.getAnnouncementsOfCategories(req.params.categoryName));
-  } catch (err) {
-    logger.error(chalk.red(err));
-    res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal server error`});
-  }
-});
+// router.get(`/:categoryName`, async (req, res) => {
+//   try {
+//     res.send(await annoucementService.getAnnouncementsOfCategories(req.params.categoryName));
+//   } catch (err) {
+//     logger.error(chalk.red(err));
+//     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal server error`});
+//   }
+// });
 
-router.get(`/:offerId`, async (req, res) => {
-  try {
-    res.send(annoucementService.getById(req.params.offerId));
-  } catch (err) {
-    logger.error(chalk.red(err));
-    if (err instanceof AnnouncementNotFoundError) {
-      res.status(GONE).send({code: GONE, message: err.message});
-    } else {
-      res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
-    }
-  }
-});
+// router.get(`/:offerId`, async (req, res) => {
+//   try {
+//     res.send(annoucementService.getById(req.params.offerId));
+//   } catch (err) {
+//     logger.error(chalk.red(err));
+//     if (err instanceof AnnouncementNotFoundError) {
+//       res.status(GONE).send({code: GONE, message: err.message});
+//     } else {
+//       res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
+//     }
+//   }
+// });
 
 router.get(`/newestAnnouncements`, async (req, res) => {
   try {
-    const temp = await annoucementService.getTheNewestAnnouncements();
-    console.log(temp);
-    res.send(temp);
+    res.send(await annoucementService.getTheNewestAnnouncements());
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
