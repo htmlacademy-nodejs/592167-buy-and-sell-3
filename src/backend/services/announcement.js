@@ -21,6 +21,11 @@ const getAnnouncementsOfCategories = async (categoryName) => {
 
 const getTheNewestAnnouncements = async () => await announcementRepository.getTheNewestAnnouncements();
 
+const getMostDiscussed = async () => {
+  const mostDiscussed = await announcementRepository.getMostDiscussed();
+  return mostDiscussed.filter((it) => Number.parseInt(it.comments, 10) > 0);
+};
+
 const getById = (id) => {
   if (!announcementRepository.exists(id)) {
     throw new AnnouncementNotFoundError(id);
@@ -59,6 +64,7 @@ module.exports = {
   getAnnouncementsForComments,
   getAnnouncementsOfCategories,
   getTheNewestAnnouncements,
+  getMostDiscussed,
   getById,
   update,
   create,

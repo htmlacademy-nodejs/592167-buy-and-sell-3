@@ -104,6 +104,28 @@ const getTheNewestAnnouncements = async () => await db.Announcement.findAll({
   limit: 8,
 });
 
+const getMostDiscussed = async () => {
+  const sql = `select a.id,
+                      a.title,
+                      a.sum,
+                      (select count(c.id) from "Comments" c where c."announcementId"=a.id) as comments,
+                      (select image from "Images" i where i."announcementId" = a.id limit 1),
+                      t.type,
+                      string_agg(cat.category, ', ') as categories
+               from "Announcements" a
+                      inner join "Types" T
+                                 on T.id = a."typeId"
+                      inner join "AnnouncementsToCategories" ATC
+                                 on a.id = ATC."AnnouncementId"
+                      inner join "Categories" cat
+                                 on ATC."CategoryId" = cat.id
+               group by a.id, t.type
+               order by comments desc
+               limit 8;`;
+  const type = sequelize.QueryTypes.SELECT;
+  return await sequelize.query(sql, {type});
+};
+
 const save = (newAnnouncement, id) => {
   if (id) {
     const announcement = findById(id);
@@ -161,6 +183,7 @@ module.exports = {
   getAnnouncementsForComments,
   getAnnouncementsOfCategories,
   getTheNewestAnnouncements,
+  getMostDiscussed,
   save,
   findByTitle,
   remove,
