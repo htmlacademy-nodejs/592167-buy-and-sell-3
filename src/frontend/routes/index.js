@@ -17,9 +17,12 @@ const initializeRoutes = (app) => {
       const categories = resCategories.data;
       const resNewAnnouncements = await axios.get(`${BACKEND_URL}/api/offers/newestAnnouncements`);
       const newAnnouncements = resNewAnnouncements.data;
+      const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/offers/mostdiscussed`);
+      const mostDiscussed = resMostDiscussed.data;
       const mainPage = {
         categories,
         newAnnouncements,
+        mostDiscussed,
       };
       res.render(`index`, {mainPage});
     } catch (err) {
