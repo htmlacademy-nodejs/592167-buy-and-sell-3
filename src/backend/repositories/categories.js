@@ -1,16 +1,20 @@
 'use strict';
 
-const {db, sequelize, Operator} = require(`../db/db-connect`);
+const {db, sequelize} = require(`../db/db-connect`);
 
-const announcementRepository = require(`../repositories/announcement`);
 
-const findAll = async () => await db.Announcement.findAll({
-  attributes: [],
-  include: {
-    model: db.Category,
-    attributes: [`category`],
-  },
-});
+const findAll = async () => {
+  const sql = `select C.category, count(A.id) as categoryCount
+               from "Announcements" A
+                      inner join "AnnouncementsToCategories" ATC
+                                 on A.id = ATC."AnnouncementId"
+                      inner join "Categories" C
+                                 on c.id = ATC."CategoryId"
+               group by c.category;`;
+  const type = sequelize.QueryTypes.SELECT;
+
+  return await sequelize.query(sql, {type});
+};
 
 // {
 //   const categories = announcementRepository.findAll()
