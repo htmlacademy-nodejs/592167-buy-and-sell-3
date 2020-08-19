@@ -13,7 +13,6 @@ const initializeRoutes = (app) => {
 
   app.get(`/`, async (req, res) => {
     try {
-      // const response = await axios.get(`${BACKEND_URL}/api/offers`);
       const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
       const categories = resCategories.data;
       const resNewAnnouncements = await axios.get(`${BACKEND_URL}/api/offers/newestAnnouncements`);
