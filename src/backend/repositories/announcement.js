@@ -82,6 +82,28 @@ const getAnnouncementsOfCategories = async (categoryName) => await db.Announceme
   }
 });
 
+const getTheNewestAnnouncements = async () => await db.Announcement.findAll({
+  attributes: {
+    include: [
+      [
+        sequelize.literal(`(
+                    SELECT image.image
+        FROM "Images" AS image
+        WHERE
+                image."announcementId" = "Announcement".id
+        limit 1
+                )`),
+        `images.image`
+      ]
+    ]
+  },
+  include: [{
+    model: db.Type,
+  }],
+  raw: true,
+  limit: 8,
+});
+
 const save = (newAnnouncement, id) => {
   if (id) {
     const announcement = findById(id);
@@ -138,6 +160,7 @@ module.exports = {
   findMyAnnouncements,
   getAnnouncementsForComments,
   getAnnouncementsOfCategories,
+  getTheNewestAnnouncements,
   save,
   findByTitle,
   remove,

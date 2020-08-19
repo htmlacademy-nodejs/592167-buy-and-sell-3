@@ -17,14 +17,14 @@ const emptyAnnouncement = {
 let templateAnnouncement;
 
 
-router.get(`/category`, async (req, res) => {
-  const elementCountCategory = await axios.get(`${BACKEND_URL}/api/offers/category`);
-  res.render(`category`);
-});
-
-router.get(`/category/:id`, (req, res) => {
-  res.render(`category`);
-});
+// router.get(`/category`, async (req, res) => {
+//   const elementCountCategory = await axios.get(`${BACKEND_URL}/api/categories`);
+//   res.render(`category`);
+// });
+//
+// router.get(`/category/:id`, (req, res) => {
+//   res.render(`category`);
+// });
 
 router.get(`/add`, (req, res) => {
   templateAnnouncement = Object.assign({}, emptyAnnouncement);

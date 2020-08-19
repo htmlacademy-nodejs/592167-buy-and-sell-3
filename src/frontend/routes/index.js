@@ -13,9 +13,16 @@ const initializeRoutes = (app) => {
 
   app.get(`/`, async (req, res) => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/offers`);
-      const announcements = response.data;
-      res.render(`index`, {announcements});
+      // const response = await axios.get(`${BACKEND_URL}/api/offers`);
+      const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
+      const categories = resCategories.data;
+      const resNewAnnouncements = await axios.get(`${BACKEND_URL}/api/offers/newestAnnouncements`);
+      const newAnnouncements = resNewAnnouncements.data;
+      const mainPage = {
+        categories,
+        newAnnouncements,
+      };
+      res.render(`index`, {mainPage});
     } catch (err) {
       res.render(`./errors/500`, {err});
     }

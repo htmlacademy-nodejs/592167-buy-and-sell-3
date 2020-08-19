@@ -58,6 +58,17 @@ router.get(`/:offerId`, async (req, res) => {
   }
 });
 
+router.get(`/newestAnnouncements`, async (req, res) => {
+  try {
+    const temp = await annoucementService.getTheNewestAnnouncements();
+    console.log(temp);
+    res.send(temp);
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
+  }
+});
+
 router.post(`/`, (req, res) => {
   if (Object.keys(req.body).length !== 6) {
     res.status(BAD_REQUEST).send({code: 1, message: `Send not all params for new announcement.`});
