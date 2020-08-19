@@ -107,6 +107,7 @@ const getTheNewestAnnouncements = async () => await db.Announcement.findAll({
 const getMostDiscussed = async () => {
   const sql = `select a.id,
                       a.title,
+                      a.description,
                       a.sum,
                       (select count(c.id) from "Comments" c where c."announcementId"=a.id) as comments,
                       (select image from "Images" i where i."announcementId" = a.id limit 1),
