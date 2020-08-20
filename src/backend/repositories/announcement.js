@@ -82,27 +82,27 @@ const getAnnouncementsOfCategories = async (categoryName) => await db.Announceme
   }
 });
 
-const getTheNewestAnnouncements = async () => await db.Announcement.findAll({
-  attributes: {
-    include: [
-      [
-        sequelize.literal(`(
-                    SELECT image.image
-        FROM "Images" AS image
-        WHERE
-                image."announcementId" = "Announcement".id
-        limit 1
-                )`),
-        `images.image`
-      ]
-    ]
-  },
-  include: [{
-    model: db.Type,
-  }],
-  raw: true,
-  limit: 8,
-});
+const getTheNewestAnnouncements = async () => {
+  const sql = `select a.id,
+                      a.title,
+                      a.description,
+                      a.sum,
+                      (select image from "Images" i where i."announcementId" = a.id limit 1),
+                      t.type,
+                      string_agg(cat.category, ', ') as categories
+               from "Announcements" a
+                      inner join "Types" T
+                                 on T.id = a."typeId"
+                      inner join "AnnouncementsToCategories" ATC
+                                 on a.id = ATC."AnnouncementId"
+                      inner join "Categories" cat
+                                 on ATC."CategoryId" = cat.id
+               group by a.id, t.type, a."createdAt"
+               order by a."createdAt" desc
+               limit 8;`;
+  const type = sequelize.QueryTypes.SELECT;
+  return await sequelize.query(sql, {type});
+};
 
 const getMostDiscussed = async () => {
   const sql = `select a.id,
