@@ -22,8 +22,18 @@ const {BACKEND_URL} = require(`../../constants`);
 //   res.render(`category`);
 // });
 
-router.get(`/category/:id`, (req, res) => {
-  res.render(`category`);
+router.get(`/category/:id`, async (req, res) => {
+  const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
+  const categories = resCategories.data;
+  const resAnnouncementsOfCategory = await axios.get(`${BACKEND_URL}/api/categories/${req.params.id}`);
+  const announcementsOfCategory = resAnnouncementsOfCategory.data;
+  const categoryInfo = categories.find((el) => el.id === Number.parseInt(req.params.id, 10));
+  const announcementsOfCategoryPage = {
+    categories,
+    announcementsOfCategory,
+    categoryInfo,
+  };
+  res.render(`category`, {announcementsOfCategoryPage});
 });
 
 // router.get(`/add`, (req, res) => {
