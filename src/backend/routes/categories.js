@@ -19,10 +19,13 @@ router.get(`/`, async (req, res) => {
   }
 });
 
-// router.get(`/:categoryId`, async (req, res) => {
-//   try {
-//     res.send(categoriesService.getAnnouncementsOfCategory)
-//   }
-// });
+router.get(`/:categoryId`, async (req, res) => {
+  try {
+    res.send(await categoriesService.getAnnouncementsOfCategory(req.params.categoryId));
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
+  }
+});
 
 module.exports = router;
