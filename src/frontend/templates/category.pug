@@ -38,17 +38,8 @@ block main
                       |  ₽
                   .ticket-card__desc
                     p #{announcement.description}
-        .tickets-list__pagination
+        .tickets-list__pagination(hidden=announcementsOfCategoryPage.categoryInfo.categorycount < 8 ? true : false)
           ul.pagination
-            li
-              a.pagination__item.active(href='#') 1
-            li
-              a.pagination__item(href='#') 2
-            li
-              a.pagination__item(href='#') 3
-            li
-              a.pagination__item(href='#') 4
-            li
-              a.pagination__item(href='#') 5
-            li
-              a(href='#') дальше
+            each paginationStep in announcementsOfCategoryPage.paginationStep
+              li
+                a.pagination__item(href='#') #{paginationStep}
