@@ -42,4 +42,4 @@ block main
           ul.pagination
             each paginationStep in announcementsOfCategoryPage.paginationStep
               li
-                a.pagination__item(href='#') #{paginationStep}
+                a.pagination__item(href=`/offers/category/${paginationStep.categoryId}?start=${paginationStep.step}&count=8&offset=desc` class=paginationStep.offset ? `active` : ``) #{paginationStep.step}
