@@ -28,10 +28,15 @@ router.get(`/category/:id`, async (req, res) => {
   const resAnnouncementsOfCategory = await axios.get(`${BACKEND_URL}/api/categories/${req.params.id}`);
   const announcementsOfCategory = resAnnouncementsOfCategory.data;
   const categoryInfo = categories.find((el) => el.id === Number.parseInt(req.params.id, 10));
+  const tempCount = Math.floor(categoryInfo.categorycount / 8);
+  const paginationCount = (categoryInfo.categorycount > 0 && categoryInfo.categorycount % 8 > 0) ? tempCount + 1 : tempCount;
+  const paginationStep = Array(paginationCount).fill(0).map((it, i) => i + 1);
+  paginationStep.push(`Дальше`);
   const announcementsOfCategoryPage = {
     categories,
     announcementsOfCategory,
     categoryInfo,
+    paginationStep,
   };
   res.render(`category`, {announcementsOfCategoryPage});
 });
