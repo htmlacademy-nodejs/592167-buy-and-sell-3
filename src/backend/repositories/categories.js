@@ -1,7 +1,10 @@
 'use strict';
 
-const {db, sequelize} = require(`../db/db-connect`);
+const {sequelize} = require(`../db/db-connect`);
 
+const DEFAULT_PREVIEW_COUNT = 8;
+const DEFAULT_OFFSET = 0;
+const DEFAULT_ORDER = `DESC`;
 
 const findAll = async () => {
   const sql = `select C.id, C.category, count(A.id) as categoryCount
@@ -16,13 +19,6 @@ const findAll = async () => {
   return await sequelize.query(sql, {type});
 };
 
-// {
-//   const categories = announcementRepository.findAll()
-//     .flatMap((announcement) => announcement.categories);
-//   const tempSet = new Set(categories);
-//
-//   return [...tempSet];
-// };
 
 const getAnnouncementsOfCategories = async (categoryId, selectionParams) => {
   const sql = `select a.id,
@@ -42,13 +38,15 @@ const getAnnouncementsOfCategories = async (categoryId, selectionParams) => {
                where cat.id = :id
                group by a.id, t.type, a."createdAt"
                order by a."createdAt" desc
-offset :selectionStartIdx
-limit :selectionCount;`;
+               offset :selectionOffset limit :selectionCount;`;
   const type = sequelize.QueryTypes.SELECT;
   const id = Number.parseInt(categoryId, 10);
-  const selectionStartIdx = Number.parseInt(selectionParams.start, 10);
-  const selectionCount = Number.parseInt(selectionParams.count, 10);
-  const replacements = {id, selectionStartIdx, selectionCount};
+  let selectionOffset = Number.parseInt(selectionParams.start, 10) || DEFAULT_OFFSET;
+  selectionOffset = selectionOffset === DEFAULT_OFFSET ? selectionOffset : (selectionOffset - 1) * DEFAULT_PREVIEW_COUNT;
+
+  const selectionCount = Number.parseInt(selectionParams.count, 10) || DEFAULT_PREVIEW_COUNT;
+  const order = `a."createdAt" ${selectionParams.order ? selectionParams.order : DEFAULT_ORDER}`;
+  const replacements = {id, selectionOffset, selectionCount, order};
 
   return await sequelize.query(sql, {type, replacements});
 };
