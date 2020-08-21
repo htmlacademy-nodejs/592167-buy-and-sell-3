@@ -21,7 +21,7 @@ router.get(`/`, async (req, res) => {
 
 router.get(`/:categoryId`, async (req, res) => {
   try {
-    res.send(await categoriesService.getAnnouncementsOfCategory(req.params.categoryId));
+    res.send(await categoriesService.getAnnouncementsOfCategory(req.params.categoryId, req.query));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});

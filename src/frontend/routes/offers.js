@@ -25,7 +25,8 @@ const {BACKEND_URL} = require(`../../constants`);
 router.get(`/category/:id`, async (req, res) => {
   const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
   const categories = resCategories.data;
-  const resAnnouncementsOfCategory = await axios.get(`${BACKEND_URL}/api/categories/${req.params.id}`);
+  const resAnnouncementsOfCategory = await axios.get(`${BACKEND_URL}/api/categories/${req.params.id}?start=${req.query.start}&count=${req.query.count}`);
+  console.log(resAnnouncementsOfCategory.data);
   const announcementsOfCategory = resAnnouncementsOfCategory.data;
   const categoryInfo = categories.find((el) => el.id === Number.parseInt(req.params.id, 10));
   const tempCount = Math.floor(categoryInfo.categorycount / 8);

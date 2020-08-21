@@ -24,7 +24,7 @@ const findAll = async () => {
 //   return [...tempSet];
 // };
 
-const getAnnouncementsOfCategories = async (categoryId) => {
+const getAnnouncementsOfCategories = async (categoryId, selectionParams) => {
   const sql = `select a.id,
                       a.title,
                       a.description,
@@ -41,10 +41,14 @@ const getAnnouncementsOfCategories = async (categoryId) => {
                                  on ATC."CategoryId" = cat.id
                where cat.id = :id
                group by a.id, t.type, a."createdAt"
-               order by a."createdAt" desc;`;
+               order by a."createdAt" desc
+offset :selectionStartIdx
+limit :selectionCount;`;
   const type = sequelize.QueryTypes.SELECT;
   const id = Number.parseInt(categoryId, 10);
-  const replacements = {id};
+  const selectionStartIdx = Number.parseInt(selectionParams.start, 10);
+  const selectionCount = Number.parseInt(selectionParams.count, 10);
+  const replacements = {id, selectionStartIdx, selectionCount};
 
   return await sequelize.query(sql, {type, replacements});
 };
