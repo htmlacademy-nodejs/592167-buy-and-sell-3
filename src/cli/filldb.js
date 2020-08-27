@@ -59,8 +59,7 @@ const readContent = async (filePath) => {
 };
 
 const getPictureFileName = (num) => {
-  const countPicture = num < 10 ? `0${num}` : `${num}`;
-  return `item${countPicture}`;
+  return `${num}`.padStart(6, `item00`);
 };
 
 const getAnnouncementsToCategories = (countAnnouncement) => {
