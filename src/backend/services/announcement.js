@@ -19,7 +19,7 @@ const getAnnouncementsOfCategories = async (categoryName) => {
   return await announcementRepository.getAnnouncementsOfCategories(categoryName);
 };
 
-const getTheNewestAnnouncements = async () => await announcementRepository.getTheNewestAnnouncements();
+const getTheNewestAnnouncements = async (limitAnnouncements) => await announcementRepository.getTheNewestAnnouncements(limitAnnouncements);
 
 const getMostDiscussed = async () => {
   const mostDiscussed = await announcementRepository.getMostDiscussed();

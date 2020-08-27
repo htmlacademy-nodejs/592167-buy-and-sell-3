@@ -11,6 +11,7 @@ const annoucementService = require(`../services/announcement`);
 const {
   INTERNAL_SERVER_ERROR,
 } = require(`../../constants`).HttpCode;
+const {DEFAULT} = require(`../../constants`);
 
 
 router.get(`/`, async (req, res) => {
@@ -33,7 +34,7 @@ router.get(`/my`, async (req, res) => {
 
 router.get(`/newestAnnouncements`, async (req, res) => {
   try {
-    res.send(await annoucementService.getTheNewestAnnouncements());
+    res.send(await annoucementService.getTheNewestAnnouncements(DEFAULT.PREVIEW_COUNT));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(INTERNAL_SERVER_ERROR).send({code: INTERNAL_SERVER_ERROR, message: `Internal service error`});
