@@ -21,8 +21,8 @@ const getAnnouncementsOfCategories = async (categoryName) => {
 
 const getTheNewestAnnouncements = async (limitAnnouncements) => await announcementRepository.getTheNewestAnnouncements(limitAnnouncements);
 
-const getMostDiscussed = async () => {
-  const mostDiscussed = await announcementRepository.getMostDiscussed();
+const getMostDiscussed = async (limitAnnouncements) => {
+  const mostDiscussed = await announcementRepository.getMostDiscussed(limitAnnouncements);
   return mostDiscussed.filter((it) => Number.parseInt(it.comments, 10) > 0);
 };
 

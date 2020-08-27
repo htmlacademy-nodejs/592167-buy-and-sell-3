@@ -105,7 +105,7 @@ const getTheNewestAnnouncements = async (limitAnnouncements) => {
   return await sequelize.query(sql, {type, replacements});
 };
 
-const getMostDiscussed = async () => {
+const getMostDiscussed = async (limitAnnouncements) => {
   const sql = `select a.id,
                       a.title,
                       a.description,
@@ -123,9 +123,10 @@ const getMostDiscussed = async () => {
                                  on ATC."CategoryId" = cat.id
                group by a.id, t.type
                order by comments desc
-               limit 8;`;
+               limit :limitAnnouncements;`;
   const type = sequelize.QueryTypes.SELECT;
-  return await sequelize.query(sql, {type});
+  const replacements = {limitAnnouncements};
+  return await sequelize.query(sql, {type, replacements});
 };
 
 const save = (newAnnouncement, id) => {
