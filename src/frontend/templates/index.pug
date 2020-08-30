@@ -5,63 +5,29 @@ block main
     section.categories-list
       h1.visually-hidden Сервис объявлений "Куплю - продам"
       ul.categories-list__wrapper
-        li.categories-list__item
-          a.category-tile.category-tile--default(href='#')
-            span.category-tile__image
-              img(src='img/cat.jpg', srcset='img/cat@2x.jpg 2x', alt='Иконка категории')
-            span.category-tile__label
-              | Дом
-              span.category-tile__qty.js-qty 81
-        li.categories-list__item
-          a.category-tile.category-tile--default(href='#')
-            span.category-tile__image
-              img(src='img/cat02.jpg', srcset='img/cat02@2x.jpg 2x', alt='Иконка категории')
-            span.category-tile__label
-              | Электроника
-              span.category-tile__qty.js-qty 62
-        li.categories-list__item
-          a.category-tile.category-tile--default(href='#')
-            span.category-tile__image
-              img(src='img/cat03.jpg', srcset='img/cat03@2x.jpg 2x', alt='Иконка категории')
-            span.category-tile__label
-              | Одежда
-              span.category-tile__qty.js-qty 106
-        li.categories-list__item
-          a.category-tile.category-tile--default(href='#')
-            span.category-tile__image
-              img(src='img/cat04.jpg', srcset='img/cat04@2x.jpg 2x', alt='Иконка категории')
-            span.category-tile__label
-              | Спорт/отдых
-              span.category-tile__qty.js-qty 86
-        li.categories-list__item
-          a.category-tile.category-tile--default(href='#')
-            span.category-tile__image
-              img(src='img/cat05.jpg', srcset='img/cat05@2x.jpg 2x', alt='Иконка категории')
-            span.category-tile__label
-              | Авто
-              span.category-tile__qty.js-qty 34
-        li.categories-list__item
-          a.category-tile.category-tile--default(href='#')
-            span.category-tile__image
-              img(src='img/cat06.jpg', srcset='img/cat06@2x.jpg 2x', alt='Иконка категории')
-            span.category-tile__label
-              | Книги
-              span.category-tile__qty.js-qty 92
+        each category in mainPage.categories
+          li.categories-list__item
+            a.category-tile.category-tile--default(href=`/offers/category/${category.id}`)
+              span.category-tile__image
+                img(src=`/img/cat0${category.id + 1}.jpg`, srcset=`/img/cat0${category.id + 1}@2x.jpg 2x`, alt='Иконка категории')
+              span.category-tile__labelk
+                | #{category.category}
+                span.category-tile__qty.js-qty #{category.categorycount}
     section.tickets-list
       h2.visually-hidden Самые новые предложения
       .tickets-list__wrapper
         .tickets-list__header
           p.tickets-list__title Самое свежее
         ul
-          each announcement in announcements
+          each announcement in mainPage.newAnnouncements
             li.tickets-list__item
               .ticket-card.ticket-card--color01
                 .ticket-card__img
-                  img(src=`img/${announcement['images.image']}`, srcset='img/item01@2x.jpg 2x', alt='Изображение товара')
+                  img(src=`img/${announcement.image}.jpg`, srcset=`img/${announcement.image}@2x.jpg 2x`, alt='Изображение товара')
                 .ticket-card__info
-                  span.ticket-card__label #{announcement['types.type']}
+                  span.ticket-card__label #{announcement.type}
                   .ticket-card__categories
-                    a(href='#') #{announcement.categories ? announcement.categories[0] : ``}
+                    a(href='#') #{announcement.categories}
                   .ticket-card__header
                     h3.ticket-card__title
                       a(href='#') #{announcement.title}
@@ -76,67 +42,20 @@ block main
         .tickets-list__header
           p.tickets-list__title Самые обсуждаемые
         ul
-          li.tickets-list__item
-            .ticket-card.ticket-card--color09
-              .ticket-card__img
-                img(src='img/item09.jpg', srcset='img/item09@2x.jpg 2x', alt='Изображение товара')
-              .ticket-card__info
-                span.ticket-card__label Куплю
-                .ticket-card__categories
-                  a(href='#') Дом
-                .ticket-card__header
-                  h3.ticket-card__title
-                    a(href='#') Монстера
-                  p.ticket-card__price
-                    span.js-sum 1000
-                    |  ₽
-                .ticket-card__desc
-                  p Куплю монстеру зеленую в хорошем зеленом состоянии, буду поливать...
-          li.tickets-list__item
-            .ticket-card.ticket-card--color10
-              .ticket-card__img
-                img(src='img/item10.jpg', srcset='img/item10@2x.jpg 2x', alt='Изображение товара')
-              .ticket-card__info
-                span.ticket-card__label ПРОДАМ
-                .ticket-card__categories
-                  a(href='#') Дом
-                .ticket-card__header
-                  h3.ticket-card__title
-                    a(href='#') Мое старое кресло
-                  p.ticket-card__price
-                    span.js-sum 4000
-                    |  ₽
-                .ticket-card__desc
-                  p Мое старое кресло
-          li.tickets-list__item
-            .ticket-card.ticket-card--color11
-              .ticket-card__img
-                img(src='img/item11.jpg', srcset='img/item11@2x.jpg 2x', alt='Изображение товара')
-              .ticket-card__info
-                span.ticket-card__label ПРОДАМ
-                .ticket-card__categories
-                  a(href='#') ЭЛЕКТРОНИКА
-                .ticket-card__header
-                  h3.ticket-card__title
-                    a(href='#') Дедушкины часы
-                  p.ticket-card__price
-                    span.js-sum 45 000
-                    |  ₽
-                .ticket-card__desc
-                  p Продаю дедушкины часы в прекрасном состоянии, ходят до...
-          li.tickets-list__item
-            .ticket-card.ticket-card--color04
-              .ticket-card__img
-                img(src='img/item04.jpg', srcset='img/item04@2x.jpg 2x', alt='Изображение товара')
-              .ticket-card__info
-                span.ticket-card__label Куплю
-                .ticket-card__categories
-                  a(href='#') Дом
-                .ticket-card__header
-                  h3.ticket-card__title
-                    a(href='#') Кофеварка
-                  p.ticket-card__price
-                    span.js-sum 2000
-                    |  ₽
-                .ticket-card__desc
-                  p Куплю вот такую итальянскую кофеварку, можно любой фирмы...
+          each mostDiscussed in mainPage.mostDiscussed
+            li.tickets-list__item
+              .ticket-card.ticket-card--color09
+                .ticket-card__img
+                  img(src=`img/${mostDiscussed.image}.jpg`, srcset=`img/${mostDiscussed.image}@2x.jpg 2x`, alt='Изображение товара')
+                .ticket-card__info
+                  span.ticket-card__label #{mostDiscussed.type}
+                  .ticket-card__categories
+                    a(href='#') #{mostDiscussed.categories}
+                  .ticket-card__header
+                    h3.ticket-card__title
+                      a(href='#') #{mostDiscussed.title}
+                    p.ticket-card__price
+                      span.js-sum #{mostDiscussed.sum}
+                      |  ₽
+                  .ticket-card__desc
+                    p #{mostDiscussed.description}

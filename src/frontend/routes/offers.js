@@ -1,75 +1,46 @@
 'use strict';
 
-const fs = require(`fs`).promises;
 const {Router} = require(`express`);
 const router = new Router();
 
 const axios = require(`axios`);
 const {BACKEND_URL} = require(`../../constants`);
 
-const emptyAnnouncement = {
-  categories: ``,
-  description: ``,
-  title: ``,
-  type: ``,
-  sum: ``,
-};
-let templateAnnouncement;
+const DEFAULT_PREVIEW_COUNT = 8;
 
 
-router.get(`/category`, (req, res) => {
-  res.render(`category`);
-});
-
-router.get(`/category/:id`, (req, res) => {
-  res.render(`category`);
-});
-
-router.get(`/add`, (req, res) => {
-  templateAnnouncement = Object.assign({}, emptyAnnouncement);
-  res.render(`new-ticket`, {templateAnnouncement});
-});
-
-router.post(`/add`, async (req, res) => {
-  try {
-    const {type, size, path, name} = req.files.avatar;
-    const allowTypes = [`image/jpeg`, `image/png`];
-
-    const newAnnouncement = {
-      categories: req.fields.category,
-      description: req.fields.comment,
-      picture: name,
-      title: req.fields[`ticket-name`],
-      type: req.fields.action,
-      sum: parseInt(req.fields.price, 10),
+router.get(`/category/:id`, async (req, res) => {
+  const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
+  const categories = resCategories.data;
+  const resAnnouncementsOfCategory = await axios.get(`${BACKEND_URL}/api/categories/${req.params.id}?start=${req.query.start}&count=${req.query.count}`);
+  const announcementsOfCategory = resAnnouncementsOfCategory.data;
+  const categoryInfo = categories.find((el) => el.id === Number.parseInt(req.params.id, 10));
+  const tempCount = Math.floor(categoryInfo.categorycount / DEFAULT_PREVIEW_COUNT);
+  const paginationCount = (categoryInfo.categorycount > 0 && categoryInfo.categorycount % DEFAULT_PREVIEW_COUNT > 0) ? tempCount + 1 : tempCount;
+  const paginationStep = Array(paginationCount).fill({}).map((it, i) => {
+    return {
+      step: i + 1,
+      offset: Number.parseInt(req.query.start, 10) === i + 1,
+      categoryId: req.params.id,
     };
-
-    templateAnnouncement = Object.assign({}, newAnnouncement);
-
-    if (size === 0 || !allowTypes.includes(type)) {
-      fs.unlink(path);
-      return res.render(`new-ticket`, {templateAnnouncement});
-    }
-
-    await axios.post(`${BACKEND_URL}/api/offers`, newAnnouncement);
-
-    return res.redirect(`/my`);
-  } catch (err) {
-    res.render(`500`, {err});
+  });
+  if (!req.query.start) {
+    paginationStep[0].offset = true;
   }
+  console.log(req.query.start);
+  paginationStep.push({
+    step: `Дальше`,
+    offset: ``
+  });
+  console.log(req.query.start);
+  const announcementsOfCategoryPage = {
+    categories,
+    announcementsOfCategory,
+    categoryInfo,
+    paginationStep,
+  };
+  res.render(`category`, {announcementsOfCategoryPage});
 });
-
-router.get(`/edit/:id`, async (req, res) => {
-  try {
-    const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
-    const announcement = response.data;
-    res.render(`ticket-edit`, {announcement});
-  } catch (err) {
-    res.render(`500`, {err});
-  }
-});
-
-router.get(`/:id`, (req, res) => res.send(req.originalUrl));
 
 
 module.exports = router;

@@ -13,7 +13,18 @@ const getMyAnnouncements = async () => {
 
 const getAnnouncementsForComments = async (userId) => {
   return await announcementRepository.getAnnouncementsForComments(userId);
-}
+};
+
+const getAnnouncementsOfCategories = async (categoryName) => {
+  return await announcementRepository.getAnnouncementsOfCategories(categoryName);
+};
+
+const getTheNewestAnnouncements = async (limitAnnouncements) => await announcementRepository.getTheNewestAnnouncements(limitAnnouncements);
+
+const getMostDiscussed = async (limitAnnouncements) => {
+  const mostDiscussed = await announcementRepository.getMostDiscussed(limitAnnouncements);
+  return mostDiscussed.filter((it) => Number.parseInt(it.comments, 10) > 0);
+};
 
 const getById = (id) => {
   if (!announcementRepository.exists(id)) {
@@ -51,6 +62,9 @@ module.exports = {
   getAll,
   getMyAnnouncements,
   getAnnouncementsForComments,
+  getAnnouncementsOfCategories,
+  getTheNewestAnnouncements,
+  getMostDiscussed,
   getById,
   update,
   create,

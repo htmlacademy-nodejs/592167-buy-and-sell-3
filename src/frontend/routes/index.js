@@ -13,11 +13,20 @@ const initializeRoutes = (app) => {
 
   app.get(`/`, async (req, res) => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/offers`);
-      const announcements = response.data;
-      res.render(`index`, {announcements});
+      const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
+      const categories = resCategories.data;
+      const resNewAnnouncements = await axios.get(`${BACKEND_URL}/api/offers/newestAnnouncements`);
+      const newAnnouncements = resNewAnnouncements.data;
+      const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/offers/mostdiscussed`);
+      const mostDiscussed = resMostDiscussed.data;
+      const mainPage = {
+        categories,
+        newAnnouncements,
+        mostDiscussed,
+      };
+      res.render(`index`, {mainPage});
     } catch (err) {
-      res.render(`500`, {err});
+      res.render(`./errors/500`, {err});
     }
   });
 
