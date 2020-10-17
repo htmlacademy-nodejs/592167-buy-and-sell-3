@@ -8,6 +8,13 @@ const {BACKEND_URL} = require(`../../constants`);
 
 const DEFAULT_PREVIEW_COUNT = 8;
 
+router.get(`/add`, async (req, res) => {
+  try {
+    res.render(`new-ticket`);
+  } catch (err) {
+    res.render(`./errors/500`, {err});
+  }
+});
 
 router.get(`/category/:id`, async (req, res) => {
   const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
@@ -27,12 +34,12 @@ router.get(`/category/:id`, async (req, res) => {
   if (!req.query.start) {
     paginationStep[0].offset = true;
   }
-  console.log(req.query.start);
+  // console.log(req.query.start);
   paginationStep.push({
     step: `Дальше`,
     offset: ``
   });
-  console.log(req.query.start);
+  // console.log(req.query.start);
   const announcementsOfCategoryPage = {
     categories,
     announcementsOfCategory,
@@ -42,5 +49,12 @@ router.get(`/category/:id`, async (req, res) => {
   res.render(`category`, {announcementsOfCategoryPage});
 });
 
+router.get(`/:id`, async (req, res) => {
+  try {
+    res.render(`ticket`);
+  } catch (err) {
+    res.render(`./errors/500`, {err});
+  }
+});
 
 module.exports = router;

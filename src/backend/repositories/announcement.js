@@ -33,29 +33,32 @@ const findAll = async () => await db.Announcement.findAll({
 });
 
 const findMyAnnouncements = async () => await db.Announcement.findAll({
-  attributes: {
-    include: [
-      [
-        sequelize.literal(`(
-                    SELECT image.image
-        FROM "Images" AS image
-        WHERE
-                image."announcementId" = "Announcement".id
-        limit 1
-                )`),
-        `images.image`
-      ]
-    ]
-  },
-  include: [{
-    model: db.Type,
-    attributes: [`type`],
-    as: `types`,
-  }],
-  raw: true,
   where: {
-    userId: 1
+    userId: 1,
   }
+  // attributes: {
+  //   include: [
+  //     [
+  //       sequelize.literal(`(
+  //                   SELECT image.image
+  //       FROM "Images" AS image
+  //       WHERE
+  //               image."announcementId" = "Announcement".id
+  //       limit 1
+  //               )`),
+  //       `images.image`
+  //     ]
+  //   ]
+  // },
+  // include: [{
+  //   model: db.Type,
+  //   attributes: [`type`],
+  //   as: `types`,
+  // }],
+  // raw: true,
+  // where: {
+  //   userId: 1
+  // }
 });
 
 const getAnnouncementsForComments = async (userId) => await db.Announcement.findAll({

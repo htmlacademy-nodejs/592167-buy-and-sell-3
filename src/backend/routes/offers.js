@@ -41,12 +41,13 @@ router.get(`/newestAnnouncements`, async (req, res) => {
 
 router.get(`/mostDiscussed`, async (req, res) => {
   try {
-    res.send(await annoucementService.getMostDiscussed());
+    res.send(await annoucementService.getMostDiscussed(DEFAULT.PREVIEW_COUNT));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(StatusCode.INTERNAL_SERVER_ERROR).send({code: StatusCode.INTERNAL_SERVER_ERROR, message: `Internal service error`});
   }
 });
+
 
 
 module.exports = router;
