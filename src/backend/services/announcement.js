@@ -8,7 +8,15 @@ const getAll = async () => {
 };
 
 const getMyAnnouncements = async () => {
-  return await announcementRepository.findMyAnnouncements();
+  const tempAnnouncements = await announcementRepository.findMyAnnouncements();
+  return Array(tempAnnouncements.length).fill({}).map((el, i) => {
+    return {
+      image: tempAnnouncements[i].image,
+      title: tempAnnouncements[i].Announcement.dataValues.title,
+      sum: tempAnnouncements[i].Announcement.dataValues.sum,
+      type: tempAnnouncements[i].Announcement.dataValues.Type.dataValues.type,
+    }
+  });
 };
 
 const getAnnouncementsForComments = async (userId) => {

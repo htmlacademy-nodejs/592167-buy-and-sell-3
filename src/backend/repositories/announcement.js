@@ -32,34 +32,21 @@ const findAll = async () => await db.Announcement.findAll({
   raw: true,
 });
 
-const findMyAnnouncements = async () => await db.Announcement.findAll({
-  where: {
-    userId: 1,
-  }
-  // attributes: {
-  //   include: [
-  //     [
-  //       sequelize.literal(`(
-  //                   SELECT image.image
-  //       FROM "Images" AS image
-  //       WHERE
-  //               image."announcementId" = "Announcement".id
-  //       limit 1
-  //               )`),
-  //       `images.image`
-  //     ]
-  //   ]
-  // },
-  // include: [{
-  //   model: db.Type,
-  //   attributes: [`type`],
-  //   as: `types`,
-  // }],
-  // raw: true,
-  // where: {
-  //   userId: 1
-  // }
+const findMyAnnouncements = async () => await db.Image.findAll({
+  attributes: [`image`],
+  include: {
+    model: db.Announcement,
+    attributes: [`title`, `sum`],
+    where: {
+      userId: 3,
+    },
+    include: {
+      model: db.Type,
+      attributes: [`type`],
+    },
+  },
 });
+
 
 const getAnnouncementsForComments = async (userId) => await db.Announcement.findAll({
   attributes: [`id`, `title`, `sum`],
@@ -113,10 +100,10 @@ const getMostDiscussed = async (limitAnnouncements) => {
                       a.title,
                       a.description,
                       a.sum,
-                      (select count(c.id) from "Comments" c where c."announcementId"=a.id) as comments,
+                      (select count(c.id) from "Comments" c where c."announcementId" = a.id) as comments,
                       (select image from "Images" i where i."announcementId" = a.id limit 1),
                       t.type,
-                      string_agg(cat.category, ', ') as categories
+                      string_agg(cat.category, ', ')                                         as categories
                from "Announcements" a
                       inner join "Types" T
                                  on T.id = a."typeId"
