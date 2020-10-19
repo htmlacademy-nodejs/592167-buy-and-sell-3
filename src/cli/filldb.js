@@ -58,9 +58,6 @@ const readContent = async (filePath) => {
   }
 };
 
-const getPictureFileName = (num) => {
-  return `${num}`.padStart(6, `item00`);
-};
 
 const getAnnouncementsToCategories = (countAnnouncement) => {
   const announcementsToCategories = [];
@@ -110,7 +107,7 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
     announcements.push(announcement);
 
     const image = {
-      announcementId: i, image: getPictureFileName(getRandomInit(Images.MIN, Images.MAX))
+      announcementId: i, image: `${getRandomInit(Images.MIN, Images.MAX)}`.padStart(6, `item00`)
     };
     images.push(image);
   }
