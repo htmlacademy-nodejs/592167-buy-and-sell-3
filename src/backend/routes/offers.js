@@ -48,6 +48,12 @@ router.get(`/mostDiscussed`, async (req, res) => {
   }
 });
 
-
+router.post(`/add`, async (req, res) => {
+  try {
+    res.send(await annoucementService.create(req.body));
+  } catch (err) {
+    res.send(err);
+  }
+});
 
 module.exports = router;

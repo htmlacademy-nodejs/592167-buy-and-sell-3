@@ -1,7 +1,7 @@
 'use strict';
 
 const announcementRepository = require(`../repositories/announcement`);
-const {AnnouncementNotFoundError} = require(`../errors/errors`);
+// const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
 const getAll = async () => {
   return await announcementRepository.findAll();
@@ -34,36 +34,29 @@ const getMostDiscussed = async (limitAnnouncements) => {
   return mostDiscussed.filter((it) => Number.parseInt(it.comments, 10) > 0);
 };
 
-const getById = (id) => {
-  if (!announcementRepository.exists(id)) {
-    throw new AnnouncementNotFoundError(id);
-  }
-
-  return announcementRepository.findById(id);
-};
-
-const update = (newAnnouncment, id) => {
-  if (!announcementRepository.exists(id)) {
-    throw new AnnouncementNotFoundError(id);
-  }
-
-  return announcementRepository.save(newAnnouncment, id);
-};
-
-const create = (newAnnouncement) => {
-  return announcementRepository.save(newAnnouncement);
-};
-
-const remove = (id) => {
-  if (!announcementRepository.exists(id)) {
-    throw new AnnouncementNotFoundError(id);
-  }
-
-  announcementRepository.remove(id);
-  return true;
-};
-
 const search = async (queryString) => await announcementRepository.findByTitle(queryString);
+
+const create = async (newAnnouncement) => {
+  let announcementType = 1;
+  if (newAnnouncement.action === 'sell') {
+    announcementType = 2;
+  }
+  const announcement = {
+    title: newAnnouncement['ticket-name'],
+    description: newAnnouncement.comment,
+    sum: newAnnouncement.price,
+    userId: 3,
+    typeId: announcementType,
+    category: newAnnouncement.category,
+  }
+
+  const image = {
+    image: newAnnouncement.image,
+  }
+
+
+  return await announcementRepository.save(announcement, image)
+};
 
 
 module.exports = {
@@ -73,9 +66,35 @@ module.exports = {
   getAnnouncementsOfCategories,
   getTheNewestAnnouncements,
   getMostDiscussed,
-  getById,
-  update,
   create,
-  remove,
   search,
+  // getById,
+  // update,
+  // remove,
 };
+
+// старый код
+// const getById = (id) => {
+//   if (!announcementRepository.exists(id)) {
+//     throw new AnnouncementNotFoundError(id);
+//   }
+//
+//   return announcementRepository.findById(id);
+// };
+//
+// const update = (newAnnouncment, id) => {
+//   if (!announcementRepository.exists(id)) {
+//     throw new AnnouncementNotFoundError(id);
+//   }
+//
+//   return announcementRepository.save(newAnnouncment, id);
+// };
+//
+// const remove = (id) => {
+//   if (!announcementRepository.exists(id)) {
+//     throw new AnnouncementNotFoundError(id);
+//   }
+//
+//   announcementRepository.remove(id);
+//   return true;
+// };

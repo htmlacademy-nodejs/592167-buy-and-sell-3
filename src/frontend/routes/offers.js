@@ -1,10 +1,12 @@
 'use strict';
 
+const fs = require(`fs`).promises;
 const {Router} = require(`express`);
 const router = new Router();
 
 const axios = require(`axios`);
 const {BACKEND_URL} = require(`../../constants`);
+const {getRandomInit} = require(`../../utils`);
 
 const DEFAULT_PREVIEW_COUNT = 8;
 
@@ -54,6 +56,32 @@ router.get(`/:id`, async (req, res) => {
     res.render(`ticket`);
   } catch (err) {
     res.render(`./errors/500`, {err});
+  }
+});
+
+router.post(`/add`, async (req, res) => {
+  const {type, size, path, name} = req.files.avatar;
+  const allowTypes = [`image/jpeg`, `image/png`];
+
+  if (size === 0 || !allowTypes.includes(type)) {
+    fs.unlink(path);
+    return res.redirect(`/add`);
+  }
+
+  try {
+    await fs.rename(path, `${__dirname}/../images/${name}`);
+  } catch (error) {
+    return res.send(`Oops! Error: ${error.message}`);
+  }
+
+  try {
+    const params = req.fields;
+    params.image = `${getRandomInit(1, 16)}`.padStart(6, `item00`);
+    // console.log(params);
+    const answer = await axios.post(`${BACKEND_URL}/api/offers/add`, params);
+    res.send(answer.data);
+  } catch (err) {
+    res.send(`post is not successful`);
   }
 });
 

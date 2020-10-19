@@ -1,15 +1,11 @@
 'use strict';
 
-const fs = require(`fs`);
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
+// const fs = require(`fs`);
+// const {deleteItemFromArray, getNewId} = require(`../../utils`);
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
-const {MOCK_FILE_NAME} = require(`../../constants`);
-let announcements = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
-
-const findById = (id) => announcements.find((el) => el.id === id);
-
-const exists = (id) => findById(id) !== undefined;
+// const {MOCK_FILE_NAME} = require(`../../constants`);
+// let announcements = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
 
 const findAll = async () => await db.Announcement.findAll({
   attributes: {
@@ -46,7 +42,6 @@ const findMyAnnouncements = async () => await db.Image.findAll({
     },
   },
 });
-
 
 const getAnnouncementsForComments = async (userId) => await db.Announcement.findAll({
   attributes: [`id`, `title`, `sum`],
@@ -119,22 +114,20 @@ const getMostDiscussed = async (limitAnnouncements) => {
   return await sequelize.query(sql, {type, replacements});
 };
 
-const save = (newAnnouncement, id) => {
-  if (id) {
-    const announcement = findById(id);
-    const newContent = deleteItemFromArray(announcements, id);
-    const newOffer = Object.assign({}, announcement, newAnnouncement);
-    newContent.push(newOffer);
-    announcements = newContent;
-  } else {
-    newAnnouncement.id = getNewId();
-    announcements.push(newAnnouncement);
-  }
-  return newAnnouncement.id;
-};
+const save = async (announcement, image) => {
+  try {
+    const temp = await db.Announcement.create(announcement);
 
-const remove = (id) => {
-  announcements = deleteItemFromArray(announcements, id);
+    image.announcementId = temp.id;
+    await db.Image.create(image);
+
+    const categories = await db.Category.findByPk(Number.parseInt(announcement.category, 10));
+    await temp.addCategories(categories);
+
+    return temp;
+  } catch (err) {
+    return err.message;
+  }
 };
 
 const findByTitle = async (queryString) => {
@@ -169,8 +162,6 @@ const findByTitle = async (queryString) => {
 
 
 module.exports = {
-  exists,
-  findById,
   findAll,
   findMyAnnouncements,
   getAnnouncementsForComments,
@@ -179,5 +170,31 @@ module.exports = {
   getMostDiscussed,
   save,
   findByTitle,
-  remove,
+  // exists,
+  // findById,
+  // remove,
 };
+
+
+// старый код
+// const findById = (id) => announcements.find((el) => el.id === id);
+
+// const exists = (id) => findById(id) !== undefined;
+
+// const save = (newAnnouncement, id) => {
+//   if (id) {
+//     const announcement = findById(id);
+//     const newContent = deleteItemFromArray(announcements, id);
+//     const newOffer = Object.assign({}, announcement, newAnnouncement);
+//     newContent.push(newOffer);
+//     announcements = newContent;
+//   } else {
+//     newAnnouncement.id = getNewId();
+//     announcements.push(newAnnouncement);
+//   }
+//   return newAnnouncement.id;
+// };
+
+// const remove = (id) => {
+//   announcements = deleteItemFromArray(announcements, id);
+// };
