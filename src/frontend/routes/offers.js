@@ -57,7 +57,9 @@ router.get(`/category/:id`, async (req, res) => {
 
 router.get(`/:id`, async (req, res) => {
   try {
-    res.render(`ticket`);
+    const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
+    const announcement = response.data;
+    res.render(`ticket`, {announcement});
   } catch (err) {
     res.render(`./errors/500`, {err});
   }

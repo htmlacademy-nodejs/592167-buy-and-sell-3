@@ -59,7 +59,7 @@ const getCommentsForAnnouncement = async (announcementId) => await db.Comment.fi
     model: db.User,
     attributes: [`firstName`, `lastName`],
   },
-  raw: true,
+  // raw: true,
 });
 
 const getAnnouncementsOfCategories = async (categoryName) => await db.Announcement.findAll({
@@ -168,6 +168,30 @@ const findByTitle = async (queryString) => {
   });
 };
 
+const getAnnouncement = async (announcementId) => await db.Image.findAll({
+  attributes: [`image`],
+  include: {
+    model: db.Announcement,
+    attributes: [`title`, `sum`, `description`, `createdAt`],
+    where: {
+      'id': announcementId,
+    },
+    include: [
+      {
+        model: db.Type,
+        attributes: [`type`],
+      },
+      {
+        model: db.User,
+        attributes: [`firstName`, `lastName`, `email`],
+      },
+      {
+        model: db.Category,
+        attributes: [`category`],
+      }],
+  },
+});
+
 
 module.exports = {
   findAll,
@@ -179,6 +203,7 @@ module.exports = {
   getMostDiscussed,
   save,
   findByTitle,
+  getAnnouncement,
   // exists,
   // findById,
   // remove,

@@ -1,5 +1,12 @@
 'use strict';
 
+const createDate = (date) => {
+  const newDate = new Date(date);
+  const month = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
+  const tempMonth = month[newDate.getMonth()];
+  return `${newDate.getDate()} ${tempMonth} ${newDate.getFullYear()}`;
+};
+
 const announcementRepository = require(`../repositories/announcement`);
 // const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
@@ -73,6 +80,28 @@ const create = async (newAnnouncement) => {
   return await announcementRepository.save(announcement, image);
 };
 
+const getAnnouncement = async (announcementId) => {
+  const announcementList = await announcementRepository.getAnnouncement(announcementId);
+  const commentList = await announcementRepository.getCommentsForAnnouncement(announcementId);
+  return {
+    image: announcementList[0].image,
+    title: announcementList[0].Announcement.title,
+    sum: announcementList[0].Announcement.sum,
+    description: announcementList[0].Announcement.description,
+    createdAt: createDate(announcementList[0].Announcement.createdAt),
+    type: announcementList[0].Announcement.Type.type,
+    author: `${announcementList[0].Announcement.User.firstName} ${announcementList[0].Announcement.User.lastName}`,
+    email: announcementList[0].Announcement.User.email,
+    categories: announcementList[0].Announcement.Categories.map((el) => el.category),
+    comments: commentList.map((el) => {
+      return {
+        comment: el.comment,
+        author: `${el.User.firstName} ${el.User.lastName}`
+      };
+    }),
+  };
+};
+
 
 module.exports = {
   getAll,
@@ -84,6 +113,7 @@ module.exports = {
   create,
   search,
   getListCommentsForUserAnnouncements,
+  getAnnouncement,
   // getById,
   // update,
   // remove,

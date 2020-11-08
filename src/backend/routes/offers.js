@@ -116,6 +116,14 @@ router.post(`/add`, upload.single(`avatar`), async (req, res) => {
   }
 });
 
+router.get(`/:id`, async (req, res) => {
+  try {
+    res.send(await annoucementService.getAnnouncement(req.params.id));
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 // router.post(`/add`, async (req, res) => {
 //   try {
 //     res.send(await annoucementService.create(req.body));
