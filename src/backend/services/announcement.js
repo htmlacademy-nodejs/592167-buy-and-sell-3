@@ -15,12 +15,27 @@ const getMyAnnouncements = async () => {
       title: tempAnnouncements[i].Announcement.dataValues.title,
       sum: tempAnnouncements[i].Announcement.dataValues.sum,
       type: tempAnnouncements[i].Announcement.dataValues.Type.dataValues.type,
-    }
+    };
   });
 };
 
 const getAnnouncementsForComments = async (userId) => {
   return await announcementRepository.getAnnouncementsForComments(userId);
+};
+
+const getListCommentsForUserAnnouncements = async (userId) => {
+  const listUserAnnouncementsId = await announcementRepository.getAnnouncementsListUser(userId);
+  const listUserAnnouncements = [];
+  for (let i = 0; i < listUserAnnouncementsId.length; i++) {
+    const announcementInfo = {
+      title: listUserAnnouncementsId[i].title,
+      sum: listUserAnnouncementsId[i].sum,
+    };
+    announcementInfo.type = listUserAnnouncementsId[i].typeId === 1 ? `Куплю` : `Продам`;
+    announcementInfo.comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
+    listUserAnnouncements.push(announcementInfo);
+  }
+  return listUserAnnouncements.filter((el) => el.comments.length > 0);
 };
 
 const getAnnouncementsOfCategories = async (categoryName) => {
@@ -38,24 +53,24 @@ const search = async (queryString) => await announcementRepository.findByTitle(q
 
 const create = async (newAnnouncement) => {
   let announcementType = 1;
-  if (newAnnouncement.action === 'sell') {
+  if (newAnnouncement.action === `sell`) {
     announcementType = 2;
   }
   const announcement = {
-    title: newAnnouncement['ticket-name'],
+    title: newAnnouncement[`ticket-name`],
     description: newAnnouncement.comment,
     sum: newAnnouncement.price,
     userId: 3,
     typeId: announcementType,
-    category: newAnnouncement.category,
-  }
+    categories: newAnnouncement.category,
+  };
 
   const image = {
     image: newAnnouncement.image,
-  }
+  };
 
 
-  return await announcementRepository.save(announcement, image)
+  return await announcementRepository.save(announcement, image);
 };
 
 
@@ -68,6 +83,7 @@ module.exports = {
   getMostDiscussed,
   create,
   search,
+  getListCommentsForUserAnnouncements,
   // getById,
   // update,
   // remove,

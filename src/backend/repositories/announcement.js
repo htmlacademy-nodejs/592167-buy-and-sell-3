@@ -43,15 +43,21 @@ const findMyAnnouncements = async () => await db.Image.findAll({
   },
 });
 
-const getAnnouncementsForComments = async (userId) => await db.Announcement.findAll({
-  attributes: [`id`, `title`, `sum`],
-  include: {
-    model: db.Type,
-    attributes: [`type`],
-    as: `types`,
-  },
+const getAnnouncementsListUser = async (userId) => await db.Announcement.findAll({
+  attributes: [`id`, `title`, `sum`, `typeId`],
   where: {
-    userId
+    'userId': userId,
+  }
+});
+
+const getCommentsForAnnouncement = async (announcementId) => await db.Comment.findAll({
+  attributes: [`comment`],
+  where: {
+    'announcementId': announcementId,
+  },
+  include: {
+    model: db.User,
+    attributes: [`firstName`, `lastName`],
   },
   raw: true,
 });
@@ -121,8 +127,10 @@ const save = async (announcement, image) => {
     image.announcementId = temp.id;
     await db.Image.create(image);
 
-    const categories = await db.Category.findByPk(Number.parseInt(announcement.category, 10));
-    await temp.addCategories(categories);
+    for (const categoryId of announcement.categories) {
+      const categories = await db.Category.findByPk(Number.parseInt(categoryId, 10));
+      await temp.addCategories(categories);
+    }
 
     return temp;
   } catch (err) {
@@ -164,9 +172,10 @@ const findByTitle = async (queryString) => {
 module.exports = {
   findAll,
   findMyAnnouncements,
-  getAnnouncementsForComments,
+  getCommentsForAnnouncement,
   getAnnouncementsOfCategories,
   getTheNewestAnnouncements,
+  getAnnouncementsListUser,
   getMostDiscussed,
   save,
   findByTitle,

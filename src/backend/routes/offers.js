@@ -69,6 +69,18 @@ router.get(`/my`, async (req, res) => {
   }
 });
 
+router.get(`/my/comments`, async (req, res) => {
+  try {
+    res.send(await annoucementService.getListCommentsForUserAnnouncements(3));
+  } catch (err) {
+    logger.error(chalk.red(err));
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
+      code: StatusCode.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
+  }
+});
+
 router.get(`/newestAnnouncements`, async (req, res) => {
   try {
     res.send(await annoucementService.getTheNewestAnnouncements(DEFAULT.PREVIEW_COUNT));
@@ -94,9 +106,14 @@ router.get(`/mostDiscussed`, async (req, res) => {
 });
 
 router.post(`/add`, upload.single(`avatar`), async (req, res) => {
-  const {file} = req;
-  console.log(req.body);
-  res.send(file);
+  const data = req.body;
+  data.image = req.file.filename;
+  try {
+    await annoucementService.create(data);
+    res.redirect(`http://localhost:8080/my`);
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 // router.post(`/add`, async (req, res) => {

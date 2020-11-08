@@ -19,10 +19,12 @@ router.get(`/`, async (req, res) => {
 router.get(`/comments`, async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/my/comments`);
-    const firstNAnnouncements = response.data;
-    res.render(`comments`, {firstNAnnouncements});
+    const listCommentsForUserAnnouncements = response.data;
+    // console.log(getListCommentsForUserAnnouncements);
+    // res.send(`comments`);
+    res.render(`comments`, {listCommentsForUserAnnouncements});
   } catch (err) {
-    res.render(`500`, {err});
+    res.render(`errors/500`, {err});
   }
 });
 
