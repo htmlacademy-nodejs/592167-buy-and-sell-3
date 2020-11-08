@@ -102,6 +102,14 @@ const getAnnouncement = async (announcementId) => {
   };
 };
 
+const addComment = async (newComment) => {
+  const normalizedComment = {
+    comment: newComment.comment,
+    announcementId: newComment.offersId,
+    userId: newComment.userId,
+  };
+  return await announcementRepository.addComment(normalizedComment);
+};
 
 module.exports = {
   getAll,
@@ -114,6 +122,7 @@ module.exports = {
   search,
   getListCommentsForUserAnnouncements,
   getAnnouncement,
+  addComment,
   // getById,
   // update,
   // remove,

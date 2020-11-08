@@ -124,6 +124,18 @@ router.get(`/:id`, async (req, res) => {
   }
 });
 
+router.post(`/:id/comments`, async (req, res) => {
+  try {
+    const newComment = req.body;
+    newComment.offersId = req.params.id;
+    newComment.userId = `3`;
+    await annoucementService.addComment(newComment);
+    res.redirect(`http://localhost:8080/offers/${req.params.id}`);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 // router.post(`/add`, async (req, res) => {
 //   try {
 //     res.send(await annoucementService.create(req.body));

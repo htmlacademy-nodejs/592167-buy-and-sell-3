@@ -192,6 +192,7 @@ const getAnnouncement = async (announcementId) => await db.Image.findAll({
   },
 });
 
+const addComment = async (newComment) => await db.Comment.create(newComment);
 
 module.exports = {
   findAll,
@@ -204,6 +205,7 @@ module.exports = {
   save,
   findByTitle,
   getAnnouncement,
+  addComment,
   // exists,
   // findById,
   // remove,
