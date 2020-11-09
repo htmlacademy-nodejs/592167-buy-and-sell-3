@@ -111,6 +111,23 @@ const addComment = async (newComment) => {
   return await announcementRepository.addComment(normalizedComment);
 };
 
+const edit = async (editAnnouncement) => {
+  let announcementType = 1;
+  if (editAnnouncement.action === `sell`) {
+    announcementType = 2;
+  }
+  const announcement = {
+    id: editAnnouncement.id,
+    title: editAnnouncement[`ticket-name`],
+    description: editAnnouncement.comment,
+    sum: editAnnouncement.price,
+    userId: 3,
+    typeId: announcementType,
+    categories: editAnnouncement.category,
+  };
+  return await announcementRepository.edit(announcement);
+};
+
 module.exports = {
   getAll,
   getMyAnnouncements,
@@ -123,6 +140,7 @@ module.exports = {
   getListCommentsForUserAnnouncements,
   getAnnouncement,
   addComment,
+  edit,
   // getById,
   // update,
   // remove,

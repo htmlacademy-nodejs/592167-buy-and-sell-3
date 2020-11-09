@@ -7,7 +7,6 @@ const router = new Router();
 // const {upload} = require(`./index`);
 
 
-
 const axios = require(`axios`);
 const {BACKEND_URL} = require(`../../constants`);
 // const {getRandomInit} = require(`../../utils`);
@@ -64,6 +63,17 @@ router.get(`/:id`, async (req, res) => {
     res.render(`./errors/500`, {err});
   }
 });
+
+router.get(`/edit/:id`, async (req, res) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
+    const announcement = response.data;
+    res.render(`ticket-edit`, {announcement});
+  } catch (err) {
+    res.render(`./errors/500`, {err});
+  }
+});
+
 
 // router.post(`/add`, async (req, res) => {
 //   const {type, size, path, name} = req.files.avatar;

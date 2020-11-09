@@ -194,6 +194,18 @@ const getAnnouncement = async (announcementId) => await db.Image.findAll({
 
 const addComment = async (newComment) => await db.Comment.create(newComment);
 
+const edit = async (editAnnouncement) => {
+  try {
+    return await db.Announcement.update(editAnnouncement, {
+      where: {
+        id: editAnnouncement.id,
+      }
+    });
+  } catch (err) {
+    return err.message;
+  }
+};
+
 module.exports = {
   findAll,
   findMyAnnouncements,
@@ -206,6 +218,7 @@ module.exports = {
   findByTitle,
   getAnnouncement,
   addComment,
+  edit,
   // exists,
   // findById,
   // remove,

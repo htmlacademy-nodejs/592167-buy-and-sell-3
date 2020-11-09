@@ -116,6 +116,19 @@ router.post(`/add`, upload.single(`avatar`), async (req, res) => {
   }
 });
 
+router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
+  const data = req.body;
+  data.image = req.file.filename;
+  data.id = req.params.id;
+  try {
+    const result = await annoucementService.edit(data);
+    console.log(result);
+    res.redirect(`http://localhost:8080/offers/3`);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 router.get(`/:id`, async (req, res) => {
   try {
     res.send(await annoucementService.getAnnouncement(req.params.id));
