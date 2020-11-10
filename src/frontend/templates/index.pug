@@ -30,7 +30,7 @@ block main
                     a(href='#') #{announcement.categories}
                   .ticket-card__header
                     h3.ticket-card__title
-                      a(href='/offers/id') #{announcement.title}
+                      a(href=`/offers/${announcement.id}`) #{announcement.title}
                     p.ticket-card__price
                       span.js-sum #{announcement.sum}
                       |  ₽
@@ -53,7 +53,7 @@ block main
                     a(href='#') #{mostDiscussed.categories}
                   .ticket-card__header
                     h3.ticket-card__title
-                      a(href='/offers/id') #{mostDiscussed.title}
+                      a(href=`/offers/${mostDiscussed.id}`) #{mostDiscussed.title}
                     p.ticket-card__price
                       span.js-sum #{mostDiscussed.sum}
                       |  ₽
