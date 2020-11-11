@@ -32,13 +32,13 @@ block main
                     a(href='#') #{announcement.categories}
                   .ticket-card__header
                     h3.ticket-card__title
-                      a(href='/offers/id') #{announcement.title}
+                      a(href=`/offers/${announcement.id}`) #{announcement.title}
                     p.ticket-card__price
                       span.js-sum #{announcement.sum}
                       |  ₽
                   .ticket-card__desc
                     p #{announcement.description}
-        .tickets-list__pagination(hidden=announcementsOfCategoryPage.categoryInfo.categorycount < 8 ? true : false)
+        .tickets-list__pagination(hidden=announcementsOfCategoryPage.categoryInfo.categorycount)
           ul.pagination
             each paginationStep in announcementsOfCategoryPage.paginationStep
               li
