@@ -5,27 +5,35 @@ block main
     section.search-results
       h1.visually-hidden Результаты поиска
       .search-results__wrapper
-        p.search-results__label
-          | Найдено
-          span.js-results 2 публикации
-        ul.search-results__list
-          each announcement in announcements
-            li.search-results__item
-              .ticket-card.ticket-card--color05
-                .ticket-card__img
-                  img(src=`/img/${announcement.image}.jpg`, srcset=`/img/${announcement.image}@2x.jpg 2x`, alt='Изображение товара')
-                .ticket-card__info
-                  span.ticket-card__label #{announcement.type}
-                  .ticket-card__categories
-                    a(href='#') #{announcement.categories ? announcement.categories[0] : ``}
-                  .ticket-card__header
-                    h3.ticket-card__title
-                      a(href='#') #{announcement.title}
-                    p.ticket-card__price
-                      span.js-sum #{announcement.sum}
-                      |  ₽
-                  .ticket-card__desc
-                    p #{announcement.description}
+        if announcements.length > 0
+          p.search-results__label
+            | Найдено
+            span.js-results #{announcements.length} публикации
+          ul.search-results__list
+            each announcement in announcements
+              li.search-results__item
+                .ticket-card.ticket-card--color05
+                  .ticket-card__img
+                    img(src=`/img/${announcement.image}.jpg`, srcset=`/img/${announcement.image}@2x.jpg 2x`, alt='Изображение товара')
+                  .ticket-card__info
+                    span.ticket-card__label #{announcement.type}
+                    .ticket-card__categories
+                      each category in announcement.categories
+                        a(href=`/offers/category/${category.id}`) #{category.category}
+                    .ticket-card__header
+                      h3.ticket-card__title
+                        a(href=`/offers/${announcement.id}`) #{announcement.title}
+                      p.ticket-card__price
+                        span.js-sum #{announcement.sum}
+                        |  ₽
+                    .ticket-card__desc
+                      p #{announcement.description}
+        else
+          .search-results__message
+            p
+             | Не найдено <br> ни одной публикации
+
+
     section.tickets-list
       h2.visually-hidden Самые новые предложения
       .tickets-list__wrapper

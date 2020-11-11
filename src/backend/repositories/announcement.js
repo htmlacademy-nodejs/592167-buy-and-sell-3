@@ -142,7 +142,7 @@ const findByTitle = async (queryString) => await db.Image.findAll({
   attributes: [`image`],
   include: {
     model: db.Announcement,
-    attributes: [`title`, `sum`, `description`, `createdAt`],
+    attributes: [`id`, `title`, `sum`, `description`, `createdAt`],
     where: {
       title: {
         [Operator.like]: `%${queryString}%`,
@@ -159,7 +159,7 @@ const findByTitle = async (queryString) => await db.Image.findAll({
       },
       {
         model: db.Category,
-        attributes: [`category`],
+        attributes: [`category`, `id`],
       }],
   },
 });

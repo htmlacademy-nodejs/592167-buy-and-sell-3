@@ -60,12 +60,18 @@ const search = async (queryString) => {
   const announcementList = await announcementRepository.findByTitle(queryString);
   return Array(announcementList.length).fill({}).map((el, i) => {
     return {
+      id: announcementList[i].Announcement.id,
       image: announcementList[i].image,
       title: announcementList[i].Announcement.title,
       type: announcementList[i].Announcement.Type.type,
       sum: announcementList[i].Announcement.sum,
       description: announcementList[i].Announcement.description,
-      categories: announcementList[i].Announcement.Categories.map((it) => it.category),
+      categories: announcementList[i].Announcement.Categories.map((it) => {
+        return {
+          id: it.id,
+          category: it.category
+        };
+      }),
     };
   });
 };
