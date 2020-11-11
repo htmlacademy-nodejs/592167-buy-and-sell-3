@@ -38,7 +38,7 @@ block main
                       |  ₽
                   .ticket-card__desc
                     p #{announcement.description}
-        .tickets-list__pagination(hidden=announcementsOfCategoryPage.categoryInfo.categorycount)
+        .tickets-list__pagination(hidden=announcementsOfCategoryPage.categoryInfo.categorycount < 8 ? true : false)
           ul.pagination
             each paginationStep in announcementsOfCategoryPage.paginationStep
               li

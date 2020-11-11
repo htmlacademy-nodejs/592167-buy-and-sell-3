@@ -56,7 +56,19 @@ const getMostDiscussed = async (limitAnnouncements) => {
   return mostDiscussed.filter((it) => Number.parseInt(it.comments, 10) > 0);
 };
 
-const search = async (queryString) => await announcementRepository.findByTitle(queryString);
+const search = async (queryString) => {
+  const announcementList = await announcementRepository.findByTitle(queryString);
+  return Array(announcementList.length).fill({}).map((el, i) => {
+    return {
+      image: announcementList[i].image,
+      title: announcementList[i].Announcement.title,
+      type: announcementList[i].Announcement.Type.type,
+      sum: announcementList[i].Announcement.sum,
+      description: announcementList[i].Announcement.description,
+      categories: announcementList[i].Announcement.Categories.map((it) => it.category),
+    };
+  });
+};
 
 const create = async (newAnnouncement) => {
   let announcementType = 1;

@@ -13,9 +13,9 @@ block main
             li.search-results__item
               .ticket-card.ticket-card--color05
                 .ticket-card__img
-                  img(src=`img/${announcement['images.image']}`, srcset='img/item05@2x.jpg 2x', alt='Изображение товара')
+                  img(src=`/img/${announcement.image}.jpg`, srcset=`/img/${announcement.image}@2x.jpg 2x`, alt='Изображение товара')
                 .ticket-card__info
-                  span.ticket-card__label #{announcement['types.type']}
+                  span.ticket-card__label #{announcement.type}
                   .ticket-card__categories
                     a(href='#') #{announcement.categories ? announcement.categories[0] : ``}
                   .ticket-card__header

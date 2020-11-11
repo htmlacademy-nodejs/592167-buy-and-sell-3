@@ -138,35 +138,31 @@ const save = async (announcement, image) => {
   }
 };
 
-const findByTitle = async (queryString) => {
-  return await db.Announcement.findAll({
-    attributes: {
-      include: [
-        [
-          sequelize.literal(`(
-                    SELECT image.image
-        FROM "Images" AS image
-        WHERE
-                image."announcementId" = "Announcement".id
-        limit 1
-                )`),
-          `images.image`
-        ]
-      ]
-    },
-    include: [{
-      model: db.Type,
-      attributes: [`type`],
-      as: `types`,
-    }],
+const findByTitle = async (queryString) => await db.Image.findAll({
+  attributes: [`image`],
+  include: {
+    model: db.Announcement,
+    attributes: [`title`, `sum`, `description`, `createdAt`],
     where: {
       title: {
-        [Operator.substring]: queryString,
+        [Operator.like]: `%${queryString}%`,
       },
     },
-    raw: true,
-  });
-};
+    include: [
+      {
+        model: db.Type,
+        attributes: [`type`],
+      },
+      {
+        model: db.User,
+        attributes: [`firstName`, `lastName`, `email`],
+      },
+      {
+        model: db.Category,
+        attributes: [`category`],
+      }],
+  },
+});
 
 const getAnnouncement = async (announcementId) => await db.Image.findAll({
   attributes: [`image`],
