@@ -9,7 +9,7 @@ const logger = getLogger();
 const multer = require(`multer`);
 const md5 = require(`md5`);
 
-const UPLOAD_DIR = `${__dirname}/../tmp`;
+const UPLOAD_DIR = `${__dirname}/../images`;
 
 const MimeTypeExtension = {
   'image/png': `png`,
