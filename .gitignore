@@ -20,5 +20,9 @@ mock.json
 # Папка с логами
 src/backend/logs/
 
+# Папка с изображениями
+src/backend/images/
+
 # Файл с параметрами окружения
 .env
+
