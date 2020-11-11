@@ -1,5 +1,6 @@
 'use strict';
 
+
 const createDate = (date) => {
   const newDate = new Date(date);
   const month = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
@@ -8,6 +9,7 @@ const createDate = (date) => {
 };
 
 const announcementRepository = require(`../repositories/announcement`);
+const checkAnnouncement = require(`src/backend/validation-schemas/announcement-schema`);
 // const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
 const getAll = async () => {
@@ -89,6 +91,9 @@ const create = async (newAnnouncement) => {
     typeId: announcementType,
     categories: newAnnouncement.category,
   };
+
+  const status = await checkAnnouncement.validateAsync(announcement);
+  console.log(status);
 
   const image = {
     image: newAnnouncement.image,
