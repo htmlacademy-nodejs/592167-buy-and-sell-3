@@ -9,7 +9,8 @@ const createDate = (date) => {
 };
 
 const announcementRepository = require(`../repositories/announcement`);
-const checkAnnouncement = require(`src/backend/validation-schemas/announcement-schema`);
+const checkAnnouncement = require(`../validation-schemas/announcement-schema`);
+const checkComment = require(`../validation-schemas/comment-schema`);
 // const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
 const getAll = async () => {
@@ -92,15 +93,16 @@ const create = async (newAnnouncement) => {
     categories: newAnnouncement.category,
   };
 
-  const status = await checkAnnouncement.validateAsync(announcement);
-  console.log(status);
+  try {
+    const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
+    const image = {
+      image: newAnnouncement.image,
+    };
 
-  const image = {
-    image: newAnnouncement.image,
-  };
-
-
-  return await announcementRepository.save(announcement, image);
+    return await announcementRepository.save(checkedAnnouncement, image);
+  } catch (err) {
+    return `что-то пошло не так`;
+  }
 };
 
 const getAnnouncement = async (announcementId) => {
@@ -131,7 +133,13 @@ const addComment = async (newComment) => {
     announcementId: newComment.offersId,
     userId: newComment.userId,
   };
-  return await announcementRepository.addComment(normalizedComment);
+
+  try {
+    const checkedComment = await checkComment.validateAsync(normalizedComment);
+    return await announcementRepository.addComment(checkedComment);
+  } catch (err) {
+    return `что-то пошло не так`;
+  }
 };
 
 const edit = async (editAnnouncement) => {

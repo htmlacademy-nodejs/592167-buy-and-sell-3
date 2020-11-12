@@ -106,13 +106,14 @@ router.get(`/mostDiscussed`, async (req, res) => {
 });
 
 router.post(`/add`, upload.single(`avatar`), async (req, res) => {
-  const data = req.body;
-  data.image = req.file.filename;
   try {
+    const data = req.body;
+    data.image = req.file.filename;
+
     await annoucementService.create(data);
     res.redirect(`http://localhost:8080/my`);
   } catch (err) {
-    res.send(err);
+    res.redirect(`http://localhost:8080/offers/add`);
   }
 });
 
