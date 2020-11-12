@@ -168,7 +168,7 @@ const getAnnouncement = async (announcementId) => await db.Image.findAll({
   attributes: [`image`],
   include: {
     model: db.Announcement,
-    attributes: [`title`, `sum`, `description`, `createdAt`],
+    attributes: [`id`, `title`, `sum`, `description`, `createdAt`],
     where: {
       'id': announcementId,
     },
@@ -190,11 +190,11 @@ const getAnnouncement = async (announcementId) => await db.Image.findAll({
 
 const addComment = async (newComment) => await db.Comment.create(newComment);
 
-const edit = async (editAnnouncement) => {
+const edit = async (editAnnouncement, announcementId) => {
   try {
     return await db.Announcement.update(editAnnouncement, {
       where: {
-        id: editAnnouncement.id,
+        id: announcementId,
       }
     });
   } catch (err) {

@@ -109,6 +109,7 @@ const getAnnouncement = async (announcementId) => {
   const announcementList = await announcementRepository.getAnnouncement(announcementId);
   const commentList = await announcementRepository.getCommentsForAnnouncement(announcementId);
   return {
+    id: announcementList[0].Announcement.id,
     image: announcementList[0].image,
     title: announcementList[0].Announcement.title,
     sum: announcementList[0].Announcement.sum,
@@ -142,13 +143,13 @@ const addComment = async (newComment) => {
   }
 };
 
-const edit = async (editAnnouncement) => {
+const edit = async (editAnnouncement, announcementId) => {
   let announcementType = 1;
   if (editAnnouncement.action === `sell`) {
     announcementType = 2;
   }
   const announcement = {
-    id: editAnnouncement.id,
+    // id: editAnnouncement.id,
     title: editAnnouncement[`ticket-name`],
     description: editAnnouncement.comment,
     sum: editAnnouncement.price,
@@ -156,7 +157,13 @@ const edit = async (editAnnouncement) => {
     typeId: announcementType,
     categories: editAnnouncement.category,
   };
-  return await announcementRepository.edit(announcement);
+
+  try {
+    const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
+    return await announcementRepository.edit(checkedAnnouncement, announcementId);
+  } catch (err) {
+    return `Что-то пошло не так`;
+  }
 };
 
 module.exports = {
