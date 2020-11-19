@@ -17,6 +17,8 @@ const MimeTypeExtension = {
   'image/jpg': `jpg`,
 };
 
+const maxFileSize = 5 * 1024 * 1024;
+
 // Подготовка хранилища для сохранения файлов
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
@@ -35,7 +37,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   storage, fileFilter, limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: maxFileSize,
   }
 });
 
