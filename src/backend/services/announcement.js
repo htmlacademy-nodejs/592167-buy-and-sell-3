@@ -1,10 +1,10 @@
 'use strict';
 
+const {MONTH_LIST} = require(`../../constants`);
 
 const createDate = (date) => {
   const newDate = new Date(date);
-  const month = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
-  const tempMonth = month[newDate.getMonth()];
+  const tempMonth = MONTH_LIST[newDate.getMonth()];
   return `${newDate.getDate()} ${tempMonth} ${newDate.getFullYear()}`;
 };
 

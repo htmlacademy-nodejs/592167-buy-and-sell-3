@@ -27,6 +27,7 @@ const DEFAULT = {
 const USER_ARGV_INDEX = 2;
 const MOCK_FILE_NAME = `mock.json`;
 const BACKEND_URL = `http://localhost:8081`;
+const MONTH_LIST = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
 
 
 module.exports = {
@@ -36,4 +37,5 @@ module.exports = {
   USER_ARGV_INDEX,
   MOCK_FILE_NAME,
   BACKEND_URL,
+  MONTH_LIST,
 };
