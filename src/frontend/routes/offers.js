@@ -1,15 +1,10 @@
 'use strict';
 
-// const fs = require(`fs`).promises;
 const {Router} = require(`express`);
 const router = new Router();
 
-// const {upload} = require(`./index`);
-
-
 const axios = require(`axios`);
 const {BACKEND_URL} = require(`../../constants`);
-// const {getRandomInit} = require(`../../utils`);
 
 const DEFAULT_PREVIEW_COUNT = 8;
 
@@ -39,12 +34,10 @@ router.get(`/category/:id`, async (req, res) => {
   if (!req.query.start) {
     paginationStep[0].offset = true;
   }
-  // console.log(req.query.start);
   paginationStep.push({
     step: `Дальше`,
     offset: ``
   });
-  // console.log(req.query.start);
   const announcementsOfCategoryPage = {
     categories,
     announcementsOfCategory,
@@ -74,36 +67,5 @@ router.get(`/edit/:id`, async (req, res) => {
   }
 });
 
-
-// router.post(`/add`, async (req, res) => {
-//   const {type, size, path, name} = req.files.avatar;
-//   const allowTypes = [`image/jpeg`, `image/png`];
-//
-//   if (size === 0 || !allowTypes.includes(type)) {
-//     fs.unlink(path);
-//     return res.redirect(`/add`);
-//   }
-//
-//   try {
-//     await fs.rename(path, `${__dirname}/../images/${name}`);
-//   } catch (error) {
-//     return res.send(`Oops! Error: ${error.message}`);
-//   }
-//
-//   try {
-//     const params = req.fields;
-//     params.image = `${getRandomInit(1, 16)}`.padStart(6, `item00`);
-//     console.log(req);
-//     const answer = await axios.post(`${BACKEND_URL}/api/offers/add`, params);
-//     res.send(answer.data);
-//   } catch (err) {
-//     res.send(`post is not successful`);
-//   }
-// });
-
-// router.post(`/add`, upload.single(`avatar`), async (req, res) => {
-//   const {file} = req;
-//   res.send(file);
-// });
 
 module.exports = router;

@@ -11,7 +11,6 @@ const createDate = (date) => {
 const announcementRepository = require(`../repositories/announcement`);
 const checkAnnouncement = require(`../validation-schemas/announcement-schema`);
 const checkComment = require(`../validation-schemas/comment-schema`);
-// const {AnnouncementNotFoundError} = require(`../errors/errors`);
 
 const getAll = async () => {
   return await announcementRepository.findAll();
@@ -149,7 +148,6 @@ const edit = async (editAnnouncement, announcementId) => {
     announcementType = 2;
   }
   const announcement = {
-    // id: editAnnouncement.id,
     title: editAnnouncement[`ticket-name`],
     description: editAnnouncement.comment,
     sum: editAnnouncement.price,
@@ -179,33 +177,4 @@ module.exports = {
   getAnnouncement,
   addComment,
   edit,
-  // getById,
-  // update,
-  // remove,
 };
-
-// старый код
-// const getById = (id) => {
-//   if (!announcementRepository.exists(id)) {
-//     throw new AnnouncementNotFoundError(id);
-//   }
-//
-//   return announcementRepository.findById(id);
-// };
-//
-// const update = (newAnnouncment, id) => {
-//   if (!announcementRepository.exists(id)) {
-//     throw new AnnouncementNotFoundError(id);
-//   }
-//
-//   return announcementRepository.save(newAnnouncment, id);
-// };
-//
-// const remove = (id) => {
-//   if (!announcementRepository.exists(id)) {
-//     throw new AnnouncementNotFoundError(id);
-//   }
-//
-//   announcementRepository.remove(id);
-//   return true;
-// };

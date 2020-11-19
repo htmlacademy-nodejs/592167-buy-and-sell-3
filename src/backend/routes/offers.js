@@ -148,17 +148,4 @@ router.post(`/:id/comments`, async (req, res) => {
   }
 });
 
-// router.post(`/add`, async (req, res) => {
-//   try {
-//     res.send(await annoucementService.create(req.body));
-//   } catch (err) {
-//     res.send(err);
-//   }
-// });
-
-// router.post(`/add`, upload.single(`avatar`), async (req, res) => {
-//   const {file} = req;
-//   res.send(file);
-// });
-
 module.exports = router;

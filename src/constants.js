@@ -24,14 +24,9 @@ const DEFAULT = {
   ORDER: `DESC`,
 };
 
-// const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
 const MOCK_FILE_NAME = `mock.json`;
 const BACKEND_URL = `http://localhost:8081`;
-
-// const DEFAULT_PREVIEW_COUNT = 8;
-// const DEFAULT_OFFSET = 0;
-// const DEFAULT_ORDER = `DESC`;
 
 
 module.exports = {
@@ -41,6 +36,4 @@ module.exports = {
   USER_ARGV_INDEX,
   MOCK_FILE_NAME,
   BACKEND_URL,
-  // DEFAULT_PREVIEW_COUNT,
-  // DEFAULT_OFFSET
 };
