@@ -110,7 +110,7 @@ const create = async (newAnnouncement) => {
 
     return await announcementRepository.save(checkedAnnouncement, image);
   } catch (err) {
-    return `что-то пошло не так`;
+    return err;
   }
 };
 
@@ -149,7 +149,7 @@ const addComment = async (newComment) => {
     const checkedComment = await checkComment.validateAsync(normalizedComment);
     return await announcementRepository.addComment(checkedComment);
   } catch (err) {
-    return `что-то пошло не так`;
+    return err;
   }
 };
 
