@@ -117,17 +117,18 @@ const create = async (newAnnouncement) => {
 const getAnnouncement = async (announcementId) => {
   const announcementList = await announcementRepository.getAnnouncement(announcementId);
   const commentList = await announcementRepository.getCommentsForAnnouncement(announcementId);
+  const firstList = announcementList.shift();
   return {
-    id: announcementList[0].Announcement.id,
-    image: announcementList[0].image,
-    title: announcementList[0].Announcement.title,
-    sum: announcementList[0].Announcement.sum,
-    description: announcementList[0].Announcement.description,
-    createdAt: createDate(announcementList[0].Announcement.createdAt),
-    type: announcementList[0].Announcement.Type.type,
-    author: `${announcementList[0].Announcement.User.firstName} ${announcementList[0].Announcement.User.lastName}`,
-    email: announcementList[0].Announcement.User.email,
-    categories: announcementList[0].Announcement.Categories.map((el) => el.category),
+    id: firstList.Announcement.id,
+    image: firstList.image,
+    title: firstList.Announcement.title,
+    sum: firstList.Announcement.sum,
+    description: firstList.Announcement.description,
+    createdAt: createDate(firstList.Announcement.createdAt),
+    type: firstList.Announcement.Type.type,
+    author: `${firstList.Announcement.User.firstName} ${firstList.Announcement.User.lastName}`,
+    email: firstList.Announcement.User.email,
+    categories: firstList.Announcement.Categories.map((el) => el.category),
     comments: commentList.map((el) => {
       return {
         comment: el.comment,
