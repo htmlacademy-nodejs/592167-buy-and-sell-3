@@ -1,6 +1,6 @@
 'use strict';
 
-const {MONTH_LIST} = require(`../../constants`);
+const {MONTH_LIST, ANNOUNCEMENT_TYPE, MOCK_USER_ID} = require(`../../constants`);
 
 const createDate = (date) => {
   const newDate = new Date(date);
@@ -40,10 +40,20 @@ const getListCommentsForUserAnnouncements = async (userId) => {
       title: listUserAnnouncementsId[i].title,
       sum: listUserAnnouncementsId[i].sum,
     };
-    announcementInfo.type = listUserAnnouncementsId[i].typeId === 1 ? `Куплю` : `Продам`;
+    announcementInfo.type = listUserAnnouncementsId[i].typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
     announcementInfo.comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
     listUserAnnouncements.push(announcementInfo);
   }
+  // listUserAnnouncementsId.forEach(async (el) => {
+  //   const announcementInfo = {
+  //     title: el.title,
+  //     sum: el.sum,
+  //   };
+  //   announcementInfo.type = el.typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
+  //   announcementInfo.comments = await announcementRepository.getCommentsForAnnouncement(el);
+  //   listUserAnnouncements.push(announcementInfo);
+  // });
+
   return listUserAnnouncements.filter((el) => el.comments.length > 0);
 };
 
@@ -79,15 +89,15 @@ const search = async (queryString) => {
 };
 
 const create = async (newAnnouncement) => {
-  let announcementType = 1;
+  let announcementType = ANNOUNCEMENT_TYPE.BUY;
   if (newAnnouncement.action === `sell`) {
-    announcementType = 2;
+    announcementType = ANNOUNCEMENT_TYPE.SELL;
   }
   const announcement = {
     title: newAnnouncement[`ticket-name`],
     description: newAnnouncement.comment,
     sum: newAnnouncement.price,
-    userId: 3,
+    userId: MOCK_USER_ID,
     typeId: announcementType,
     categories: newAnnouncement.category,
   };
@@ -143,15 +153,15 @@ const addComment = async (newComment) => {
 };
 
 const edit = async (editAnnouncement, announcementId) => {
-  let announcementType = 1;
+  let announcementType = ANNOUNCEMENT_TYPE.BUY;
   if (editAnnouncement.action === `sell`) {
-    announcementType = 2;
+    announcementType = ANNOUNCEMENT_TYPE.SELL;
   }
   const announcement = {
     title: editAnnouncement[`ticket-name`],
     description: editAnnouncement.comment,
     sum: editAnnouncement.price,
-    userId: 3,
+    userId: MOCK_USER_ID,
     typeId: announcementType,
     categories: editAnnouncement.category,
   };
