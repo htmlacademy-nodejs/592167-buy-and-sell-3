@@ -7,7 +7,7 @@ block main
         h1.visually-hidden Карточка объявления
         .ticket__content
           .ticket__img
-            img(src=`/upload/${announcement.image}.jpg`, srcset=`/upload/${announcement.image}@2x.jpg 2x`, alt='Изображение товара')
+            img(src=`/upload/${announcement.image}`, alt='Изображение товара')
           .ticket__info
             h2.ticket__title #{announcement.title}
             .ticket__header
@@ -33,7 +33,7 @@ block main
                 li
                   a.category-tile.category-tile--small(href='#')
                     span.category-tile__image
-                      img(src=`/upload/cat0${2}.jpg`, srcset=`/upload/cat0${2}@2x.jpg 2x`, alt='Иконка категории')
+                      img(src=`/img/cat0${2}.jpg`, srcset=`/img/cat0${2}@2x.jpg 2x`, alt='Иконка категории')
                     span.category-tile__label #{category}
         .ticket__comments
           h2.ticket__subtitle Комментарии
@@ -41,7 +41,7 @@ block main
             form.form.comment-form(action='http://localhost:8081/api/offers/3/comments', method='post')
               .comment-form__header
                 a.comment-form__avatar.avatar(href='#')
-                  img(src='/upload/avatar.jpg', srcset='/upload/avatar@2x.jpg 2x', alt='Аватар пользователя')
+                  img(src='/img/avatar.jpg', srcset='/img/avatar@2x.jpg 2x', alt='Аватар пользователя')
                 p.comment-form__author Вам слово
               .comment-form__field
                 .form__field
@@ -56,7 +56,7 @@ block main
                   .comment-card
                     .comment-card__header
                       a.comment-card__avatar.avatar(href='#')
-                        img(src='/upload/avatar02.jpg', srcset='/upload/avatar02@2x.jpg 2x', alt='Аватар пользователя')
+                        img(src='/img/avatar02.jpg', srcset='/img/avatar02@2x.jpg 2x', alt='Аватар пользователя')
                       p.comment-card__author #{comment.author}
                     .comment-card__content
                       p #{comment.comment}
