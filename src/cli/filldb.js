@@ -106,8 +106,9 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
     };
     announcements.push(announcement);
 
+    const generateImage = `${getRandomInit(Images.MIN, Images.MAX)}`.padStart(6, `item00`);
     const image = {
-      announcementId: i, image: `${getRandomInit(Images.MIN, Images.MAX)}`.padStart(6, `item00`)
+      announcementId: i, image: `${generateImage}.jpg`
     };
     images.push(image);
   }
@@ -136,6 +137,7 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
   await db.Comment.bulkCreate(comments);
 
   for (let i = 0; i < countAnnouncement; i++) {
+    // eslint-disable-next-line no-shadow
     const categories = await db.Category.findAll({
       where: {
         id: {
@@ -144,6 +146,7 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
       },
     });
 
+    // eslint-disable-next-line no-shadow
     const announcements = await db.Announcement.findByPk(i + 1);
     await announcements.addCategories(categories);
   }
