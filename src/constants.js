@@ -27,11 +27,12 @@ const DEFAULT = {
 const ANNOUNCEMENT_TYPE = {
   BUY: 1,
   SELL: 2,
-}
+};
 
 const USER_ARGV_INDEX = 2;
 const MOCK_FILE_NAME = `mock.json`;
 const BACKEND_URL = `http://localhost:8081`;
+const FRONTEND_URL = `http://localhost:8080`;
 const MONTH_LIST = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
 const MOCK_USER_ID = 3;
 
@@ -43,6 +44,7 @@ module.exports = {
   USER_ARGV_INDEX,
   MOCK_FILE_NAME,
   BACKEND_URL,
+  FRONTEND_URL,
   MONTH_LIST,
   ANNOUNCEMENT_TYPE,
   MOCK_USER_ID

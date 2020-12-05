@@ -9,6 +9,10 @@ const logger = getLogger();
 const multer = require(`multer`);
 const md5 = require(`md5`);
 
+const annoucementService = require(`../services/announcement`);
+const {DEFAULT, FRONTEND_URL} = require(`../../constants`);
+
+
 const UPLOAD_DIR = `${__dirname}/../../static/upload`;
 
 const MimeTypeExtension = {
@@ -42,9 +46,6 @@ const upload = multer({
 });
 
 const router = new Router();
-
-const annoucementService = require(`../services/announcement`);
-const {DEFAULT} = require(`../../constants`);
 
 
 router.get(`/`, async (req, res) => {
@@ -113,9 +114,9 @@ router.post(`/add`, upload.single(`avatar`), async (req, res) => {
     data.image = req.file.filename;
 
     await annoucementService.create(data);
-    res.redirect(`http://localhost:8080/my`);
+    res.redirect(`${FRONTEND_URL}/my`);
   } catch (err) {
-    res.redirect(`http://localhost:8080/offers/add`);
+    res.redirect(`${FRONTEND_URL}/offers/add`);
   }
 });
 
@@ -124,7 +125,7 @@ router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
   data.image = req.file.filename;
   try {
     await annoucementService.edit(data, req.params.id);
-    res.redirect(`http://localhost:8080/offers/${req.params.id}`);
+    res.redirect(`${FRONTEND_URL}/offers/${req.params.id}`);
   } catch (err) {
     res.send(err);
   }
@@ -144,7 +145,7 @@ router.post(`/:id/comments`, async (req, res) => {
     newComment.offersId = req.params.id;
     newComment.userId = `3`;
     await annoucementService.addComment(newComment);
-    res.redirect(`http://localhost:8080/offers/${req.params.id}`);
+    res.redirect(`${FRONTEND_URL}/offers/${req.params.id}`);
   } catch (err) {
     res.send(err);
   }
