@@ -111,7 +111,7 @@ router.get(`/mostDiscussed`, async (req, res) => {
 router.post(`/add`, upload.single(`avatar`), async (req, res) => {
   try {
     const data = req.body;
-    data.image = req.file.filename;
+    data.image = req.file !== undefined ? req.file.filename : ``;
 
     await annoucementService.create(data);
     res.redirect(`${FRONTEND_URL}/my`);
