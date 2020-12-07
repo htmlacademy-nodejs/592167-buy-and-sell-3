@@ -47,7 +47,7 @@ const getAnnouncementsListUser = async (userId) => await db.Announcement.findAll
 });
 
 const getCommentsForAnnouncement = async (announcementId) => await db.Comment.findAll({
-  attributes: [`comment`],
+  attributes: [`id`, `comment`],
   where: {
     'announcementId': announcementId,
   },

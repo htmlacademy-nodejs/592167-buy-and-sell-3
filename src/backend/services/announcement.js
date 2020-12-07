@@ -37,11 +37,19 @@ const getListCommentsForUserAnnouncements = async (userId) => {
   const listUserAnnouncements = [];
   for (let i = 0; i < listUserAnnouncementsId.length; i++) {
     const announcementInfo = {
+      id: listUserAnnouncementsId[i].id,
       title: listUserAnnouncementsId[i].title,
       sum: listUserAnnouncementsId[i].sum,
     };
     announcementInfo.type = listUserAnnouncementsId[i].typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
-    announcementInfo.comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
+    const comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
+    announcementInfo.comments = comments.map((el) => {
+      return {
+        id: el.id,
+        comment: el.comment,
+        user: `${el.User.firstName} ${el.User.lastName}`,
+      };
+    });
     listUserAnnouncements.push(announcementInfo);
   }
   // listUserAnnouncementsId.forEach(async (el) => {
@@ -102,16 +110,26 @@ const create = async (newAnnouncement) => {
     categories: newAnnouncement.category,
   };
 
-  try {
-    const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
-    const image = {
-      image: newAnnouncement.image,
-    };
+  // try {
+  //   const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
+  //   const image = {
+  //     image: newAnnouncement.image,
+  //   };
+  //
+  //   return await announcementRepository.save(checkedAnnouncement, image);
+  // } catch (err) {
+  //   return err;
+  // }
+  checkAnnouncement.validateAsync(announcement)
+    .then(async (response) => {
+      const image = {
+        image: newAnnouncement.image,
+      };
 
-    return await announcementRepository.save(checkedAnnouncement, image);
-  } catch (err) {
-    return err;
-  }
+      return await announcementRepository.save(response, image);
+    }).catch((err) => {
+      return err;
+    });
 };
 
 const getAnnouncement = async (announcementId) => {

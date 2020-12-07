@@ -3,11 +3,14 @@
 const express = require(`express`);
 const app = express();
 
+const cors = require(`cors`);
+
 const {getLogger} = require(`./logger`);
 const logger = getLogger();
 
 
 const {initializeRoutes} = require(`./routes`);
+const {FRONTEND_URL} = require(`../constants`);
 
 
 app.use(express.json());
@@ -20,6 +23,10 @@ app.use((req, res, next) => {
   logger.debug(`Request came from address ${req.url}`);
   next();
 });
+
+app.use(cors({
+  origin: FRONTEND_URL,
+}));
 
 initializeRoutes(app);
 

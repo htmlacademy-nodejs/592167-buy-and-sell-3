@@ -109,13 +109,19 @@ router.get(`/mostDiscussed`, async (req, res) => {
 });
 
 router.post(`/add`, upload.single(`avatar`), async (req, res) => {
+  const data = req.body;
   try {
-    const data = req.body;
     data.image = req.file !== undefined ? req.file.filename : ``;
 
     await annoucementService.create(data);
     res.redirect(`${FRONTEND_URL}/my`);
   } catch (err) {
+    console.log(`is mistake`);
+    const {details} = err;
+    res.status(StatusCode.HTTP_STATUS_BAD_REQUEST).json({
+      message: details.map((errorDescription) => errorDescription.message),
+      data,
+    });
     res.redirect(`${FRONTEND_URL}/offers/add`);
   }
 });
