@@ -21,6 +21,7 @@ const getMyAnnouncements = async () => {
   return Array(tempAnnouncements.length).fill({}).map((el, i) => {
     return {
       image: tempAnnouncements[i].image,
+      id: tempAnnouncements[i].Announcement.dataValues.id,
       title: tempAnnouncements[i].Announcement.dataValues.title,
       sum: tempAnnouncements[i].Announcement.dataValues.sum,
       type: tempAnnouncements[i].Announcement.dataValues.Type.dataValues.type,

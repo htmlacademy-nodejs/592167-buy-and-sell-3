@@ -28,7 +28,7 @@ const findMyAnnouncements = async () => await db.Image.findAll({
   attributes: [`image`],
   include: {
     model: db.Announcement,
-    attributes: [`title`, `sum`],
+    attributes: [`id`, `title`, `sum`],
     where: {
       userId: 3,
     },
