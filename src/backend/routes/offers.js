@@ -120,14 +120,22 @@ router.post(`/add`, upload.single(`avatar`), async (req, res) => {
   }
 });
 
+router.post(`/:id`, (req, res, next) => {
+  if (Number.parseInt(req.params.id, 10)) {
+    return next();
+  } else {
+    return res.redirect(`${FRONTEND_URL}/errors/404`);
+  }
+});
+
 router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
   const data = req.body;
-  data.image = req.file.filename;
+  data.image = req.file !== undefined ? req.file.filename : ``;
   try {
     await annoucementService.edit(data, req.params.id);
-    res.redirect(`${FRONTEND_URL}/offers/${req.params.id}`);
+    return res.redirect(`${FRONTEND_URL}/offers/${req.params.id}`);
   } catch (err) {
-    res.send(err);
+    return res.send(err);
   }
 });
 
@@ -136,6 +144,14 @@ router.get(`/:id`, async (req, res) => {
     res.send(await annoucementService.getAnnouncement(req.params.id));
   } catch (err) {
     res.send(err);
+  }
+});
+
+router.post(`/:id/comments`, (req, res, next) => {
+  if (Number.parseInt(req.params.id, 10)) {
+    return next();
+  } else {
+    return res.redirect(`${FRONTEND_URL}/errors/404`);
   }
 });
 

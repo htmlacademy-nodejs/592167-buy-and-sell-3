@@ -6,11 +6,13 @@ const {BACKEND_URL} = require(`../../constants`);
 
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
+const errorsRoutes = require(`./errors`);
 
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
+  app.use(`/errors`, errorsRoutes);
 
 
   app.get(`/`, async (req, res) => {
