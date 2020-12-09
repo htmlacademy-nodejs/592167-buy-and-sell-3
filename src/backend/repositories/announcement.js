@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require(`fs`);
+
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
 
@@ -197,6 +199,66 @@ const edit = async (editAnnouncement, announcementId) => {
   }
 };
 
+const remove = async (announcementId) => {
+  try {
+    const temp = await db.Image.findOne({
+      attributes: [`image`],
+      include: {
+        model: db.Announcement,
+        attributes: [`id`],
+        include: {
+          model: db.Category,
+          attributes: [`id`, `category`],
+          through: {
+            attributes: [],
+          },
+        },
+        where: {
+          id: announcementId,
+        },
+      },
+    });
+
+    const currentCategoriesList = temp.Announcement.Categories.map((el) => el.id);
+
+    const announcement = await db.Announcement.findByPk(announcementId);
+
+
+    currentCategoriesList.forEach(async (el) => {
+      const category = await db.Category.findByPk(el);
+      await announcement.removeCategories(category);
+    });
+
+    await db.Comment.destroy({
+      where: {
+        announcementId,
+      },
+    });
+
+    await db.Image.destroy({
+      where: {
+        announcementId,
+      },
+    });
+
+    if (temp.image) {
+      try {
+        fs.unlinkSync(`${__dirname}/../../static/upload/${temp.image}`);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return await db.Announcement.destroy({
+      where: {
+        id: announcementId,
+      },
+    });
+  } catch (err) {
+    return err.message;
+  }
+};
+
 module.exports = {
   findAll,
   findMyAnnouncements,
@@ -210,4 +272,5 @@ module.exports = {
   getAnnouncement,
   addComment,
   edit,
+  remove,
 };

@@ -24,4 +24,4 @@ block main
                     p.ticket-card__price
                       span.js-sum #{announcement.sum}
                       |  ₽
-                button.ticket-card__del.js-delete(type='button') Удалить
+                button.ticket-card__del.js-delete(type='button', data-offerId=`${announcement.id}`) Удалить

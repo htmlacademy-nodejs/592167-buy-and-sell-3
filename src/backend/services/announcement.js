@@ -111,16 +111,6 @@ const create = async (newAnnouncement) => {
     categories: newAnnouncement.category,
   };
 
-  // try {
-  //   const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
-  //   const image = {
-  //     image: newAnnouncement.image,
-  //   };
-  //
-  //   return await announcementRepository.save(checkedAnnouncement, image);
-  // } catch (err) {
-  //   return err;
-  // }
   checkAnnouncement.validateAsync(announcement)
     .then(async (response) => {
       const image = {
@@ -194,6 +184,9 @@ const edit = async (editAnnouncement, announcementId) => {
   }
 };
 
+const remove = async (announcementId) => await announcementRepository.remove(announcementId);
+
+
 module.exports = {
   getAll,
   getMyAnnouncements,
@@ -207,4 +200,5 @@ module.exports = {
   getAnnouncement,
   addComment,
   edit,
+  remove,
 };

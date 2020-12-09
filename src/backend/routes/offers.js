@@ -173,4 +173,14 @@ router.post(`/:id/comments`, async (req, res) => {
   }
 });
 
+router.get(`/delete/:id`, async (req, res) => {
+  try {
+    await annoucementService.remove(req.params.id);
+    res.json({isDelete: true});
+  } catch (err) {
+    logger.error(err);
+    res.json({isDelete: false});
+  }
+});
+
 module.exports = router;
