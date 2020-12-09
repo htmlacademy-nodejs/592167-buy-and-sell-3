@@ -139,7 +139,7 @@ router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
   data.image = req.file !== undefined ? req.file.filename : ``;
   try {
     await annoucementService.edit(data, req.params.id);
-    return res.redirect(`${FRONTEND_URL}/offers/${req.params.id}`);
+    return res.redirect(`${FRONTEND_URL}/my`);
   } catch (err) {
     return res.send(err);
   }
