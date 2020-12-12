@@ -8,6 +8,16 @@ const {BACKEND_URL} = require(`../../constants`);
 
 const DEFAULT_PREVIEW_COUNT = 8;
 
+router.get(`/add`, async (req, res) => {
+  try {
+    const back = {
+      url: `${BACKEND_URL}`,
+    };
+    res.render(`new-ticket`, {back});
+  } catch (err) {
+    res.render(`./errors/500`, {err});
+  }
+});
 
 router.get(`/category/:id`, async (req, res) => {
   const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
@@ -27,12 +37,10 @@ router.get(`/category/:id`, async (req, res) => {
   if (!req.query.start) {
     paginationStep[0].offset = true;
   }
-  console.log(req.query.start);
   paginationStep.push({
     step: `Дальше`,
     offset: ``
   });
-  console.log(req.query.start);
   const announcementsOfCategoryPage = {
     categories,
     announcementsOfCategory,
@@ -40,6 +48,28 @@ router.get(`/category/:id`, async (req, res) => {
     paginationStep,
   };
   res.render(`category`, {announcementsOfCategoryPage});
+});
+
+router.get(`/:id`, async (req, res) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
+    const announcement = response.data;
+    announcement.backend = `${BACKEND_URL}`;
+    res.render(`ticket`, {announcement});
+  } catch (err) {
+    res.render(`./errors/500`, {err});
+  }
+});
+
+router.get(`/edit/:id`, async (req, res) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
+    const announcement = response.data;
+    announcement.backend = `${BACKEND_URL}`;
+    res.render(`ticket-edit`, {announcement});
+  } catch (err) {
+    res.render(`./errors/500`, {err});
+  }
 });
 
 

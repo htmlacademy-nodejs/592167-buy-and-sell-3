@@ -1,15 +1,7 @@
 'use strict';
 
-const fs = require(`fs`);
-const {deleteItemFromArray, getNewId} = require(`../../utils`);
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
-const {MOCK_FILE_NAME} = require(`../../constants`);
-let announcements = fs.existsSync(MOCK_FILE_NAME) ? JSON.parse(fs.readFileSync(MOCK_FILE_NAME)) : [];
-
-const findById = (id) => announcements.find((el) => el.id === id);
-
-const exists = (id) => findById(id) !== undefined;
 
 const findAll = async () => await db.Announcement.findAll({
   attributes: {
@@ -32,43 +24,37 @@ const findAll = async () => await db.Announcement.findAll({
   raw: true,
 });
 
-const findMyAnnouncements = async () => await db.Announcement.findAll({
-  attributes: {
-    include: [
-      [
-        sequelize.literal(`(
-                    SELECT image.image
-        FROM "Images" AS image
-        WHERE
-                image."announcementId" = "Announcement".id
-        limit 1
-                )`),
-        `images.image`
-      ]
-    ]
+const findMyAnnouncements = async () => await db.Image.findAll({
+  attributes: [`image`],
+  include: {
+    model: db.Announcement,
+    attributes: [`title`, `sum`],
+    where: {
+      userId: 3,
+    },
+    include: {
+      model: db.Type,
+      attributes: [`type`],
+    },
   },
-  include: [{
-    model: db.Type,
-    attributes: [`type`],
-    as: `types`,
-  }],
-  raw: true,
+});
+
+const getAnnouncementsListUser = async (userId) => await db.Announcement.findAll({
+  attributes: [`id`, `title`, `sum`, `typeId`],
   where: {
-    userId: 1
+    'userId': userId,
   }
 });
 
-const getAnnouncementsForComments = async (userId) => await db.Announcement.findAll({
-  attributes: [`id`, `title`, `sum`],
-  include: {
-    model: db.Type,
-    attributes: [`type`],
-    as: `types`,
-  },
+const getCommentsForAnnouncement = async (announcementId) => await db.Comment.findAll({
+  attributes: [`comment`],
   where: {
-    userId
+    'announcementId': announcementId,
   },
-  raw: true,
+  include: {
+    model: db.User,
+    attributes: [`firstName`, `lastName`],
+  },
 });
 
 const getAnnouncementsOfCategories = async (categoryName) => await db.Announcement.findAll({
@@ -110,10 +96,10 @@ const getMostDiscussed = async (limitAnnouncements) => {
                       a.title,
                       a.description,
                       a.sum,
-                      (select count(c.id) from "Comments" c where c."announcementId"=a.id) as comments,
+                      (select count(c.id) from "Comments" c where c."announcementId" = a.id) as comments,
                       (select image from "Images" i where i."announcementId" = a.id limit 1),
                       t.type,
-                      string_agg(cat.category, ', ') as categories
+                      string_agg(cat.category, ', ')                                         as categories
                from "Announcements" a
                       inner join "Types" T
                                  on T.id = a."typeId"
@@ -129,65 +115,99 @@ const getMostDiscussed = async (limitAnnouncements) => {
   return await sequelize.query(sql, {type, replacements});
 };
 
-const save = (newAnnouncement, id) => {
-  if (id) {
-    const announcement = findById(id);
-    const newContent = deleteItemFromArray(announcements, id);
-    const newOffer = Object.assign({}, announcement, newAnnouncement);
-    newContent.push(newOffer);
-    announcements = newContent;
-  } else {
-    newAnnouncement.id = getNewId();
-    announcements.push(newAnnouncement);
+const save = async (announcement, image) => {
+  try {
+    const temp = await db.Announcement.create(announcement);
+
+    image.announcementId = temp.id;
+    await db.Image.create(image);
+
+    for (const categoryId of announcement.categories) {
+      const categories = await db.Category.findByPk(Number.parseInt(categoryId, 10));
+      await temp.addCategories(categories);
+    }
+
+    return temp;
+  } catch (err) {
+    return err.message;
   }
-  return newAnnouncement.id;
 };
 
-const remove = (id) => {
-  announcements = deleteItemFromArray(announcements, id);
-};
-
-const findByTitle = async (queryString) => {
-  return await db.Announcement.findAll({
-    attributes: {
-      include: [
-        [
-          sequelize.literal(`(
-                    SELECT image.image
-        FROM "Images" AS image
-        WHERE
-                image."announcementId" = "Announcement".id
-        limit 1
-                )`),
-          `images.image`
-        ]
-      ]
-    },
-    include: [{
-      model: db.Type,
-      attributes: [`type`],
-      as: `types`,
-    }],
+const findByTitle = async (queryString) => await db.Image.findAll({
+  attributes: [`image`],
+  include: {
+    model: db.Announcement,
+    attributes: [`id`, `title`, `sum`, `description`, `createdAt`],
     where: {
       title: {
-        [Operator.substring]: queryString,
+        [Operator.like]: `%${queryString}%`,
       },
     },
-    raw: true,
-  });
+    include: [
+      {
+        model: db.Type,
+        attributes: [`type`],
+      },
+      {
+        model: db.User,
+        attributes: [`firstName`, `lastName`, `email`],
+      },
+      {
+        model: db.Category,
+        attributes: [`category`, `id`],
+      }],
+  },
+});
+
+const getAnnouncement = async (announcementId) => await db.Image.findAll({
+  attributes: [`image`],
+  include: {
+    model: db.Announcement,
+    attributes: [`id`, `title`, `sum`, `description`, `createdAt`],
+    where: {
+      'id': announcementId,
+    },
+    include: [
+      {
+        model: db.Type,
+        attributes: [`type`],
+      },
+      {
+        model: db.User,
+        attributes: [`firstName`, `lastName`, `email`],
+      },
+      {
+        model: db.Category,
+        attributes: [`category`],
+      }],
+  },
+});
+
+const addComment = async (newComment) => await db.Comment.create(newComment);
+
+const edit = async (editAnnouncement, announcementId) => {
+  try {
+    return await db.Announcement.update(editAnnouncement, {
+      where: {
+        id: announcementId,
+      }
+    });
+  } catch (err) {
+    return err.message;
+  }
 };
 
-
 module.exports = {
-  exists,
-  findById,
   findAll,
   findMyAnnouncements,
-  getAnnouncementsForComments,
+  getCommentsForAnnouncement,
   getAnnouncementsOfCategories,
   getTheNewestAnnouncements,
+  getAnnouncementsListUser,
   getMostDiscussed,
   save,
   findByTitle,
-  remove,
+  getAnnouncement,
+  addComment,
+  edit,
 };

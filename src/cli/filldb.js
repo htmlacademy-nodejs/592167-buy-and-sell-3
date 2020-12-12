@@ -58,9 +58,6 @@ const readContent = async (filePath) => {
   }
 };
 
-const getPictureFileName = (num) => {
-  return `${num}`.padStart(6, `item00`);
-};
 
 const getAnnouncementsToCategories = (countAnnouncement) => {
   const announcementsToCategories = [];
@@ -109,8 +106,9 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
     };
     announcements.push(announcement);
 
+    const generateImage = `${getRandomInit(Images.MIN, Images.MAX)}`.padStart(6, `item00`);
     const image = {
-      announcementId: i, image: getPictureFileName(getRandomInit(Images.MIN, Images.MAX))
+      announcementId: i, image: `${generateImage}.jpg`
     };
     images.push(image);
   }
@@ -139,6 +137,7 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
   await db.Comment.bulkCreate(comments);
 
   for (let i = 0; i < countAnnouncement; i++) {
+    // eslint-disable-next-line no-shadow
     const categories = await db.Category.findAll({
       where: {
         id: {
@@ -147,6 +146,7 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
       },
     });
 
+    // eslint-disable-next-line no-shadow
     const announcements = await db.Announcement.findByPk(i + 1);
     await announcements.addCategories(categories);
   }
