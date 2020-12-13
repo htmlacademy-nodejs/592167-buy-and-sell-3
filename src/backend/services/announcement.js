@@ -71,7 +71,7 @@ const getAnnouncementsOfCategories = async (categoryName) => {
 };
 
 const getTheNewestAnnouncements = async (limitAnnouncements) => {
-  const temp = await announcementRepository.getLimitAnnouncements(limitAnnouncements);
+  const temp = await announcementRepository.getTheNewestAnnouncements(limitAnnouncements);
   return Array(temp.length).fill({}).map((el, i) => {
     return {
       id: temp[i].id,
