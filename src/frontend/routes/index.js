@@ -2,7 +2,7 @@
 
 const axios = require(`axios`);
 
-const {BACKEND_URL} = require(`../../constants`);
+const {BACKEND_URL, FRONTEND_URL} = require(`../../constants`);
 
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
@@ -27,6 +27,7 @@ const initializeRoutes = (app) => {
         categories,
         newAnnouncements,
         mostDiscussed,
+        FRONTEND_URL,
       };
       res.render(`index`, {mainPage});
     } catch (err) {

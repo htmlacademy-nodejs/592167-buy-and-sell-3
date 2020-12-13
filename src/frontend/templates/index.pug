@@ -27,7 +27,8 @@ block main
                 .ticket-card__info
                   span.ticket-card__label #{announcement.type}
                   .ticket-card__categories
-                    a(href='#') #{announcement.categories}
+                     each categories in announcement.categories
+                       a(href=`${mainPage.FRONTEND_URL}/offers/category/${categories.id}`) #{categories.category}
                   .ticket-card__header
                     h3.ticket-card__title
                       a(href=`/offers/${announcement.id}`) #{announcement.title}

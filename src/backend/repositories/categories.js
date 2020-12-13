@@ -1,5 +1,6 @@
 'use strict';
 
+const {db, Operator} = require(`../db/db-connect`);
 const {sequelize} = require(`../db/db-connect`);
 const {DEFAULT} = require(`../../constants`);
 
@@ -48,7 +49,17 @@ const getAnnouncementsOfCategories = async (categoryId, selectionParams) => {
   return await sequelize.query(sql, {type, replacements});
 };
 
+const getCategoriesByListId = async (listId) => db.Category.findAll({
+  attributes: [`id`, `category`],
+  where: {
+    announcementId: {
+      [Operator.in]: listId,
+    },
+  },
+});
+
 module.exports = {
   findAll,
   getAnnouncementsOfCategories,
+  getCategoriesByListId,
 };

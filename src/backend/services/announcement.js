@@ -70,7 +70,20 @@ const getAnnouncementsOfCategories = async (categoryName) => {
   return await announcementRepository.getAnnouncementsOfCategories(categoryName);
 };
 
-const getTheNewestAnnouncements = async (limitAnnouncements) => await announcementRepository.getTheNewestAnnouncements(limitAnnouncements);
+const getTheNewestAnnouncements = async (limitAnnouncements) => {
+  const temp = await announcementRepository.getLimitAnnouncements(limitAnnouncements);
+  return Array(temp.length).fill({}).map((el, i) => {
+    return {
+      id: temp[i].id,
+      title: temp[i].title,
+      description: temp[i].description,
+      sum: temp[i].sum,
+      type: temp[i].Type.type,
+      image: temp[i].Images[0].image,
+      categories: temp[i].Categories,
+    };
+  });
+};
 
 const getMostDiscussed = async (limitAnnouncements) => {
   const mostDiscussed = await announcementRepository.getMostDiscussed(limitAnnouncements);
