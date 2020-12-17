@@ -21,6 +21,7 @@ const getMyAnnouncements = async () => {
   return Array(tempAnnouncements.length).fill({}).map((el, i) => {
     return {
       image: tempAnnouncements[i].image,
+      id: tempAnnouncements[i].Announcement.dataValues.id,
       title: tempAnnouncements[i].Announcement.dataValues.title,
       sum: tempAnnouncements[i].Announcement.dataValues.sum,
       type: tempAnnouncements[i].Announcement.dataValues.Type.dataValues.type,
@@ -37,11 +38,19 @@ const getListCommentsForUserAnnouncements = async (userId) => {
   const listUserAnnouncements = [];
   for (let i = 0; i < listUserAnnouncementsId.length; i++) {
     const announcementInfo = {
+      id: listUserAnnouncementsId[i].id,
       title: listUserAnnouncementsId[i].title,
       sum: listUserAnnouncementsId[i].sum,
     };
     announcementInfo.type = listUserAnnouncementsId[i].typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
-    announcementInfo.comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
+    const comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
+    announcementInfo.comments = comments.map((el) => {
+      return {
+        id: el.id,
+        comment: el.comment,
+        user: `${el.User.firstName} ${el.User.lastName}`,
+      };
+    });
     listUserAnnouncements.push(announcementInfo);
   }
   // listUserAnnouncementsId.forEach(async (el) => {
@@ -61,7 +70,20 @@ const getAnnouncementsOfCategories = async (categoryName) => {
   return await announcementRepository.getAnnouncementsOfCategories(categoryName);
 };
 
-const getTheNewestAnnouncements = async (limitAnnouncements) => await announcementRepository.getTheNewestAnnouncements(limitAnnouncements);
+const getTheNewestAnnouncements = async (limitAnnouncements) => {
+  const temp = await announcementRepository.getTheNewestAnnouncements(limitAnnouncements);
+  return Array(temp.length).fill({}).map((el, i) => {
+    return {
+      id: temp[i].id,
+      title: temp[i].title,
+      description: temp[i].description,
+      sum: temp[i].sum,
+      type: temp[i].Type.type,
+      image: temp[i].Images[0].image,
+      categories: temp[i].Categories,
+    };
+  });
+};
 
 const getMostDiscussed = async (limitAnnouncements) => {
   const mostDiscussed = await announcementRepository.getMostDiscussed(limitAnnouncements);
@@ -102,16 +124,16 @@ const create = async (newAnnouncement) => {
     categories: newAnnouncement.category,
   };
 
-  try {
-    const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
-    const image = {
-      image: newAnnouncement.image,
-    };
+  checkAnnouncement.validateAsync(announcement)
+    .then(async (response) => {
+      const image = {
+        image: newAnnouncement.image,
+      };
 
-    return await announcementRepository.save(checkedAnnouncement, image);
-  } catch (err) {
-    return err;
-  }
+      return await announcementRepository.save(response, image);
+    }).catch((err) => {
+      return err;
+    });
 };
 
 const getAnnouncement = async (announcementId) => {
@@ -175,6 +197,9 @@ const edit = async (editAnnouncement, announcementId) => {
   }
 };
 
+const remove = async (announcementId) => await announcementRepository.remove(announcementId);
+
+
 module.exports = {
   getAll,
   getMyAnnouncements,
@@ -188,4 +213,5 @@ module.exports = {
   getAnnouncement,
   addComment,
   edit,
+  remove,
 };

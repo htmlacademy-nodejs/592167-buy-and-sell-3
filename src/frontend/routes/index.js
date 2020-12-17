@@ -5,15 +5,17 @@ const shemaValidator = require(`../../middleware/shema-validator`);
 const update = require(`../../middleware/save-photo`);
 const userSchema = require(`../../backend/validation-schemas/user-schema`);
 
-const {BACKEND_URL, TEMPLATE} = require(`../../constants`);
+const {BACKEND_URL, FRONTEND_URL, TEMPLATE} = require(`../../constants`);
 
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
+const errorsRoutes = require(`./errors`);
 
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
+  app.use(`/errors`, errorsRoutes);
 
 
   app.get(`/`, async (req, res) => {
@@ -28,6 +30,7 @@ const initializeRoutes = (app) => {
         categories,
         newAnnouncements,
         mostDiscussed,
+        FRONTEND_URL,
       };
       res.render(`index`, {mainPage});
     } catch (err) {
