@@ -1,8 +1,11 @@
 'use strict';
 
 const axios = require(`axios`);
+const shemaValidator = require(`../../middleware/shema-validator`);
+const update = require(`../../middleware/save-photo`);
+const userSchema = require(`../../backend/validation-schemas/user-schema`);
 
-const {BACKEND_URL} = require(`../../constants`);
+const {BACKEND_URL, TEMPLATE} = require(`../../constants`);
 
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
@@ -34,6 +37,18 @@ const initializeRoutes = (app) => {
 
   app.get(`/register`, (req, res) => {
     res.render(`sign-up`);
+  });
+
+  app.post(`/register`, [
+    update(TEMPLATE.REGISTER),
+    shemaValidator(userSchema, TEMPLATE.REGISTER),
+  ], async (req, res) => {
+    try {
+      // console.log(req.file);
+      res.render(`login`);
+    } catch (err) {
+      // console.error(err, req.file);
+    }
   });
 
   app.get(`/login`, (req, res) => {

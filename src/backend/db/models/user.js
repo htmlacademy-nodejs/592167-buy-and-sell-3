@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends sequelize.Sequelize.Model{ }
+  class User extends sequelize.Sequelize.Model { }
   User.init({
     id: {
       type: DataTypes.INTEGER,
@@ -22,9 +22,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     password: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(60),
       allowNull: false,
     },
+    avatar: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    }
   }, {
     sequelize,
     timestamps: true,

@@ -3,7 +3,12 @@ extends common/layout
 block main
   main.page-content
     section.sign-up
-      form.sign-up__form.form(action='#', method='post', enctype='multipart/form-data', autocomplete='off')
+      if errorMessages
+        ul.error__list
+          each error in errorMessages
+            li.error__item
+              span #{error}
+      form.sign-up__form.form(action=`#`, method='post', enctype='multipart/form-data', autocomplete='off')
         .sign-up__title
           h2 Регистрация
           a.sign-up__link(href='/login') Вход
@@ -31,3 +36,5 @@ block main
           label(for='user-password-again') Пароль еще раз
           span Обязательное поле
         button.sign-up__button.btn.btn--medium.js-button(type='submit', disabled='') Создать аккаунт
+
+
