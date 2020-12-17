@@ -47,7 +47,7 @@ const initializeRoutes = (app) => {
     shemaValidator(userSchema, TEMPLATE.REGISTER),
   ], async (req, res) => {
     try {
-      // console.log(req.file);
+      console.log(req.user);
       res.render(`login`);
     } catch (err) {
       // console.error(err, req.file);

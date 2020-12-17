@@ -1,19 +1,26 @@
 'use strict';
 
+const fs = require(`fs`);
+
 module.exports = (schema, template) => (
   async (req, res, next) => {
-    // const {body} = req;
-    console.log(req.body);
-    const body2 = {
-      userName: `Иванов Иван@`,
-      email: `safd@dfs.de`,
-      password: `123534345`,
-      repeat: `123534345`,
+    const {body} = req;
+
+    const newUser = {
+      userName: body[`user-name`],
+      email: body[`user-email`],
+      password: body[`user-password`],
+      repeat: body[`user-password-again`],
     };
-    await schema.validateAsync(body2, {abortEarly: false})
-      .then(() => next())
+    await schema.validateAsync(newUser, {abortEarly: false})
+      .then((response) => {
+        req.user = response;
+        return next();
+      })
       .catch((err) => {
-        console.log(req.file.filename);
+        if (req.file !== undefined) {
+          fs.unlinkSync(`${__dirname}/../static/upload/${req.file.filename}`);
+        }
         const {details} = err;
         res.render(template, {errorMessages: details.map((errorDescription) => errorDescription.message)});
         return;
