@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require(`express`);
+const helmet = require(`helmet`);
 const app = express();
 
 const cors = require(`cors`);
@@ -15,6 +16,15 @@ const {FRONTEND_URL} = require(`../constants`);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: [`self`]
+    }
+  },
+  xssFilter: true,
+}));
 
 app.use((req, res, next) => {
   res.on(`finish`, () => {
