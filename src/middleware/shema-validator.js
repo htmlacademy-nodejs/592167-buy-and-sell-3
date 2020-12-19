@@ -15,6 +15,7 @@ module.exports = (schema, template) => (
     await schema.validateAsync(newUser, {abortEarly: false})
       .then((response) => {
         req.user = response;
+        req.user.avatar = req.file !== undefined ? req.file.filename : ``;
         return next();
       })
       .catch((err) => {

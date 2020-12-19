@@ -1,8 +1,11 @@
 'use strict';
 
 const axios = require(`axios`);
+
 const shemaValidator = require(`../../middleware/shema-validator`);
 const update = require(`../../middleware/save-photo`);
+const alreadyRegister = require(`../../middleware/already-register`);
+
 const userSchema = require(`../../backend/validation-schemas/user-schema`);
 
 const {BACKEND_URL, FRONTEND_URL, TEMPLATE} = require(`../../constants`);
@@ -45,12 +48,13 @@ const initializeRoutes = (app) => {
   app.post(`/register`, [
     update(TEMPLATE.REGISTER),
     shemaValidator(userSchema, TEMPLATE.REGISTER),
+    alreadyRegister(),
   ], async (req, res) => {
     try {
-      console.log(req.user);
+      await axios.post(`${BACKEND_URL}/api/user`, req.user);
       res.render(`login`);
     } catch (err) {
-      // console.error(err, req.file);
+      res.render(`error/500`);
     }
   });
 

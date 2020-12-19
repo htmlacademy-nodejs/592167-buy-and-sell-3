@@ -9,24 +9,20 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
-    firstName: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.STRING(50),
+    userName: {
+      type: DataTypes.string(100),
       allowNull: false,
     },
     email: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.string(100),
       allowNull: false,
     },
     password: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.string(60),
       allowNull: false,
     },
     avatar: {
-      type: DataTypes.TEXT,
+      type: DataTypes.text,
       allowNull: true,
     }
   }, {

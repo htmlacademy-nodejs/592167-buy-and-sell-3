@@ -83,9 +83,9 @@ const initDb = async (countAnnouncement, titles, sentences, commentsTemplate) =>
   ];
 
   const users = [
-    {firstName: `Иванов`, lastName: `Иван`, email: `my@mail.ru`, password: `123455`},
-    {firstName: `Петров`, lastName: `Петр`, email: `petrov@gmail.com`, password: `34523`},
-    {firstName: `Сидоров`, lastName: `Илья`, email: `sidorov.iliya@yahoo.com`, password: `I8e#8d`},
+    {userName: `Иванов Иван`, email: `my@mail.ru`, password: `123455`},
+    {userName: `Петров Петр`, email: `petrov@gmail.com`, password: `34523`},
+    {userName: `Сидоров Илья`, email: `sidorov.iliya@yahoo.com`, password: `I8e#8d`},
   ];
 
   const categories = [

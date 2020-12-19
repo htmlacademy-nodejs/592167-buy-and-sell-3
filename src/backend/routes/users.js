@@ -2,53 +2,65 @@
 
 const {Router} = require(`express`);
 const router = new Router();
+const {StatusCodes} = require(`http-status-codes`);
 
-const multer = require(`multer`);
-const md5 = require(`md5`);
+const {getLogger} = require(`../logger`);
+const logger = getLogger();
 
 const usersServices = require(`../services/users`);
-const {FRONTEND_URL} = require(`../../constants`);
 
-const UPLOAD_DIR = `${__dirname}/../../static/avatar`;
 
-const MimeTypeExtension = {
-  'image/png': `png`,
-  'image/jpeg': `jpg`,
-  'image/jpg': `jpg`,
-};
+// const multer = require(`multer`);
+// const md5 = require(`md5`);
 
-const maxFileSize = 5 * 1024 * 1024;
+// const {FRONTEND_URL} = require(`../../constants`);
 
-// Подготовка хранилища для сохранения файлов
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-  filename: (req, file, cb) => {
-    const fileExtention = MimeTypeExtension[file.mimetype];
-    cb(null, `${md5(Date.now())}.${fileExtention}`);
-  },
-});
+// const UPLOAD_DIR = `${__dirname}/../../static/avatar`;
+//
+// const MimeTypeExtension = {
+//   'image/png': `png`,
+//   'image/jpeg': `jpg`,
+//   'image/jpg': `jpg`,
+// };
+//
+// const maxFileSize = 5 * 1024 * 1024;
+//
+// // Подготовка хранилища для сохранения файлов
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+//   filename: (req, file, cb) => {
+//     const fileExtention = MimeTypeExtension[file.mimetype];
+//     cb(null, `${md5(Date.now())}.${fileExtention}`);
+//   },
+// });
+//
+// // Функция определяющая допустимые файлы для загрузки
+// const fileFilter = (req, file, cb) => {
+//   const allowTypes = Object.keys(MimeTypeExtension);
+//   const isValid = allowTypes.includes(file.mimetype);
+//   cb(null, isValid);
+// };
 
-// Функция определяющая допустимые файлы для загрузки
-const fileFilter = (req, file, cb) => {
-  const allowTypes = Object.keys(MimeTypeExtension);
-  const isValid = allowTypes.includes(file.mimetype);
-  cb(null, isValid);
-};
+// const upload = multer({
+//   storage, fileFilter, limits: {
+//     fileSize: maxFileSize,
+//   }
+// });
 
-const upload = multer({
-  storage, fileFilter, limits: {
-    fileSize: maxFileSize,
-  }
-});
-
-router.post(`/`, upload.single(`avatar`), async (req, res) => {
+router.post(`/`, async (req, res) => {
   try {
-    const data = req.body;
-    data.avatar = req.file.filename;
-    await usersServices.add(data);
-    res.redirect(`${FRONTEND_URL}/login`);
+    // const user = req.body;
+    await usersServices.add(req.body);
+    res.status(StatusCodes.OK).send({
+      code: StatusCodes.OK,
+      message: `OK`,
+    });
   } catch (err) {
-    res.send(err);
+    logger.error(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
   }
 });
 

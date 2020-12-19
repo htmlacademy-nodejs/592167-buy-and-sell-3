@@ -47,6 +47,7 @@ const REGISTER_MESSAGE = {
   EMAIL_WRONG: `Неправильный email`,
   USER_NAME_WRONG: `Поле "Имя и фамилия" не должно содержать цифр и специальных символов`,
   PASSWORDS_NOT_EQUALS: `Пароль и подтверждение пароля не совпадают`,
+  USER_ALREADY_REGISTER: `Пользователь с таким Email уже зарегистрирован`,
 };
 
 const TEMPLATE = {
