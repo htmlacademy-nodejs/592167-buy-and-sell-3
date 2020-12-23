@@ -24,14 +24,6 @@ const add = (newCommentText, id) => {
   return commentRepository.save(newCommentText, id);
 };
 
-// const remove = (announcementId, commentId) => {
-//   if (!commentRepository.exists(commentId)) {
-//     throw new CommentNotFoundError(announcementId, commentId);
-//   }
-//
-//   commentRepository.remove(announcementId, commentId);
-//   return true;
-// };
 
 const remove = async (commentId) => await commentRepository.remove(commentId);
 

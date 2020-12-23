@@ -53,15 +53,6 @@ const getListCommentsForUserAnnouncements = async (userId) => {
     });
     listUserAnnouncements.push(announcementInfo);
   }
-  // listUserAnnouncementsId.forEach(async (el) => {
-  //   const announcementInfo = {
-  //     title: el.title,
-  //     sum: el.sum,
-  //   };
-  //   announcementInfo.type = el.typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
-  //   announcementInfo.comments = await announcementRepository.getCommentsForAnnouncement(el);
-  //   listUserAnnouncements.push(announcementInfo);
-  // });
 
   return listUserAnnouncements.filter((el) => el.comments.length > 0);
 };

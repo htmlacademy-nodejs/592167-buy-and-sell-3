@@ -44,11 +44,6 @@ const save = (newCommentText, announcementId) => {
   return newComment.id;
 };
 
-// const remove = (announcementId, commentId) => {
-//   const announcement = announcementRepository.findById(announcementId);
-//   const comments = announcement.comments;
-//   announcement.comments = deleteItemFromArray(comments, commentId);
-// };
 
 const remove = (commentId) => db.Comment.destroy({
   where: {
