@@ -10,19 +10,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     userName: {
-      type: DataTypes.string(100),
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     email: {
-      type: DataTypes.string(100),
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     password: {
-      type: DataTypes.string(60),
+      type: DataTypes.STRING(60),
       allowNull: false,
     },
     avatar: {
-      type: DataTypes.text,
+      type: DataTypes.TEXT,
       allowNull: true,
     }
   }, {

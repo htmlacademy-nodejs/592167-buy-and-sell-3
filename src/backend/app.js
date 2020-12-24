@@ -20,11 +20,12 @@ app.use(express.urlencoded({extended: false}));
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      scriptSrc: [`self`]
+      defaultSrc: [`'self'`],
+      scriptSrc: [`'self'`]
     }
   },
-  xssFilter: true,
 }));
+app.use(helmet.xssFilter());
 
 app.use((req, res, next) => {
   res.on(`finish`, () => {
