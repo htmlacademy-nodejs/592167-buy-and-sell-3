@@ -29,11 +29,15 @@ const initializeRoutes = (app) => {
       const newAnnouncements = resNewAnnouncements.data;
       const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/offers/mostdiscussed`);
       const mostDiscussed = resMostDiscussed.data;
+      const authorization = req.session && req.session.isLogged ? req.session.isLogged : false;
+      const avatar = `avatar04.jpg`;
       const mainPage = {
         categories,
         newAnnouncements,
         mostDiscussed,
         FRONTEND_URL,
+        authorization,
+        avatar,
       };
       res.render(`index`, {mainPage});
     } catch (err) {
@@ -60,6 +64,20 @@ const initializeRoutes = (app) => {
 
   app.get(`/login`, (req, res) => {
     res.render(`login`);
+  });
+
+  app.post(`/login`, (req, res) => {
+    console.log(req.session);
+    req.session.isLogged = true;
+    req.session.username = `Alex`;
+
+    res.redirect(`/`);
+  });
+
+  app.get(`/logout`, (req, res) => {
+    req.session.destroy(() => {
+      res.redirect(`/`);
+    });
   });
 
   app.get(`/search`, async (req, res) => {

@@ -1,5 +1,9 @@
 extends common/layout
 
+block header
+  include common/header
+  +header(`${mainPage.avatar ? mainPage.avatar : ''}`)(class=`header${mainPage.authorization ? ' header--logged' : ''}`)
+
 block main
   main.page-content
     section.categories-list
