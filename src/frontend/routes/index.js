@@ -5,6 +5,8 @@ const axios = require(`axios`);
 const shemaValidator = require(`../../middleware/shema-validator`);
 const update = require(`../../middleware/save-photo`);
 const alreadyRegister = require(`../../middleware/already-register`);
+const checkSession = require(`../../middleware/check-session`);
+const isUserRegister = require(`../../middleware/is-user-register`);
 
 const userSchema = require(`../../backend/validation-schemas/user-schema`);
 
@@ -21,7 +23,9 @@ const initializeRoutes = (app) => {
   app.use(`/errors`, errorsRoutes);
 
 
-  app.get(`/`, async (req, res) => {
+  app.get(`/`, [
+    checkSession(),
+  ], async (req, res) => {
     try {
       const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
       const categories = resCategories.data;
@@ -66,10 +70,13 @@ const initializeRoutes = (app) => {
     res.render(`login`);
   });
 
-  app.post(`/login`, (req, res) => {
-    console.log(req.session);
-    req.session.isLogged = true;
-    req.session.username = `Alex`;
+  app.post(`/login`, [
+    isUserRegister(TEMPLATE.LOGIN),
+  ], async (req, res) => {
+    const session = await axios.post(`${BACKEND_URL}/api/session/login`, req.body);
+    const {isLogged, username} = session.data;
+    req.session.isLogged = isLogged;
+    req.session.username = username;
 
     res.redirect(`/`);
   });
