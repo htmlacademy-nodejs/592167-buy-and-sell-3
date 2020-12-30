@@ -50,6 +50,10 @@ const REGISTER_MESSAGE = {
   USER_ALREADY_REGISTER: `Пользователь с таким Email уже зарегистрирован`,
 };
 
+const LOGIN_MESSAGES = {
+  USER_NOT_REGISTER: `Пользователь с таким Email не зарегистрирован`,
+};
+
 const TEMPLATE = {
   REGISTER: `sign-up`,
   LOGIN: `login`,
@@ -69,4 +73,5 @@ module.exports = {
   MOCK_USER_ID,
   REGISTER_MESSAGE,
   TEMPLATE,
+  LOGIN_MESSAGES,
 };
