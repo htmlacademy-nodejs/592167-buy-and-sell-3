@@ -26,4 +26,18 @@ router.post(`/`, async (req, res) => {
   }
 });
 
+router.post(`/check-password`, async (req, res) => {
+  const {email, password} = req.body;
+  try {
+    const checkPassword = await usersServices.checkUserPassword(email, password);
+    res.sendStatus(checkPassword ? StatusCodes.OK : StatusCodes.UNAUTHORIZED);
+  } catch (err) {
+    logger.error(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
+      message: `Internal service error`
+    });
+  }
+});
+
 module.exports = router;

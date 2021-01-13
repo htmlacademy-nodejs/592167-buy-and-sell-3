@@ -52,6 +52,7 @@ const REGISTER_MESSAGE = {
 
 const LOGIN_MESSAGES = {
   USER_NOT_REGISTER: `Пользователь с таким Email не зарегистрирован`,
+  USER_PASSWORD_IS_BAD: `Вы ввели неверный пароль`
 };
 
 const TEMPLATE = {

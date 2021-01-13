@@ -7,6 +7,7 @@ const update = require(`../../middleware/save-photo`);
 const alreadyRegister = require(`../../middleware/already-register`);
 const checkSession = require(`../../middleware/check-session`);
 const isUserRegister = require(`../../middleware/is-user-register`);
+const checkUserPassword = require(`../../middleware/check-user-password`);
 
 const userSchema = require(`../../backend/validation-schemas/user-schema`);
 
@@ -60,7 +61,7 @@ const initializeRoutes = (app) => {
   ], async (req, res) => {
     try {
       await axios.post(`${BACKEND_URL}/api/user`, req.user);
-      res.render(`login`);
+      res.redirect(`/login`);
     } catch (err) {
       res.render(`error/500`);
     }
@@ -72,6 +73,7 @@ const initializeRoutes = (app) => {
 
   app.post(`/login`, [
     isUserRegister(TEMPLATE.LOGIN),
+    checkUserPassword(),
   ], async (req, res) => {
     const session = await axios.post(`${BACKEND_URL}/api/session/login`, req.body);
     const {isLogged, username} = session.data;
