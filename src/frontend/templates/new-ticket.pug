@@ -1,12 +1,16 @@
 extends common/layout
 
+block header
+  include common/header
+  +header(`${ticketInfo.avatar ? ticketInfo.avatar : ''}`, ``)(class=`header header--logged`)
+
 block main
   main.page-content
     section.ticket-form
       .ticket-form__wrapper
         h1.ticket-form__title Новая публикация
         .ticket-form__tile
-          form.ticket-form__form.form(action=`${back.url}/api/offers/add` method='post' enctype='multipart/form-data' autocomplete='off')
+          form.ticket-form__form.form(action=`${ticketInfo.url}/api/offers/add` method='post' enctype='multipart/form-data' autocomplete='off')
             .ticket-form__avatar-container.js-preview-container
               .ticket-form__avatar.js-preview
               .ticket-form__field-avatar

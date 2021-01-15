@@ -1,4 +1,4 @@
-mixin header(avatar)
+mixin header(avatar, activeElement)
   //header.header.header--logged
   //.header.header--logged
   header&attributes(attributes)
@@ -7,9 +7,9 @@ mixin header(avatar)
         img(src='/img/logo.svg', width='179', height='34', alt='Логотип Куплю Продам')
       nav.header__user-menu
         ul.header__list
-          li.header__item
+          li(class=`header__item${activeElement === 'my' ? ' header__item--active' : ''}`)
             a(href='/my') Публикации
-          li.header__item
+          li(class=`header__item${activeElement === 'comment' ? ' header__item--active' : ''}`)
             a(href='/my/comments') Комментарии
       form.search(method='get', action='/search', autocomplete='off')
         input(type='search', name='search', placeholder='Поиск', aria-label='Поиск')
