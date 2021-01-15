@@ -10,10 +10,11 @@ const DEFAULT_PREVIEW_COUNT = 8;
 
 router.get(`/add`, async (req, res) => {
   try {
-    const back = {
+    const ticketInfo = {
       url: `${BACKEND_URL}`,
+      avatar: `avatar04.jpg`,
     };
-    res.render(`new-ticket`, {back});
+    res.render(`new-ticket`, {ticketInfo});
   } catch (err) {
     res.render(`./errors/500`, {err});
   }
@@ -46,6 +47,7 @@ router.get(`/category/:id`, async (req, res) => {
     announcementsOfCategory,
     categoryInfo,
     paginationStep,
+    avatar: `avatar04.jpg`,
   };
   res.render(`category`, {announcementsOfCategoryPage});
 });

@@ -10,17 +10,22 @@ router.get(`/`, async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/my`);
     const announcements = response.data;
+    announcements.avatar = `avatar04.jpg`;
     res.render(`my-tickets`, {announcements});
   } catch (err) {
-    res.render(`500`, {err});
+    res.render(`errors/500`, {err});
   }
 });
 
 router.get(`/comments`, async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/my/comments`);
-    const listCommentsForUserAnnouncements = response.data;
-    res.render(`comments`, {listCommentsForUserAnnouncements});
+    const listComments = response.data;
+    const commentsInfo = {
+      listComments,
+      avatar: `avatar04.jpg`,
+    };
+    res.render(`comments`, {commentsInfo});
   } catch (err) {
     res.render(`errors/500`, {err});
   }
