@@ -1,5 +1,9 @@
 extends common/layout
 
+block header
+  include common/header
+  +header(`${announcement.avatar ? announcement.avatar : ''}`)(class=`header${announcement.authorization ? ' header--logged' : ''}`)
+
 block main
   main.page-content
     section.ticket

@@ -56,7 +56,10 @@ router.get(`/:id`, async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
     const announcement = response.data;
+    const authorization = req.session && req.session.isLogged ? req.session.isLogged : false;
     announcement.backend = `${BACKEND_URL}`;
+    announcement.avatar = `avatar04.jpg`;
+    announcement.authorization = authorization;
     res.render(`ticket`, {announcement});
   } catch (err) {
     res.render(`./errors/500`, {err});

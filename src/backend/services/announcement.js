@@ -140,13 +140,13 @@ const getAnnouncement = async (announcementId) => {
     description: firstList.Announcement.description,
     createdAt: createDate(firstList.Announcement.createdAt),
     type: firstList.Announcement.Type.type,
-    author: `${firstList.Announcement.User.firstName} ${firstList.Announcement.User.lastName}`,
+    author: `${firstList.Announcement.User.userName}`,
     email: firstList.Announcement.User.email,
     categories: firstList.Announcement.Categories.map((el) => el.category),
     comments: commentList.map((el) => {
       return {
         comment: el.comment,
-        author: `${el.User.firstName} ${el.User.lastName}`
+        author: `${el.User.userName}`
       };
     }),
   };

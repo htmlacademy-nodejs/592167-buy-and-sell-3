@@ -176,7 +176,7 @@ const getAnnouncement = async (announcementId) => await db.Image.findAll({
       },
       {
         model: db.User,
-        attributes: [`firstName`, `lastName`, `email`],
+        attributes: [`userName`, `email`],
       },
       {
         model: db.Category,
