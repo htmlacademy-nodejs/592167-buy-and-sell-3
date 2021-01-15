@@ -35,20 +35,21 @@ const getAnnouncementsForComments = async (userId) => {
 
 const getListCommentsForUserAnnouncements = async (userId) => {
   const listUserAnnouncementsId = await announcementRepository.getAnnouncementsListUser(userId);
+
   const listUserAnnouncements = [];
-  for (let i = 0; i < listUserAnnouncementsId.length; i++) {
+  for (const announcement of listUserAnnouncementsId) {
     const announcementInfo = {
-      id: listUserAnnouncementsId[i].id,
-      title: listUserAnnouncementsId[i].title,
-      sum: listUserAnnouncementsId[i].sum,
+      id: announcement.id,
+      title: announcement.title,
+      sum: announcement.sum,
     };
-    announcementInfo.type = listUserAnnouncementsId[i].typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
-    const comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
+    announcementInfo.type = announcement.typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
+    const comments = await announcementRepository.getCommentsForAnnouncement(announcement.id);
     announcementInfo.comments = comments.map((el) => {
       return {
         id: el.id,
         comment: el.comment,
-        user: `${el.User.firstName} ${el.User.lastName}`,
+        user: `${el.User.userName}`,
       };
     });
     listUserAnnouncements.push(announcementInfo);

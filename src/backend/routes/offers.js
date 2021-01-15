@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {StatusCode} = require(`http-status-codes`);
+const {StatusCodes} = require(`http-status-codes`);
 const chalk = require(`chalk`);
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
@@ -53,8 +53,8 @@ router.get(`/`, async (req, res) => {
     res.send(await annoucementService.getAll());
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -65,8 +65,8 @@ router.get(`/my`, async (req, res) => {
     res.send(await annoucementService.getMyAnnouncements());
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -77,8 +77,8 @@ router.get(`/my/comments`, async (req, res) => {
     res.send(await annoucementService.getListCommentsForUserAnnouncements(3));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -89,8 +89,8 @@ router.get(`/newestAnnouncements`, async (req, res) => {
     res.send(await annoucementService.getTheNewestAnnouncements(DEFAULT.PREVIEW_COUNT));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -101,8 +101,8 @@ router.get(`/mostDiscussed`, async (req, res) => {
     res.send(await annoucementService.getMostDiscussed(DEFAULT.PREVIEW_COUNT));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -118,7 +118,7 @@ router.post(`/add`, upload.single(`avatar`), async (req, res) => {
   } catch (err) {
     console.log(`is mistake`);
     const {details} = err;
-    res.status(StatusCode.HTTP_STATUS_BAD_REQUEST).json({
+    res.status(StatusCodes.HTTP_STATUS_BAD_REQUEST).json({
       message: details.map((errorDescription) => errorDescription.message),
       data,
     });

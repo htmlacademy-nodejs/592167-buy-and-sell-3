@@ -55,7 +55,7 @@ const getCommentsForAnnouncement = async (announcementId) => await db.Comment.fi
   },
   include: {
     model: db.User,
-    attributes: [`firstName`, `lastName`],
+    attributes: [`userName`],
   },
 });
 
