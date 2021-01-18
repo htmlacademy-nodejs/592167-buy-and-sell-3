@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const router = new Router();
 
 const axios = require(`axios`);
+const checkSession = require(`../../middleware/check-session`);
 const {BACKEND_URL} = require(`../../constants`);
 
 const DEFAULT_PREVIEW_COUNT = 8;
@@ -52,7 +53,9 @@ router.get(`/category/:id`, async (req, res) => {
   res.render(`category`, {announcementsOfCategoryPage});
 });
 
-router.get(`/:id`, async (req, res) => {
+router.get(`/:id`, [
+  checkSession(),
+], async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
     const announcement = response.data;

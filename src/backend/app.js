@@ -34,10 +34,8 @@ app.use(helmet.xssFilter());
 
 const sessionStore = new SequelizeStore({
   db: sequelize,
-  // expiration: 1000 * 60 * 3,
-  // checkExpirationInterval: 1000 * 60,
-  expiration: 1000 * 30,
-  checkExpirationInterval: 1000 * 30,
+  expiration: 1000 * 60 * 3,
+  checkExpirationInterval: 1000 * 60,
 });
 
 app.use(session({
