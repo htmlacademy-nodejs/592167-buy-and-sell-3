@@ -71,6 +71,7 @@ router.get(`/edit/:id`, async (req, res) => {
     const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
     const announcement = response.data;
     announcement.backend = `${BACKEND_URL}`;
+    announcement.avatar = `avatar04.jpg`;
     res.render(`ticket-edit`, {announcement});
   } catch (err) {
     res.render(`./errors/500`, {err});
