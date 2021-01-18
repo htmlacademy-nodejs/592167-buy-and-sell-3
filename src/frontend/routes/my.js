@@ -4,9 +4,12 @@ const {Router} = require(`express`);
 const router = new Router();
 
 const axios = require(`axios`);
+const privateRoute = require(`../../middleware/private`);
 const {BACKEND_URL} = require(`../../constants`);
 
-router.get(`/`, async (req, res) => {
+router.get(`/`, [
+  privateRoute(),
+], async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/my`);
     const announcements = response.data;
@@ -17,7 +20,9 @@ router.get(`/`, async (req, res) => {
   }
 });
 
-router.get(`/comments`, async (req, res) => {
+router.get(`/comments`, [
+  privateRoute(),
+], async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/my/comments`);
     const listComments = response.data;

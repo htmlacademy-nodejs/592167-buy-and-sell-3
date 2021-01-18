@@ -11,6 +11,9 @@ module.exports = () => (
           await axios.post(`${BACKEND_URL}/api/session/check-login`, {
             username: req.session.username,
           });
+        } else {
+          res.redirect(`/login`);
+          return;
         }
         next();
       } catch (err) {
