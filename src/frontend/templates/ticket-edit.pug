@@ -33,10 +33,11 @@ block main
                   span Обязательное поле
               .ticket-form__row
                 select#category-field.form__select.js-multiple-select(name='category', data-label='Выбрать категорию публикации', multiple='')
-                  option(value='1', selected='') Дом
-                  option(value='2', selected='') Спорт и отдых
-                  option(value='3') Авто
-                  option(value='4') Электроника
+                  each category in announcement.categories
+                    if category.selected === true
+                      option(value=`${category.id}`, selected=``) #{category.category}
+                    else
+                      option(value=`${category.id}`) #{category.category}
               .ticket-form__row
                 .form__field.form__field--price
                   input#price-field.js-field.js-price(type='number', name='price', min='1', value=`${announcement.sum}`, required='')

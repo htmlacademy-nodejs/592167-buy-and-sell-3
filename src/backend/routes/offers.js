@@ -147,7 +147,9 @@ router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
 
 router.get(`/:id`, async (req, res) => {
   try {
-    res.send(await annoucementService.getAnnouncement(req.params.id));
+    const myResponse = await annoucementService.getAnnouncement(req.params.id);
+    console.log(myResponse);
+    res.send(myResponse);
   } catch (err) {
     res.send(err);
   }

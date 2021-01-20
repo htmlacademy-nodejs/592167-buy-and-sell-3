@@ -11,9 +11,12 @@ const DEFAULT_PREVIEW_COUNT = 8;
 
 router.get(`/add`, async (req, res) => {
   try {
+    const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
+    const categories = resCategories.data;
     const ticketInfo = {
       url: `${BACKEND_URL}`,
       avatar: `avatar04.jpg`,
+      categories,
     };
     res.render(`new-ticket`, {ticketInfo});
   } catch (err) {
@@ -73,8 +76,10 @@ router.get(`/edit/:id`, async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/${req.params.id}`);
     const announcement = response.data;
+    const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
     announcement.backend = `${BACKEND_URL}`;
     announcement.avatar = `avatar04.jpg`;
+    announcement.categoriesList = resCategories.data;
     res.render(`ticket-edit`, {announcement});
   } catch (err) {
     res.render(`./errors/500`, {err});

@@ -9,6 +9,8 @@ const createDate = (date) => {
 };
 
 const announcementRepository = require(`../repositories/announcement`);
+const categoriesRepository = require(`../repositories/categories`);
+
 const checkAnnouncement = require(`../validation-schemas/announcement-schema`);
 const checkComment = require(`../validation-schemas/comment-schema`);
 
@@ -131,7 +133,16 @@ const create = async (newAnnouncement) => {
 const getAnnouncement = async (announcementId) => {
   const announcementList = await announcementRepository.getAnnouncement(announcementId);
   const commentList = await announcementRepository.getCommentsForAnnouncement(announcementId);
+  const categories = await categoriesRepository.findAll();
   const firstList = announcementList.shift();
+  const currentCategoriesList = firstList.Announcement.Categories.map((el) => el.category);
+  const categoriesList = Array(categories.length).fill({}).map((el, i) => {
+    return {
+      id: categories[i].id,
+      category: categories[i].category,
+      selected: currentCategoriesList.includes(categories[i].category),
+    };
+  });
   return {
     id: firstList.Announcement.id,
     image: firstList.image,
@@ -142,7 +153,7 @@ const getAnnouncement = async (announcementId) => {
     type: firstList.Announcement.Type.type,
     author: `${firstList.Announcement.User.userName}`,
     email: firstList.Announcement.User.email,
-    categories: firstList.Announcement.Categories.map((el) => el.category),
+    categories: categoriesList,
     comments: commentList.map((el) => {
       return {
         comment: el.comment,
