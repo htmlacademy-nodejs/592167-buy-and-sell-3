@@ -20,8 +20,8 @@ block main
                     .comment-card__header
                       a.comment-card__avatar.avatar(href='#')
                         img(src='/img/avatar03.jpg', srcset='/img/avatar03@2x.jpg 2x', alt='Аватар пользователя')
-                      p.comment-card__author #{comment[`users.firstName`]} #{comment[`users.lastName`]}
+                      p.comment-card__author #{comment.user}
                     .comment-card__content
                       p
                         | #{comment.comment}
-                    button.comment-card__delete.js-delete(type='button') Удалить
+                    button.comment-card__delete.js-delete(type='button', data-commentId=`${comment.id}`) Удалить

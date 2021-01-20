@@ -36,6 +36,25 @@ const FRONTEND_URL = `http://localhost:8080`;
 const MONTH_LIST = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
 const MOCK_USER_ID = 3;
 
+const REGISTER_MESSAGE = {
+  USER_NAME_REQUIRED_FIELD: `Поле "Имя и фамилия" обязательно для заполнения`,
+  EMAIL_REQUIRED_FIELD: `Поле "Эл. почта" обязательно для заполнения`,
+  PASSWORD_REQUIRED_FIELD: `Поле "Пароль" обязательно для заполнения`,
+  REPEAT_REQUIRED_FIELD: `Поле "Пароль ещё раз" обязательно для заполнения`,
+  MAX_USER_NAME_LENGTH: `Фамилия и имя недолжны превышать 100 символов`,
+  MIN_PASSWORD_LENGTH: `Минимальная длина пароля 6 символов`,
+  MAX_PASSWORD_LENGTH: `Максимальная длина пароля 50 символов`,
+  EMAIL_WRONG: `Неправильный email`,
+  USER_NAME_WRONG: `Поле "Имя и фамилия" не должно содержать цифр и специальных символов`,
+  PASSWORDS_NOT_EQUALS: `Пароль и подтверждение пароля не совпадают`,
+  USER_ALREADY_REGISTER: `Пользователь с таким Email уже зарегистрирован`,
+};
+
+const TEMPLATE = {
+  REGISTER: `sign-up`,
+  LOGIN: `login`,
+};
+
 
 module.exports = {
   ExitCode,
@@ -47,5 +66,7 @@ module.exports = {
   FRONTEND_URL,
   MONTH_LIST,
   ANNOUNCEMENT_TYPE,
-  MOCK_USER_ID
+  MOCK_USER_ID,
+  REGISTER_MESSAGE,
+  TEMPLATE,
 };

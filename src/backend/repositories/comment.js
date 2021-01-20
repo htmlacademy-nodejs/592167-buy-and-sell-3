@@ -1,6 +1,6 @@
 'use strict';
 
-const {getNewId, deleteItemFromArray} = require(`../../utils`);
+const {getNewId} = require(`../../utils`);
 const announcementRepository = require(`../repositories/announcement`);
 
 const {db} = require(`../db/db-connect`);
@@ -44,11 +44,12 @@ const save = (newCommentText, announcementId) => {
   return newComment.id;
 };
 
-const remove = (announcementId, commentId) => {
-  const announcement = announcementRepository.findById(announcementId);
-  const comments = announcement.comments;
-  announcement.comments = deleteItemFromArray(comments, commentId);
-};
+
+const remove = (commentId) => db.Comment.destroy({
+  where: {
+    id: commentId,
+  },
+});
 
 module.exports = {
   exists,

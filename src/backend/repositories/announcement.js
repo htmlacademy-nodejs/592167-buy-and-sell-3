@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require(`fs`);
+
 const {db, sequelize, Operator} = require(`../db/db-connect`);
 
 
@@ -28,7 +30,7 @@ const findMyAnnouncements = async () => await db.Image.findAll({
   attributes: [`image`],
   include: {
     model: db.Announcement,
-    attributes: [`title`, `sum`],
+    attributes: [`id`, `title`, `sum`],
     where: {
       userId: 3,
     },
@@ -47,7 +49,7 @@ const getAnnouncementsListUser = async (userId) => await db.Announcement.findAll
 });
 
 const getCommentsForAnnouncement = async (announcementId) => await db.Comment.findAll({
-  attributes: [`comment`],
+  attributes: [`id`, `comment`],
   where: {
     'announcementId': announcementId,
   },
@@ -68,28 +70,26 @@ const getAnnouncementsOfCategories = async (categoryName) => await db.Announceme
   }
 });
 
-const getTheNewestAnnouncements = async (limitAnnouncements) => {
-  const sql = `select a.id,
-                      a.title,
-                      a.description,
-                      a.sum,
-                      (select image from "Images" i where i."announcementId" = a.id limit 1),
-                      t.type,
-                      string_agg(cat.category, ', ') as categories
-               from "Announcements" a
-                      inner join "Types" T
-                                 on T.id = a."typeId"
-                      inner join "AnnouncementsToCategories" ATC
-                                 on a.id = ATC."AnnouncementId"
-                      inner join "Categories" cat
-                                 on ATC."CategoryId" = cat.id
-               group by a.id, t.type, a."createdAt"
-               order by a."createdAt" desc
-               limit :limitAnnouncements;`;
-  const type = sequelize.QueryTypes.SELECT;
-  const replacements = {limitAnnouncements};
-  return await sequelize.query(sql, {type, replacements});
-};
+const getTheNewestAnnouncements = async (limit) => db.Announcement.findAll({
+  include: [{
+    model: db.Type,
+    attributes: [`type`],
+  }, {
+    model: db.Image,
+    attributes: [`image`],
+    limit: 1,
+  }, {
+    model: db.Category,
+    attributes: [`id`, `category`],
+    through: {
+      attributes: [],
+    },
+  }],
+  order: [
+    [`createdAt`, `desc`],
+  ],
+  limit,
+});
 
 const getMostDiscussed = async (limitAnnouncements) => {
   const sql = `select a.id,
@@ -117,6 +117,7 @@ const getMostDiscussed = async (limitAnnouncements) => {
 
 const save = async (announcement, image) => {
   try {
+    console.log(`we are here`);
     const temp = await db.Announcement.create(announcement);
 
     image.announcementId = temp.id;
@@ -127,6 +128,7 @@ const save = async (announcement, image) => {
       await temp.addCategories(categories);
     }
 
+    console.log(temp);
     return temp;
   } catch (err) {
     return err.message;
@@ -197,6 +199,66 @@ const edit = async (editAnnouncement, announcementId) => {
   }
 };
 
+const remove = async (announcementId) => {
+  try {
+    const temp = await db.Image.findOne({
+      attributes: [`image`],
+      include: {
+        model: db.Announcement,
+        attributes: [`id`],
+        include: {
+          model: db.Category,
+          attributes: [`id`, `category`],
+          through: {
+            attributes: [],
+          },
+        },
+        where: {
+          id: announcementId,
+        },
+      },
+    });
+
+    const currentCategoriesList = temp.Announcement.Categories.map((el) => el.id);
+
+    const announcement = await db.Announcement.findByPk(announcementId);
+
+
+    currentCategoriesList.forEach(async (el) => {
+      const category = await db.Category.findByPk(el);
+      await announcement.removeCategories(category);
+    });
+
+    await db.Comment.destroy({
+      where: {
+        announcementId,
+      },
+    });
+
+    await db.Image.destroy({
+      where: {
+        announcementId,
+      },
+    });
+
+    if (temp.image) {
+      try {
+        fs.unlinkSync(`${__dirname}/../../static/upload/${temp.image}`);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return await db.Announcement.destroy({
+      where: {
+        id: announcementId,
+      },
+    });
+  } catch (err) {
+    return err.message;
+  }
+};
+
 module.exports = {
   findAll,
   findMyAnnouncements,
@@ -210,4 +272,5 @@ module.exports = {
   getAnnouncement,
   addComment,
   edit,
+  remove,
 };

@@ -2,15 +2,23 @@
 
 const axios = require(`axios`);
 
-const {BACKEND_URL} = require(`../../constants`);
+const shemaValidator = require(`../../middleware/shema-validator`);
+const update = require(`../../middleware/save-photo`);
+const alreadyRegister = require(`../../middleware/already-register`);
+
+const userSchema = require(`../../backend/validation-schemas/user-schema`);
+
+const {BACKEND_URL, FRONTEND_URL, TEMPLATE} = require(`../../constants`);
 
 const myRoutes = require(`./my`);
 const offersRoutes = require(`./offers`);
+const errorsRoutes = require(`./errors`);
 
 
 const initializeRoutes = (app) => {
   app.use(`/my`, myRoutes);
   app.use(`/offers`, offersRoutes);
+  app.use(`/errors`, errorsRoutes);
 
 
   app.get(`/`, async (req, res) => {
@@ -25,6 +33,7 @@ const initializeRoutes = (app) => {
         categories,
         newAnnouncements,
         mostDiscussed,
+        FRONTEND_URL,
       };
       res.render(`index`, {mainPage});
     } catch (err) {
@@ -34,6 +43,19 @@ const initializeRoutes = (app) => {
 
   app.get(`/register`, (req, res) => {
     res.render(`sign-up`);
+  });
+
+  app.post(`/register`, [
+    update(TEMPLATE.REGISTER),
+    shemaValidator(userSchema, TEMPLATE.REGISTER),
+    alreadyRegister(),
+  ], async (req, res) => {
+    try {
+      await axios.post(`${BACKEND_URL}/api/user`, req.user);
+      res.render(`login`);
+    } catch (err) {
+      res.render(`error/500`);
+    }
   });
 
   app.get(`/login`, (req, res) => {

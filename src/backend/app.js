@@ -1,17 +1,30 @@
 'use strict';
 
 const express = require(`express`);
+const helmet = require(`helmet`);
 const app = express();
+
+const cors = require(`cors`);
 
 const {getLogger} = require(`./logger`);
 const logger = getLogger();
 
 
 const {initializeRoutes} = require(`./routes`);
+const {FRONTEND_URL} = require(`../constants`);
 
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      scriptSrc: [`self`]
+    }
+  },
+  xssFilter: true,
+}));
 
 app.use((req, res, next) => {
   res.on(`finish`, () => {
@@ -20,6 +33,10 @@ app.use((req, res, next) => {
   logger.debug(`Request came from address ${req.url}`);
   next();
 });
+
+app.use(cors({
+  origin: FRONTEND_URL,
+}));
 
 initializeRoutes(app);
 
