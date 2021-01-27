@@ -176,7 +176,6 @@ router.post(`/:id/comments`, async (req, res) => {
   }
 });
 
-
 router.get(`/delete/:id`, async (req, res) => {
   try {
     await annoucementService.remove(req.params.id);
