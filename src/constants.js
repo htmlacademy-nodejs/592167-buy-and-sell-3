@@ -36,6 +36,7 @@ const FRONTEND_URL = `http://localhost:8080`;
 const MONTH_LIST = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
 const MOCK_USER_ID = 3;
 const MOCK_ANNOUNCEMENT_ID = 5;
+const CATEGORY_ID = 1;
 
 const REGISTER_MESSAGE = {
   USER_NAME_REQUIRED_FIELD: `Поле "Имя и фамилия" обязательно для заполнения`,
@@ -77,4 +78,5 @@ module.exports = {
   TEMPLATE,
   LOGIN_MESSAGES,
   MOCK_ANNOUNCEMENT_ID,
+  CATEGORY_ID,
 };
