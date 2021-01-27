@@ -117,7 +117,6 @@ const getMostDiscussed = async (limitAnnouncements) => {
 
 const save = async (announcement, image) => {
   try {
-    console.log(`we are here`);
     const temp = await db.Announcement.create(announcement);
 
     image.announcementId = temp.id;
@@ -128,7 +127,6 @@ const save = async (announcement, image) => {
       await temp.addCategories(categories);
     }
 
-    console.log(temp);
     return temp;
   } catch (err) {
     return err.message;

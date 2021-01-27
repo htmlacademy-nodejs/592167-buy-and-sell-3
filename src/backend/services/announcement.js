@@ -31,10 +31,6 @@ const getMyAnnouncements = async () => {
   });
 };
 
-const getAnnouncementsForComments = async (userId) => {
-  return await announcementRepository.getAnnouncementsForComments(userId);
-};
-
 const getListCommentsForUserAnnouncements = async (userId) => {
   const listUserAnnouncementsId = await announcementRepository.getAnnouncementsListUser(userId);
 
@@ -58,10 +54,6 @@ const getListCommentsForUserAnnouncements = async (userId) => {
   }
 
   return listUserAnnouncements.filter((el) => el.comments.length > 0);
-};
-
-const getAnnouncementsOfCategories = async (categoryName) => {
-  return await announcementRepository.getAnnouncementsOfCategories(categoryName);
 };
 
 const getTheNewestAnnouncements = async (limitAnnouncements) => {
@@ -118,16 +110,15 @@ const create = async (newAnnouncement) => {
     categories: newAnnouncement.category,
   };
 
-  checkAnnouncement.validateAsync(announcement)
-    .then(async (response) => {
-      const image = {
-        image: newAnnouncement.image,
-      };
-
-      return await announcementRepository.save(response, image);
-    }).catch((err) => {
-      return err;
-    });
+  try {
+    const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
+    const image = {
+      image: newAnnouncement.image,
+    };
+    return await announcementRepository.save(checkedAnnouncement, image);
+  } catch (err) {
+    return err;
+  }
 };
 
 const getAnnouncement = async (announcementId) => {
@@ -196,7 +187,7 @@ const edit = async (editAnnouncement, announcementId) => {
     const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
     return await announcementRepository.edit(checkedAnnouncement, announcementId);
   } catch (err) {
-    return `Что-то пошло не так`;
+    return err;
   }
 };
 
@@ -206,8 +197,6 @@ const remove = async (announcementId) => await announcementRepository.remove(ann
 module.exports = {
   getAll,
   getMyAnnouncements,
-  getAnnouncementsForComments,
-  getAnnouncementsOfCategories,
   getTheNewestAnnouncements,
   getMostDiscussed,
   create,

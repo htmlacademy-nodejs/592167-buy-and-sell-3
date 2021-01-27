@@ -10,7 +10,7 @@ const multer = require(`multer`);
 const md5 = require(`md5`);
 
 const annoucementService = require(`../services/announcement`);
-const {DEFAULT, FRONTEND_URL} = require(`../../constants`);
+const {DEFAULT, FRONTEND_URL, MOCK_USER_ID} = require(`../../constants`);
 
 
 const UPLOAD_DIR = `${__dirname}/../../static/upload`;
@@ -74,7 +74,7 @@ router.get(`/my`, async (req, res) => {
 
 router.get(`/my/comments`, async (req, res) => {
   try {
-    res.send(await annoucementService.getListCommentsForUserAnnouncements(3));
+    res.send(await annoucementService.getListCommentsForUserAnnouncements(MOCK_USER_ID));
   } catch (err) {
     logger.error(chalk.red(err));
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
@@ -138,7 +138,8 @@ router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
   const data = req.body;
   data.image = req.file !== undefined ? req.file.filename : ``;
   try {
-    await annoucementService.edit(data, req.params.id);
+    const an = await annoucementService.edit(data, req.params.id);
+    console.log(an);
     return res.redirect(`${FRONTEND_URL}/my`);
   } catch (err) {
     return res.send(err);
@@ -147,9 +148,9 @@ router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
 
 router.get(`/:id`, async (req, res) => {
   try {
-    const myResponse = await annoucementService.getAnnouncement(req.params.id);
-    console.log(myResponse);
-    res.send(myResponse);
+    const announcementInfo = await annoucementService.getAnnouncement(req.params.id);
+    // console.log(announcementInfo);
+    res.send(announcementInfo);
   } catch (err) {
     res.send(err);
   }
@@ -167,7 +168,7 @@ router.post(`/:id/comments`, async (req, res) => {
   try {
     const newComment = req.body;
     newComment.offersId = req.params.id;
-    newComment.userId = `3`;
+    newComment.userId = `${MOCK_USER_ID}`;
     await annoucementService.addComment(newComment);
     res.redirect(`${FRONTEND_URL}/offers/${req.params.id}`);
   } catch (err) {
