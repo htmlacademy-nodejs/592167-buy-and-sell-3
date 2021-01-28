@@ -17,7 +17,6 @@ const add = async (user) => {
 const checkUserPassword = async (email, password) => {
   console.log(password);
   const user = await usersRepository.getUserPassword(email);
-  console.log(user.dataValues.password);
   return await bcrypt.compare(password, user.dataValues.password);
 };
 

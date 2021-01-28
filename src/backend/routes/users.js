@@ -30,6 +30,7 @@ router.post(`/check-password`, async (req, res) => {
   const {email, password} = req.body;
   try {
     const checkPassword = await usersServices.checkUserPassword(email, password);
+    console.log(checkPassword);
     res.sendStatus(checkPassword ? StatusCodes.OK : StatusCodes.UNAUTHORIZED);
   } catch (err) {
     logger.error(err);
