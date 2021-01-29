@@ -6,6 +6,7 @@
   "scripts": {
     "test": "npm run eslint && jest",
     "test:rest": "jest src/backend/**/*.test.js",
+    "test:one-script": "jest src/backend/routes/categories.e2e.test.js",
     "eslint": "eslint --ext .js src/",
     "start": "node src/service.js",
     "start-front-server": "nodemon src/frontend/index.js",
