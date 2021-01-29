@@ -13,10 +13,13 @@ router.get(`/add`, async (req, res) => {
   try {
     const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
     const categories = resCategories.data;
+    const resCsrfToken = await axios.get(`${BACKEND_URL}/api/offers/csrftoken`);
+    const {csrf} = resCsrfToken.data;
     const ticketInfo = {
       url: `${BACKEND_URL}`,
       avatar: `avatar04.jpg`,
       categories,
+      csrf,
     };
     res.render(`new-ticket`, {ticketInfo});
   } catch (err) {

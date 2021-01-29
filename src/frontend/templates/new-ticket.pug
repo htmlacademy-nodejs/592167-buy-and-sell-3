@@ -48,4 +48,7 @@ block main
                   .switch__item
                     input#sell-field.visually-hidden(type='radio' name='action' value='sell')
                     label.switch__button(for='sell-field') Продам
+              .ticket-form__row
+                .form__field
+                  input(type='hidden' name='csrf' value=`${ticketInfo.csrfToken}`)
             button.form__button.btn.btn--medium.js-button(type='submit' disabled='') Опубликовать

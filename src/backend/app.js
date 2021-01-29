@@ -3,6 +3,7 @@
 const express = require(`express`);
 const helmet = require(`helmet`);
 const session = require(`express-session`);
+const cookieParser = require(`cookie-parser`);
 const SequelizeStore = require(`connect-session-sequelize`)(session.Store);
 require(`dotenv`).config();
 
@@ -21,6 +22,7 @@ const {sequelize} = require(`./db/db-connect`);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
 
 app.use(helmet({
   contentSecurityPolicy: {

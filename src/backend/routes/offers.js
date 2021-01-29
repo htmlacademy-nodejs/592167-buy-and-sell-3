@@ -6,6 +6,9 @@ const chalk = require(`chalk`);
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
 
+const csrf = require(`csurf`);
+const csrfProtection = csrf({cookie: true});
+
 const multer = require(`multer`);
 const md5 = require(`md5`);
 
@@ -84,6 +87,12 @@ router.get(`/my/comments`, async (req, res) => {
   }
 });
 
+router.get(`/csrftoken`, csrfProtection, async (req, res) => {
+  const token = {csrf: req.csrfToken()};
+  console.log(token);
+  res.send(token);
+});
+
 router.get(`/newestAnnouncements`, async (req, res) => {
   try {
     res.send(await annoucementService.getTheNewestAnnouncements(DEFAULT.PREVIEW_COUNT));
@@ -108,8 +117,9 @@ router.get(`/mostDiscussed`, async (req, res) => {
   }
 });
 
-router.post(`/add`, upload.single(`avatar`), async (req, res) => {
+router.post(`/add`, upload.single(`avatar`), csrfProtection, async (req, res) => {
   const data = req.body;
+  console.log(data);
   try {
     data.image = req.file !== undefined ? req.file.filename : ``;
 
@@ -185,5 +195,6 @@ router.get(`/delete/:id`, async (req, res) => {
     res.json({isDelete: false});
   }
 });
+
 
 module.exports = router;
