@@ -55,7 +55,7 @@ const getCommentsForAnnouncement = async (announcementId) => await db.Comment.fi
   },
   include: {
     model: db.User,
-    attributes: [`firstName`, `lastName`],
+    attributes: [`userName`],
   },
 });
 
@@ -117,7 +117,6 @@ const getMostDiscussed = async (limitAnnouncements) => {
 
 const save = async (announcement, image) => {
   try {
-    console.log(`we are here`);
     const temp = await db.Announcement.create(announcement);
 
     image.announcementId = temp.id;
@@ -128,7 +127,6 @@ const save = async (announcement, image) => {
       await temp.addCategories(categories);
     }
 
-    console.log(temp);
     return temp;
   } catch (err) {
     return err.message;
@@ -176,7 +174,7 @@ const getAnnouncement = async (announcementId) => await db.Image.findAll({
       },
       {
         model: db.User,
-        attributes: [`firstName`, `lastName`, `email`],
+        attributes: [`userName`, `email`],
       },
       {
         model: db.Category,

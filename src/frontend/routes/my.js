@@ -4,23 +4,33 @@ const {Router} = require(`express`);
 const router = new Router();
 
 const axios = require(`axios`);
+const privateRoute = require(`../../middleware/private`);
 const {BACKEND_URL} = require(`../../constants`);
 
-router.get(`/`, async (req, res) => {
+router.get(`/`, [
+  privateRoute(),
+], async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/my`);
     const announcements = response.data;
+    announcements.avatar = `avatar04.jpg`;
     res.render(`my-tickets`, {announcements});
   } catch (err) {
-    res.render(`500`, {err});
+    res.render(`errors/500`, {err});
   }
 });
 
-router.get(`/comments`, async (req, res) => {
+router.get(`/comments`, [
+  privateRoute(),
+], async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/offers/my/comments`);
-    const listCommentsForUserAnnouncements = response.data;
-    res.render(`comments`, {listCommentsForUserAnnouncements});
+    const listComments = response.data;
+    const commentsInfo = {
+      listComments,
+      avatar: `avatar04.jpg`,
+    };
+    res.render(`comments`, {commentsInfo});
   } catch (err) {
     res.render(`errors/500`, {err});
   }

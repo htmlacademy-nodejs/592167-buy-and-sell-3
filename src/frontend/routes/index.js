@@ -5,6 +5,9 @@ const axios = require(`axios`);
 const shemaValidator = require(`../../middleware/shema-validator`);
 const update = require(`../../middleware/save-photo`);
 const alreadyRegister = require(`../../middleware/already-register`);
+const checkSession = require(`../../middleware/check-session`);
+const isUserRegister = require(`../../middleware/is-user-register`);
+const checkUserPassword = require(`../../middleware/check-user-password`);
 
 const userSchema = require(`../../backend/validation-schemas/user-schema`);
 
@@ -21,7 +24,9 @@ const initializeRoutes = (app) => {
   app.use(`/errors`, errorsRoutes);
 
 
-  app.get(`/`, async (req, res) => {
+  app.get(`/`, [
+    checkSession(),
+  ], async (req, res) => {
     try {
       const resCategories = await axios.get(`${BACKEND_URL}/api/categories`);
       const categories = resCategories.data;
@@ -29,11 +34,15 @@ const initializeRoutes = (app) => {
       const newAnnouncements = resNewAnnouncements.data;
       const resMostDiscussed = await axios.get(`${BACKEND_URL}/api/offers/mostdiscussed`);
       const mostDiscussed = resMostDiscussed.data;
+      const authorization = req.session && req.session.isLogged ? req.session.isLogged : false;
+      const avatar = `avatar04.jpg`;
       const mainPage = {
         categories,
         newAnnouncements,
         mostDiscussed,
         FRONTEND_URL,
+        authorization,
+        avatar,
       };
       res.render(`index`, {mainPage});
     } catch (err) {
@@ -52,7 +61,7 @@ const initializeRoutes = (app) => {
   ], async (req, res) => {
     try {
       await axios.post(`${BACKEND_URL}/api/user`, req.user);
-      res.render(`login`);
+      res.redirect(`/login`);
     } catch (err) {
       res.render(`error/500`);
     }
@@ -60,6 +69,24 @@ const initializeRoutes = (app) => {
 
   app.get(`/login`, (req, res) => {
     res.render(`login`);
+  });
+
+  app.post(`/login`, [
+    isUserRegister(TEMPLATE.LOGIN),
+    checkUserPassword(),
+  ], async (req, res) => {
+    const session = await axios.post(`${BACKEND_URL}/api/session/login`, req.body);
+    const {isLogged, username} = session.data;
+    req.session.isLogged = isLogged;
+    req.session.username = username;
+
+    res.redirect(`/`);
+  });
+
+  app.get(`/logout`, (req, res) => {
+    req.session.destroy(() => {
+      res.redirect(`/`);
+    });
   });
 
   app.get(`/search`, async (req, res) => {

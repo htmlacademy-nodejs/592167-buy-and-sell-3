@@ -2,6 +2,11 @@
 
 const express = require(`express`);
 const helmet = require(`helmet`);
+const session = require(`express-session`);
+const cookieParser = require(`cookie-parser`);
+const SequelizeStore = require(`connect-session-sequelize`)(session.Store);
+require(`dotenv`).config();
+
 const app = express();
 
 const cors = require(`cors`);
@@ -12,18 +17,35 @@ const logger = getLogger();
 
 const {initializeRoutes} = require(`./routes`);
 const {FRONTEND_URL} = require(`../constants`);
+const {sequelize} = require(`./db/db-connect`);
 
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
 
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      scriptSrc: [`self`]
+      defaultSrc: [`'self'`],
+      scriptSrc: [`'self'`]
     }
   },
-  xssFilter: true,
+}));
+app.use(helmet.xssFilter());
+
+const sessionStore = new SequelizeStore({
+  db: sequelize,
+  expiration: 1000 * 60 * 15,
+  checkExpirationInterval: 1000 * 60,
+});
+
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  proxy: true,
 }));
 
 app.use((req, res, next) => {

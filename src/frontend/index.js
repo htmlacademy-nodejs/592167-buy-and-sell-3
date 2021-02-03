@@ -1,6 +1,8 @@
 'use strict';
 
 const express = require(`express`);
+const expressSession = require(`express-session`);
+
 const {initializeRoutes} = require(`./routes/index`);
 require(`dotenv`).config();
 
@@ -12,6 +14,12 @@ app.set(`view engine`, `pug`);
 app.use(express.static(`${__dirname}/../static`));
 app.use(express.urlencoded({extended: false}));
 
+app.use(expressSession({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  name: `session_id`,
+}));
 
 initializeRoutes(app);
 

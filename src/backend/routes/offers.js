@@ -1,16 +1,19 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {StatusCode} = require(`http-status-codes`);
+const {StatusCodes} = require(`http-status-codes`);
 const chalk = require(`chalk`);
 const {getLogger} = require(`../logger`);
 const logger = getLogger();
+
+const csrf = require(`csurf`);
+const csrfProtection = csrf({cookie: true});
 
 const multer = require(`multer`);
 const md5 = require(`md5`);
 
 const annoucementService = require(`../services/announcement`);
-const {DEFAULT, FRONTEND_URL} = require(`../../constants`);
+const {DEFAULT, FRONTEND_URL, MOCK_USER_ID} = require(`../../constants`);
 
 
 const UPLOAD_DIR = `${__dirname}/../../static/upload`;
@@ -53,8 +56,8 @@ router.get(`/`, async (req, res) => {
     res.send(await annoucementService.getAll());
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -65,8 +68,8 @@ router.get(`/my`, async (req, res) => {
     res.send(await annoucementService.getMyAnnouncements());
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -74,14 +77,20 @@ router.get(`/my`, async (req, res) => {
 
 router.get(`/my/comments`, async (req, res) => {
   try {
-    res.send(await annoucementService.getListCommentsForUserAnnouncements(3));
+    res.send(await annoucementService.getListCommentsForUserAnnouncements(MOCK_USER_ID));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
+});
+
+router.get(`/csrftoken`, csrfProtection, async (req, res) => {
+  const token = {csrf: req.csrfToken()};
+  console.log(token);
+  res.send(token);
 });
 
 router.get(`/newestAnnouncements`, async (req, res) => {
@@ -89,8 +98,8 @@ router.get(`/newestAnnouncements`, async (req, res) => {
     res.send(await annoucementService.getTheNewestAnnouncements(DEFAULT.PREVIEW_COUNT));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
@@ -101,15 +110,16 @@ router.get(`/mostDiscussed`, async (req, res) => {
     res.send(await annoucementService.getMostDiscussed(DEFAULT.PREVIEW_COUNT));
   } catch (err) {
     logger.error(chalk.red(err));
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).send({
-      code: StatusCode.INTERNAL_SERVER_ERROR,
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      code: StatusCodes.INTERNAL_SERVER_ERROR,
       message: `Internal service error`
     });
   }
 });
 
-router.post(`/add`, upload.single(`avatar`), async (req, res) => {
+router.post(`/add`, upload.single(`avatar`), csrfProtection, async (req, res) => {
   const data = req.body;
+  console.log(data);
   try {
     data.image = req.file !== undefined ? req.file.filename : ``;
 
@@ -118,7 +128,7 @@ router.post(`/add`, upload.single(`avatar`), async (req, res) => {
   } catch (err) {
     console.log(`is mistake`);
     const {details} = err;
-    res.status(StatusCode.HTTP_STATUS_BAD_REQUEST).json({
+    res.status(StatusCodes.HTTP_STATUS_BAD_REQUEST).json({
       message: details.map((errorDescription) => errorDescription.message),
       data,
     });
@@ -138,7 +148,8 @@ router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
   const data = req.body;
   data.image = req.file !== undefined ? req.file.filename : ``;
   try {
-    await annoucementService.edit(data, req.params.id);
+    const an = await annoucementService.edit(data, req.params.id);
+    console.log(an);
     return res.redirect(`${FRONTEND_URL}/my`);
   } catch (err) {
     return res.send(err);
@@ -147,7 +158,9 @@ router.post(`/:id`, upload.single(`avatar`), async (req, res) => {
 
 router.get(`/:id`, async (req, res) => {
   try {
-    res.send(await annoucementService.getAnnouncement(req.params.id));
+    const announcementInfo = await annoucementService.getAnnouncement(req.params.id);
+    // console.log(announcementInfo);
+    res.send(announcementInfo);
   } catch (err) {
     res.send(err);
   }
@@ -165,14 +178,13 @@ router.post(`/:id/comments`, async (req, res) => {
   try {
     const newComment = req.body;
     newComment.offersId = req.params.id;
-    newComment.userId = `3`;
+    newComment.userId = `${MOCK_USER_ID}`;
     await annoucementService.addComment(newComment);
     res.redirect(`${FRONTEND_URL}/offers/${req.params.id}`);
   } catch (err) {
     res.send(err);
   }
 });
-
 
 router.get(`/delete/:id`, async (req, res) => {
   try {
@@ -183,5 +195,6 @@ router.get(`/delete/:id`, async (req, res) => {
     res.json({isDelete: false});
   }
 });
+
 
 module.exports = router;

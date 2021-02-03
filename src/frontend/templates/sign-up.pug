@@ -1,5 +1,9 @@
 extends common/layout
 
+block header
+  include common/header
+  +header(``, ``)(class=`header`)
+
 block main
   main.page-content
     section.sign-up

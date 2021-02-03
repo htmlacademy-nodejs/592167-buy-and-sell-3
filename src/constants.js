@@ -35,6 +35,8 @@ const BACKEND_URL = `http://localhost:8081`;
 const FRONTEND_URL = `http://localhost:8080`;
 const MONTH_LIST = [`января`, `февраля`, `марта`, `апреля`, `мая`, `июня`, `июля`, `августа`, `сентября`, `октября`, `ноября`, `декабря`];
 const MOCK_USER_ID = 3;
+const MOCK_ANNOUNCEMENT_ID = 5;
+const CATEGORY_ID = 1;
 
 const REGISTER_MESSAGE = {
   USER_NAME_REQUIRED_FIELD: `Поле "Имя и фамилия" обязательно для заполнения`,
@@ -48,6 +50,11 @@ const REGISTER_MESSAGE = {
   USER_NAME_WRONG: `Поле "Имя и фамилия" не должно содержать цифр и специальных символов`,
   PASSWORDS_NOT_EQUALS: `Пароль и подтверждение пароля не совпадают`,
   USER_ALREADY_REGISTER: `Пользователь с таким Email уже зарегистрирован`,
+};
+
+const LOGIN_MESSAGES = {
+  USER_NOT_REGISTER: `Пользователь с таким Email не зарегистрирован`,
+  USER_PASSWORD_IS_BAD: `Вы ввели неверный пароль`
 };
 
 const TEMPLATE = {
@@ -69,4 +76,7 @@ module.exports = {
   MOCK_USER_ID,
   REGISTER_MESSAGE,
   TEMPLATE,
+  LOGIN_MESSAGES,
+  MOCK_ANNOUNCEMENT_ID,
+  CATEGORY_ID,
 };

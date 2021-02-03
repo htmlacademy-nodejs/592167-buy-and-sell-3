@@ -9,6 +9,8 @@ const createDate = (date) => {
 };
 
 const announcementRepository = require(`../repositories/announcement`);
+const categoriesRepository = require(`../repositories/categories`);
+
 const checkAnnouncement = require(`../validation-schemas/announcement-schema`);
 const checkComment = require(`../validation-schemas/comment-schema`);
 
@@ -29,36 +31,29 @@ const getMyAnnouncements = async () => {
   });
 };
 
-const getAnnouncementsForComments = async (userId) => {
-  return await announcementRepository.getAnnouncementsForComments(userId);
-};
-
 const getListCommentsForUserAnnouncements = async (userId) => {
   const listUserAnnouncementsId = await announcementRepository.getAnnouncementsListUser(userId);
+
   const listUserAnnouncements = [];
-  for (let i = 0; i < listUserAnnouncementsId.length; i++) {
+  for (const announcement of listUserAnnouncementsId) {
     const announcementInfo = {
-      id: listUserAnnouncementsId[i].id,
-      title: listUserAnnouncementsId[i].title,
-      sum: listUserAnnouncementsId[i].sum,
+      id: announcement.id,
+      title: announcement.title,
+      sum: announcement.sum,
     };
-    announcementInfo.type = listUserAnnouncementsId[i].typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
-    const comments = await announcementRepository.getCommentsForAnnouncement(listUserAnnouncementsId[i].id);
+    announcementInfo.type = announcement.typeId === ANNOUNCEMENT_TYPE.BUY ? `Куплю` : `Продам`;
+    const comments = await announcementRepository.getCommentsForAnnouncement(announcement.id);
     announcementInfo.comments = comments.map((el) => {
       return {
         id: el.id,
         comment: el.comment,
-        user: `${el.User.firstName} ${el.User.lastName}`,
+        user: `${el.User.userName}`,
       };
     });
     listUserAnnouncements.push(announcementInfo);
   }
 
   return listUserAnnouncements.filter((el) => el.comments.length > 0);
-};
-
-const getAnnouncementsOfCategories = async (categoryName) => {
-  return await announcementRepository.getAnnouncementsOfCategories(categoryName);
 };
 
 const getTheNewestAnnouncements = async (limitAnnouncements) => {
@@ -115,22 +110,30 @@ const create = async (newAnnouncement) => {
     categories: newAnnouncement.category,
   };
 
-  checkAnnouncement.validateAsync(announcement)
-    .then(async (response) => {
-      const image = {
-        image: newAnnouncement.image,
-      };
-
-      return await announcementRepository.save(response, image);
-    }).catch((err) => {
-      return err;
-    });
+  try {
+    const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
+    const image = {
+      image: newAnnouncement.image,
+    };
+    return await announcementRepository.save(checkedAnnouncement, image);
+  } catch (err) {
+    return err;
+  }
 };
 
 const getAnnouncement = async (announcementId) => {
   const announcementList = await announcementRepository.getAnnouncement(announcementId);
   const commentList = await announcementRepository.getCommentsForAnnouncement(announcementId);
+  const categories = await categoriesRepository.findAll();
   const firstList = announcementList.shift();
+  const currentCategoriesList = firstList.Announcement.Categories.map((el) => el.category);
+  const categoriesList = Array(categories.length).fill({}).map((el, i) => {
+    return {
+      id: categories[i].id,
+      category: categories[i].category,
+      selected: currentCategoriesList.includes(categories[i].category),
+    };
+  });
   return {
     id: firstList.Announcement.id,
     image: firstList.image,
@@ -139,13 +142,13 @@ const getAnnouncement = async (announcementId) => {
     description: firstList.Announcement.description,
     createdAt: createDate(firstList.Announcement.createdAt),
     type: firstList.Announcement.Type.type,
-    author: `${firstList.Announcement.User.firstName} ${firstList.Announcement.User.lastName}`,
+    author: `${firstList.Announcement.User.userName}`,
     email: firstList.Announcement.User.email,
-    categories: firstList.Announcement.Categories.map((el) => el.category),
+    categories: categoriesList,
     comments: commentList.map((el) => {
       return {
         comment: el.comment,
-        author: `${el.User.firstName} ${el.User.lastName}`
+        author: `${el.User.userName}`
       };
     }),
   };
@@ -184,7 +187,7 @@ const edit = async (editAnnouncement, announcementId) => {
     const checkedAnnouncement = await checkAnnouncement.validateAsync(announcement);
     return await announcementRepository.edit(checkedAnnouncement, announcementId);
   } catch (err) {
-    return `Что-то пошло не так`;
+    return err;
   }
 };
 
@@ -194,8 +197,6 @@ const remove = async (announcementId) => await announcementRepository.remove(ann
 module.exports = {
   getAll,
   getMyAnnouncements,
-  getAnnouncementsForComments,
-  getAnnouncementsOfCategories,
   getTheNewestAnnouncements,
   getMostDiscussed,
   create,

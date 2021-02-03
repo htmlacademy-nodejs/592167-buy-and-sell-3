@@ -1,12 +1,16 @@
 extends common/layout
 
+block header
+  include common/header
+  +header(`${ticketInfo.avatar ? ticketInfo.avatar : ''}`, ``)(class=`header header--logged`)
+
 block main
   main.page-content
     section.ticket-form
       .ticket-form__wrapper
         h1.ticket-form__title Новая публикация
         .ticket-form__tile
-          form.ticket-form__form.form(action=`${back.url}/api/offers/add` method='post' enctype='multipart/form-data' autocomplete='off')
+          form.ticket-form__form.form(action=`${ticketInfo.url}/api/offers/add` method='post' enctype='multipart/form-data' autocomplete='off')
             .ticket-form__avatar-container.js-preview-container
               .ticket-form__avatar.js-preview
               .ticket-form__field-avatar
@@ -27,10 +31,11 @@ block main
                   span Обязательное поле
               .ticket-form__row
                 select#category-field.form__select.js-multiple-select(name='category[]' data-label='Выбрать категорию публикации')
-                  option(value='1') Дом
-                  option(value='2') Спорт и отдых
-                  option(value='3') Авто
-                  option(value='4') Электроника
+                  each category in ticketInfo.categories
+                    option(value=`${category.id}`) #{category.category}
+                  //option(value='2') Спорт и отдых
+                  //option(value='3') Авто
+                  //option(value='4') Электроника
               .ticket-form__row
                 .form__field.form__field--price
                   input#price-field.js-field.js-price(type='number' name='price' min='1' required='')
@@ -43,4 +48,7 @@ block main
                   .switch__item
                     input#sell-field.visually-hidden(type='radio' name='action' value='sell')
                     label.switch__button(for='sell-field') Продам
+              .ticket-form__row
+                .form__field
+                  input(type='hidden' name='csrf' value=`${ticketInfo.csrfToken}`)
             button.form__button.btn.btn--medium.js-button(type='submit' disabled='') Опубликовать

@@ -7,6 +7,14 @@ const add = async (user) => {
   return db.User.create(user);
 };
 
+const getUserPassword = async (email) => db.User.findOne({
+  attributes: [`password`],
+  where: {
+    email,
+  },
+});
+
 module.exports = {
   add,
+  getUserPassword,
 };
